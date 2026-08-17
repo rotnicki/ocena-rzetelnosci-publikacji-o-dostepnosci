@@ -1,0 +1,365 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/master/metodologia/0.2/wynik.schema.json",
+  "title": "Wynik oceny publikacji o dostępności 0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "methodology",
+    "publication",
+    "materials",
+    "evaluator",
+    "claim_count",
+    "claims",
+    "issues",
+    "issue_counts",
+    "scores",
+    "score_rationales",
+    "verdict",
+    "verdict_basis_issue_ids",
+    "counterfactual_correction",
+    "verdict_confidence",
+    "source_coverage",
+    "safe_recommendation",
+    "verdict_rationale",
+    "limitations",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.2-draft"
+    },
+    "analysis_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "identifier", "base_identifier", "frozen_before_critical_pass"],
+      "properties": {
+        "version": {"const": "0.2-draft"},
+        "identifier": {"type": "string", "minLength": 1},
+        "base_identifier": {"type": "string", "minLength": 1},
+        "frozen_before_critical_pass": {"type": "boolean"}
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publication_id",
+        "title",
+        "authors",
+        "url",
+        "published_at",
+        "updated_at",
+        "accessed_at",
+        "analyzed_at",
+        "language",
+        "publication_type",
+        "full_text"
+      ],
+      "properties": {
+        "publication_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "authors": {"type": "array", "items": {"type": "string"}},
+        "url": {"type": "string", "format": "uri"},
+        "published_at": {"type": ["string", "null"]},
+        "updated_at": {"type": ["string", "null"]},
+        "accessed_at": {"type": "string", "minLength": 1},
+        "analyzed_at": {"type": "string", "minLength": 1},
+        "language": {"type": "string", "minLength": 2},
+        "publication_type": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "full_text": {"enum": ["tak", "nie", "czesciowo"]}
+      }
+    },
+    "materials": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/material"}
+    },
+    "evaluator": {"$ref": "#/$defs/evaluator"},
+    "claim_count": {"type": "integer", "minimum": 0},
+    "claims": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/claim"}
+    },
+    "issues": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/issue"}
+    },
+    "issue_counts": {"$ref": "#/$defs/issueCounts"},
+    "scores": {"$ref": "#/$defs/scores"},
+    "score_rationales": {"$ref": "#/$defs/scoreRationales"},
+    "verdict": {"$ref": "#/$defs/verdict"},
+    "verdict_basis_issue_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "counterfactual_correction": {
+      "enum": ["ograniczona", "strukturalna", "nie_dotyczy"]
+    },
+    "verdict_confidence": {"$ref": "#/$defs/confidence"},
+    "source_coverage": {
+      "enum": ["pelne", "wystarczajace", "czesciowe", "niewystarczajace"]
+    },
+    "safe_recommendation": {
+      "enum": [
+        "bez_zastrzezen",
+        "z_niewielkimi_korektami",
+        "z_nazwanymi_korektami_lub_zrodlami",
+        "nie_do_praktycznego_uzycia",
+        "nie_mozna_ocenic"
+      ]
+    },
+    "verdict_rationale": {"type": "string", "minLength": 1},
+    "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/source"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"verdict": {"const": "nierzetelny"}},
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": {
+          "verdict_basis_issue_ids": {"minItems": 1},
+          "counterfactual_correction": {"enum": ["strukturalna", "ograniczona"]}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"verdict": {"const": "nie_mozna_rozstrzygnac"}},
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": {
+          "counterfactual_correction": {"const": "nie_dotyczy"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "confidence": {
+      "enum": ["wysoka", "srednia", "niska"]
+    },
+    "scoreValue": {
+      "oneOf": [
+        {"type": "integer", "minimum": 0, "maximum": 4},
+        {"const": "nd"}
+      ]
+    },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+      "properties": {
+        "A": {"$ref": "#/$defs/scoreValue"},
+        "B": {"$ref": "#/$defs/scoreValue"},
+        "C": {"$ref": "#/$defs/scoreValue"},
+        "D": {"$ref": "#/$defs/scoreValue"},
+        "E": {"$ref": "#/$defs/scoreValue"},
+        "F": {"$ref": "#/$defs/scoreValue"},
+        "G": {"$ref": "#/$defs/scoreValue"},
+        "H": {"$ref": "#/$defs/scoreValue"},
+        "I": {"$ref": "#/$defs/scoreValue"},
+        "J": {"$ref": "#/$defs/scoreValue"},
+        "K": {"$ref": "#/$defs/scoreValue"},
+        "L": {"$ref": "#/$defs/scoreValue"}
+      }
+    },
+    "scoreRationales": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+      "properties": {
+        "A": {"type": "string", "minLength": 1},
+        "B": {"type": "string", "minLength": 1},
+        "C": {"type": "string", "minLength": 1},
+        "D": {"type": "string", "minLength": 1},
+        "E": {"type": "string", "minLength": 1},
+        "F": {"type": "string", "minLength": 1},
+        "G": {"type": "string", "minLength": 1},
+        "H": {"type": "string", "minLength": 1},
+        "I": {"type": "string", "minLength": 1},
+        "J": {"type": "string", "minLength": 1},
+        "K": {"type": "string", "minLength": 1},
+        "L": {"type": "string", "minLength": 1}
+      }
+    },
+    "verdict": {
+      "enum": [
+        "rzetelny",
+        "rzetelny_z_niewielkimi_zastrzezeniami",
+        "rzetelny_z_istotnymi_zastrzezeniami",
+        "nierzetelny",
+        "nie_mozna_rozstrzygnac"
+      ]
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["material_id", "role", "url", "accessed_at", "version", "immutable", "scope"],
+      "properties": {
+        "material_id": {"type": "string", "minLength": 1},
+        "role": {
+          "enum": [
+            "tresc_glowna",
+            "material_centralny_zewnetrzny",
+            "material_dodatkowy",
+            "material_wylaczony"
+          ]
+        },
+        "url": {"type": "string", "format": "uri"},
+        "accessed_at": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "immutable": {"enum": ["tak", "nie", "not_available"]},
+        "scope": {"type": "string", "minLength": 1}
+      }
+    },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "name",
+        "model_snapshot",
+        "reasoning_setting",
+        "tools",
+        "memory_access",
+        "project_access",
+        "private_repository_access"
+      ],
+      "properties": {
+        "type": {"enum": ["czlowiek", "ai", "zespol"]},
+        "name": {"type": "string", "minLength": 1},
+        "model_snapshot": {"type": "string", "minLength": 1},
+        "reasoning_setting": {"type": "string", "minLength": 1},
+        "tools": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "memory_access": {"enum": ["tak", "nie", "not_available"]},
+        "project_access": {"enum": ["tak", "nie", "not_available"]},
+        "private_repository_access": {"enum": ["tak", "nie", "not_available"]}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "claim_match_id",
+        "location",
+        "text",
+        "category",
+        "importance",
+        "verifiability",
+        "result",
+        "confidence",
+        "source_ids",
+        "effect"
+      ],
+      "properties": {
+        "claim_id": {"type": "string", "pattern": "^T-[0-9]{3,}$"},
+        "claim_match_id": {"type": ["string", "null"]},
+        "location": {"type": "string", "minLength": 1},
+        "text": {"type": "string", "minLength": 1},
+        "category": {"enum": ["F", "P", "S", "T", "B", "Z", "I", "O"]},
+        "importance": {"enum": ["kluczowe", "wazne", "pomocnicze"]},
+        "verifiability": {"enum": ["weryfikowalne", "czesciowo_weryfikowalne", "nieweryfikowalne"]},
+        "result": {
+          "enum": [
+            "zgodne",
+            "zasadniczo_zgodne",
+            "czesciowo_zgodne",
+            "mylace",
+            "niezgodne",
+            "nieweryfikowalne",
+            "nierozstrzygniete"
+          ]
+        },
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "source_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "effect": {"type": "string", "minLength": 1}
+      }
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issue_id",
+        "claim_ids",
+        "summary",
+        "severity",
+        "centrality",
+        "application_risk",
+        "confidence",
+        "rationale"
+      ],
+      "properties": {
+        "issue_id": {"type": "string", "pattern": "^P-[0-9]{3,}$"},
+        "claim_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "summary": {"type": "string", "minLength": 1},
+        "severity": {"enum": ["krytyczne", "duze", "srednie", "male"]},
+        "centrality": {
+          "oneOf": [
+            {"enum": ["rdzen", "istotne_wsparcie", "element_poboczny"]},
+            {"type": "null"}
+          ]
+        },
+        "application_risk": {
+          "oneOf": [
+            {"enum": ["wysokie", "srednie", "niskie"]},
+            {"type": "null"}
+          ]
+        },
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "rationale": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"severity": {"enum": ["krytyczne", "duze"]}},
+            "required": ["severity"]
+          },
+          "then": {
+            "properties": {
+              "centrality": {"enum": ["rdzen", "istotne_wsparcie", "element_poboczny"]},
+              "application_risk": {"enum": ["wysokie", "srednie", "niskie"]}
+            }
+          }
+        }
+      ]
+    },
+    "issueCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["krytyczne", "duze", "srednie", "male"],
+      "properties": {
+        "krytyczne": {"type": "integer", "minimum": 0},
+        "duze": {"type": "integer", "minimum": 0},
+        "srednie": {"type": "integer", "minimum": 0},
+        "male": {"type": "integer", "minimum": 0}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "title", "url", "accessed_at", "version"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri"},
+        "accessed_at": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
