@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/master/metodologia/0.2/wyciag-kalibracyjny.schema.json",
+  "title": "Wyciąg kalibracyjny oceny publikacji o dostępności 0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "publication_id",
+    "methodology",
+    "evaluator",
+    "material_versions",
+    "claim_count",
+    "scores",
+    "issue_counts",
+    "central_issues",
+    "central_findings",
+    "verdict",
+    "verdict_confidence",
+    "source_coverage",
+    "counterfactual_correction"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.2-draft"},
+    "analysis_id": {"type": "string", "minLength": 1},
+    "publication_id": {"type": "string", "minLength": 1},
+    "methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "identifier"],
+      "properties": {
+        "version": {"const": "0.2-draft"},
+        "identifier": {"type": "string", "minLength": 1}
+      }
+    },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "name", "model_snapshot", "reasoning_setting", "tools", "memory_access", "project_access", "private_repository_access"],
+      "properties": {
+        "type": {"enum": ["czlowiek", "ai", "zespol"]},
+        "name": {"type": "string", "minLength": 1},
+        "model_snapshot": {"type": "string", "minLength": 1},
+        "reasoning_setting": {"type": "string", "minLength": 1},
+        "tools": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "memory_access": {"enum": ["tak", "nie", "not_available"]},
+        "project_access": {"enum": ["tak", "nie", "not_available"]},
+        "private_repository_access": {"enum": ["tak", "nie", "not_available"]}
+      }
+    },
+    "material_versions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["material_id", "role", "url", "version"],
+        "properties": {
+          "material_id": {"type": "string", "minLength": 1},
+          "role": {"enum": ["tresc_glowna", "material_centralny_zewnetrzny"]},
+          "url": {"type": "string", "format": "uri"},
+          "version": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "claim_count": {"type": "integer", "minimum": 0},
+    "scores": {"$ref": "#/$defs/scores"},
+    "issue_counts": {"$ref": "#/$defs/issueCounts"},
+    "central_issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["issue_id", "severity", "centrality", "application_risk", "confidence"],
+        "properties": {
+          "issue_id": {"type": "string", "pattern": "^P-[0-9]{3,}$"},
+          "severity": {"enum": ["krytyczne", "duze", "srednie", "male"]},
+          "centrality": {"enum": ["rdzen", "istotne_wsparcie", "element_poboczny"]},
+          "application_risk": {"enum": ["wysokie", "srednie", "niskie"]},
+          "confidence": {"enum": ["wysoka", "srednia", "niska"]}
+        }
+      }
+    },
+    "central_findings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "verdict": {"$ref": "#/$defs/verdict"},
+    "verdict_confidence": {"enum": ["wysoka", "srednia", "niska"]},
+    "source_coverage": {"enum": ["pelne", "wystarczajace", "czesciowe", "niewystarczajace"]},
+    "counterfactual_correction": {"enum": ["ograniczona", "strukturalna", "nie_dotyczy"]}
+  },
+  "$defs": {
+    "scoreValue": {
+      "oneOf": [
+        {"type": "integer", "minimum": 0, "maximum": 4},
+        {"const": "nd"}
+      ]
+    },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+      "properties": {
+        "A": {"$ref": "#/$defs/scoreValue"},
+        "B": {"$ref": "#/$defs/scoreValue"},
+        "C": {"$ref": "#/$defs/scoreValue"},
+        "D": {"$ref": "#/$defs/scoreValue"},
+        "E": {"$ref": "#/$defs/scoreValue"},
+        "F": {"$ref": "#/$defs/scoreValue"},
+        "G": {"$ref": "#/$defs/scoreValue"},
+        "H": {"$ref": "#/$defs/scoreValue"},
+        "I": {"$ref": "#/$defs/scoreValue"},
+        "J": {"$ref": "#/$defs/scoreValue"},
+        "K": {"$ref": "#/$defs/scoreValue"},
+        "L": {"$ref": "#/$defs/scoreValue"}
+      }
+    },
+    "issueCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["krytyczne", "duze", "srednie", "male"],
+      "properties": {
+        "krytyczne": {"type": "integer", "minimum": 0},
+        "duze": {"type": "integer", "minimum": 0},
+        "srednie": {"type": "integer", "minimum": 0},
+        "male": {"type": "integer", "minimum": 0}
+      }
+    },
+    "verdict": {
+      "enum": [
+        "rzetelny",
+        "rzetelny_z_niewielkimi_zastrzezeniami",
+        "rzetelny_z_istotnymi_zastrzezeniami",
+        "nierzetelny",
+        "nie_mozna_rozstrzygnac"
+      ]
+    }
+  }
+}
