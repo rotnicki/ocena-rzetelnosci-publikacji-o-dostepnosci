@@ -1,0 +1,14 @@
+interface:
+  display_name: Ocena publikacji o dostępności
+  short_description: Porównywalna ocena rzetelności publikacji
+  default_prompt: Użyj $assess-accessibility-articles, aby ocenić rzetelność wskazanej
+    publikacji o dostępności.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
