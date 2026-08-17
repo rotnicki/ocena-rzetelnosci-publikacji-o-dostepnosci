@@ -4,7 +4,7 @@ Publiczny projekt metodologii służącej do powtarzalnej, porównywalnej i spra
 
 ## Status
 
-Projekt znajduje się na etapie roboczym. Obecna metodologia ma numer **0.1** i wymaga kalibracji na zróżnicowanym zestawie publikacji przed uznaniem jej za stabilną.
+Projekt znajduje się na etapie pilotażowym. Obecna metodologia ma numer **0.1** i jest zamrożona na czas pierwszej kalibracji na zróżnicowanym zestawie publikacji. Działająca umiejętność AI korzysta z tej samej wersji zasad.
 
 ## Założenia
 
@@ -24,7 +24,9 @@ Ocena powinna:
 - `metodologia/standard.md` — aktualny projekt standardu;
 - `szablony/karta-oceny.md` — skrócona karta ocen w poszczególnych wymiarach;
 - `szablony/wzor-raportu.md` — obowiązkowa struktura pełnego raportu;
-- `skill/` — w przyszłości umiejętność AI korzystająca z przetestowanej metodologii.
+- `skill/SKILL.md` — instrukcja działania umiejętności AI;
+- `skill/references/` — zamrożone materiały metodologiczne używane przez umiejętność;
+- `skill/agents/openai.yaml` — metadane interfejsu umiejętności.
 
 ## Rozdzielenie metodologii i badań
 
@@ -34,13 +36,12 @@ Do publicznego projektu trafiają jedynie ogólne wnioski służące poprawianiu
 
 ## Plan prac
 
-1. Przeprowadzenie pierwszych analiz kalibracyjnych według wersji 0.1.
-2. Doprecyzowanie kryteriów i kotwic skali ocen.
-3. Opracowanie schematu danych dla wyników porównawczych.
-4. Publikacja metodologii 0.2.
-5. Utworzenie i przetestowanie umiejętności `assess-accessibility-articles`.
+1. Przeprowadzenie pierwszych analiz kalibracyjnych według zamrożonej wersji 0.1.
+2. Porównanie wyników i zidentyfikowanie niejednoznacznych kryteriów.
+3. Doprecyzowanie kryteriów, kotwic skali ocen i schematu danych.
+4. Powtórne sprawdzenie zestawu po zaprojektowaniu zmian.
+5. Publikacja metodologii 0.2 i aktualizacja umiejętności `assess-accessibility-articles`.
 
 ## Licencja
 
 Licencja projektu nie została jeszcze wybrana. Do czasu jej jednoznacznego wskazania nie należy zakładać prawa do kopiowania, modyfikowania ani rozpowszechniania zawartości poza uprawnieniami wynikającymi z obowiązującego prawa.
-
