@@ -81,6 +81,13 @@ def require_keys(value: dict, required: set[str], path: str) -> None:
         fail(path, f"missing keys: {', '.join(missing)}")
 
 
+def require_exact_keys(value: dict, required: set[str], path: str) -> None:
+    require_keys(value, required, path)
+    extra = sorted(set(value) - required)
+    if extra:
+        fail(path, f"unexpected keys: {', '.join(extra)}")
+
+
 def require_nonempty_string(value: object, path: str) -> str:
     if not isinstance(value, str) or not value.strip():
         fail(path, "expected non-empty string")
@@ -113,8 +120,7 @@ def validate_scores(value: object, path: str = "scores") -> None:
 
 def validate_issue_counts(value: object, issues: list | None = None, path: str = "issue_counts") -> None:
     counts = require_mapping(value, path)
-    if set(counts) != SEVERITIES:
-        fail(path, "must contain exactly krytyczne, duze, srednie, male")
+    require_exact_keys(counts, SEVERITIES, path)
     for key, count in counts.items():
         if not isinstance(count, int) or isinstance(count, bool) or count < 0:
             fail(f"{path}.{key}", "expected non-negative integer")
@@ -137,7 +143,7 @@ def validate_evaluator(value: object, path: str = "evaluator") -> None:
         "project_access",
         "private_repository_access",
     }
-    require_keys(evaluator, required, path)
+    require_exact_keys(evaluator, required, path)
     require_enum(evaluator["type"], {"czlowiek", "ai", "zespol"}, f"{path}.type")
     for key in ("name", "model_snapshot", "reasoning_setting"):
         require_nonempty_string(evaluator[key], f"{path}.{key}")
@@ -153,7 +159,7 @@ def validate_material(value: object, path: str, core_only: bool = False) -> None
     required = {"material_id", "role", "url", "version"}
     if not core_only:
         required |= {"accessed_at", "immutable", "scope"}
-    require_keys(material, required, path)
+    require_exact_keys(material, required, path)
     require_nonempty_string(material["material_id"], f"{path}.material_id")
     allowed_roles = CORE_MATERIAL_ROLES if core_only else MATERIAL_ROLES
     require_enum(material["role"], allowed_roles, f"{path}.role")
@@ -200,13 +206,13 @@ def validate_result(data: object) -> None:
         "limitations",
         "sources",
     }
-    require_keys(root, required, "root")
+    require_exact_keys(root, required, "root")
     if root["schema_version"] != "0.2-draft":
         fail("schema_version", "expected '0.2-draft'")
     require_nonempty_string(root["analysis_id"], "analysis_id")
 
     methodology = require_mapping(root["methodology"], "methodology")
-    require_keys(methodology, {"version", "identifier", "base_identifier", "frozen_before_critical_pass"}, "methodology")
+    require_exact_keys(methodology, {"version", "identifier", "base_identifier", "frozen_before_critical_pass"}, "methodology")
     if methodology["version"] != "0.2-draft":
         fail("methodology.version", "expected '0.2-draft'")
     require_nonempty_string(methodology["identifier"], "methodology.identifier")
@@ -219,15 +225,20 @@ def validate_result(data: object) -> None:
         "publication_id", "title", "authors", "url", "published_at", "updated_at",
         "accessed_at", "analyzed_at", "language", "publication_type", "full_text",
     }
-    require_keys(publication, publication_required, "publication")
+    require_exact_keys(publication, publication_required, "publication")
     for key in ("publication_id", "title", "accessed_at", "analyzed_at", "language"):
         require_nonempty_string(publication[key], f"publication.{key}")
     require_url(publication["url"], "publication.url")
     require_enum(publication["full_text"], {"tak", "nie", "czesciowo"}, "publication.full_text")
+    for key in ("published_at", "updated_at"):
+        if publication[key] is not None:
+            require_nonempty_string(publication[key], f"publication.{key}")
     for key in ("authors", "publication_type"):
         values = require_list(publication[key], f"publication.{key}")
         for index, item in enumerate(values):
             require_nonempty_string(item, f"publication.{key}[{index}]")
+    if not publication["publication_type"]:
+        fail("publication.publication_type", "expected at least one type")
 
     materials = require_list(root["materials"], "materials")
     if not materials:
@@ -241,6 +252,8 @@ def validate_result(data: object) -> None:
     validate_evaluator(root["evaluator"])
 
     claims = require_list(root["claims"], "claims")
+    if not isinstance(root["claim_count"], int) or isinstance(root["claim_count"], bool) or root["claim_count"] < 0:
+        fail("claim_count", "expected non-negative integer")
     if root["claim_count"] != len(claims):
         fail("claim_count", f"declared {root['claim_count']}, found {len(claims)}")
     claim_ids = unique_ids(claims, "claim_id", "claims")
@@ -248,7 +261,7 @@ def validate_result(data: object) -> None:
         path = f"claims[{index}]"
         if not re.fullmatch(r"T-[0-9]{3,}", claim["claim_id"]):
             fail(f"{path}.claim_id", "expected T- followed by at least three digits")
-        require_keys(claim, {"claim_match_id", "location", "text", "category", "importance", "verifiability", "result", "confidence", "source_ids", "effect", "claim_id"}, path)
+        require_exact_keys(claim, {"claim_match_id", "location", "text", "category", "importance", "verifiability", "result", "confidence", "source_ids", "effect", "claim_id"}, path)
         for key in ("location", "text", "effect"):
             require_nonempty_string(claim[key], f"{path}.{key}")
         if claim["claim_match_id"] is not None:
@@ -258,7 +271,11 @@ def validate_result(data: object) -> None:
         require_enum(claim["verifiability"], VERIFIABILITY, f"{path}.verifiability")
         require_enum(claim["result"], CLAIM_RESULTS, f"{path}.result")
         require_enum(claim["confidence"], CONFIDENCE, f"{path}.confidence")
-        require_list(claim["source_ids"], f"{path}.source_ids")
+        source_links = require_list(claim["source_ids"], f"{path}.source_ids")
+        if len(source_links) != len(set(source_links)):
+            fail(f"{path}.source_ids", "duplicate source identifiers")
+        for source_index, source_id in enumerate(source_links):
+            require_nonempty_string(source_id, f"{path}.source_ids[{source_index}]")
 
     issues = require_list(root["issues"], "issues")
     issue_ids = unique_ids(issues, "issue_id", "issues")
@@ -266,8 +283,10 @@ def validate_result(data: object) -> None:
         path = f"issues[{index}]"
         if not re.fullmatch(r"P-[0-9]{3,}", issue["issue_id"]):
             fail(f"{path}.issue_id", "expected P- followed by at least three digits")
-        require_keys(issue, {"issue_id", "claim_ids", "summary", "severity", "centrality", "application_risk", "confidence", "rationale"}, path)
+        require_exact_keys(issue, {"issue_id", "claim_ids", "summary", "severity", "centrality", "application_risk", "confidence", "rationale"}, path)
         linked_claims = require_list(issue["claim_ids"], f"{path}.claim_ids")
+        if len(linked_claims) != len(set(linked_claims)):
+            fail(f"{path}.claim_ids", "duplicate claim identifiers")
         unknown_claims = set(linked_claims) - claim_ids
         if unknown_claims:
             fail(f"{path}.claim_ids", f"unknown claims: {', '.join(sorted(unknown_claims))}")
@@ -306,13 +325,20 @@ def validate_result(data: object) -> None:
     require_enum(root["source_coverage"], SOURCE_COVERAGE, "source_coverage")
     require_enum(root["safe_recommendation"], SAFE_RECOMMENDATIONS, "safe_recommendation")
     require_nonempty_string(root["verdict_rationale"], "verdict_rationale")
-    require_list(root["limitations"], "limitations")
+    limitations = require_list(root["limitations"], "limitations")
+    for index, limitation in enumerate(limitations):
+        require_nonempty_string(limitation, f"limitations[{index}]")
+    counts = root["issue_counts"]
+    if verdict in {"rzetelny", "rzetelny_z_niewielkimi_zastrzezeniami"} and (
+        counts["krytyczne"] > 0 or counts["duze"] > 0
+    ):
+        fail("verdict", "rzetelny or niewielkie zastrzezenia cannot coexist with large or critical issues")
 
     sources = require_list(root["sources"], "sources")
     source_ids = unique_ids(sources, "source_id", "sources")
     for index, source in enumerate(sources):
         path = f"sources[{index}]"
-        require_keys(source, {"source_id", "title", "url", "accessed_at", "version"}, path)
+        require_exact_keys(source, {"source_id", "title", "url", "accessed_at", "version"}, path)
         for key in ("title", "accessed_at", "version"):
             require_nonempty_string(source[key], f"{path}.{key}")
         require_url(source["url"], f"{path}.url")
@@ -330,13 +356,13 @@ def validate_extract(data: object) -> None:
         "central_findings", "verdict", "verdict_confidence", "source_coverage",
         "counterfactual_correction",
     }
-    require_keys(root, required, "root")
+    require_exact_keys(root, required, "root")
     if root["schema_version"] != "0.2-draft":
         fail("schema_version", "expected '0.2-draft'")
     require_nonempty_string(root["analysis_id"], "analysis_id")
     require_nonempty_string(root["publication_id"], "publication_id")
     methodology = require_mapping(root["methodology"], "methodology")
-    require_keys(methodology, {"version", "identifier"}, "methodology")
+    require_exact_keys(methodology, {"version", "identifier"}, "methodology")
     if methodology["version"] != "0.2-draft":
         fail("methodology.version", "expected '0.2-draft'")
     require_nonempty_string(methodology["identifier"], "methodology.identifier")
@@ -348,6 +374,7 @@ def validate_extract(data: object) -> None:
         validate_material(material, f"material_versions[{index}]", core_only=True)
     if not any(material["role"] == "tresc_glowna" for material in materials):
         fail("material_versions", "missing tresc_glowna")
+    unique_ids(materials, "material_id", "material_versions")
     if not isinstance(root["claim_count"], int) or isinstance(root["claim_count"], bool) or root["claim_count"] < 0:
         fail("claim_count", "expected non-negative integer")
     validate_scores(root["scores"])
@@ -355,13 +382,14 @@ def validate_extract(data: object) -> None:
     central_issues = require_list(root["central_issues"], "central_issues")
     for index, issue in enumerate(central_issues):
         path = f"central_issues[{index}]"
-        require_keys(issue, {"issue_id", "severity", "centrality", "application_risk", "confidence"}, path)
+        require_exact_keys(issue, {"issue_id", "severity", "centrality", "application_risk", "confidence"}, path)
         if not re.fullmatch(r"P-[0-9]{3,}", require_nonempty_string(issue["issue_id"], f"{path}.issue_id")):
             fail(f"{path}.issue_id", "expected P- followed by at least three digits")
         require_enum(issue["severity"], SEVERITIES, f"{path}.severity")
         require_enum(issue["centrality"], CENTRALITIES, f"{path}.centrality")
         require_enum(issue["application_risk"], RISKS, f"{path}.application_risk")
         require_enum(issue["confidence"], CONFIDENCE, f"{path}.confidence")
+    unique_ids(central_issues, "issue_id", "central_issues")
     findings = require_list(root["central_findings"], "central_findings")
     if not findings:
         fail("central_findings", "expected at least one finding")
