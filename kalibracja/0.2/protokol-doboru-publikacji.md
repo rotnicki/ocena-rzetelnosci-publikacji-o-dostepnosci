@@ -36,6 +36,8 @@ Oba przebiegi mogą wykonywać ten sam system AI. Użycie dwóch różnych syste
 
 Ta seria nie jest pełną walidacją całej metodologii. Sprawdza przede wszystkim jej powtarzalność podczas użycia przez AI.
 
+Zamrożony projekt metodologii 0.2 zawiera także oddzielną propozycję szerszej próby z udziałem eksperta będącego człowiekiem. Niniejszy protokół tej propozycji nie wykonuje ani nie usuwa. Decyzję, czy ją zachować, zmienić albo zastąpić inną kontrolą jakości, wolno podjąć dopiero podczas przygotowywania kolejnej wersji metodologii, a nie w trakcie tej serii.
+
 ## 3. Status dotychczasowych prób 0.2
 
 Przypadki ocenione przed zamrożeniem tego protokołu są próbami wstępnymi.
