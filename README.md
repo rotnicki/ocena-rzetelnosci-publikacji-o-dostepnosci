@@ -104,6 +104,10 @@ Ocena powinna:
 
 ## Co znajduje się w repozytorium
 
+### Kalibracja
+
+- `kalibracja/0.2/protokol-doboru-publikacji.md` — formalne zasady tworzenia, wyboru i zamrożenia korpusu do kalibracji powtarzalności AI.
+
 ### Metodologia
 
 - `metodologia/standard.md` — zamrożony standard 0.1 zachowany dla zgodności dotychczasowych odsyłaczy;
@@ -144,14 +148,14 @@ Największa niejednoznaczność dotyczyła przejścia od wykrytych problemów do
 
 Plan dalszych prac obejmuje:
 
-1. kontynuowanie niezależnych ocen publikacji różnych autorów i różnych typów;
-2. porównywanie powtórzeń wykonanych w odrębnych kontekstach, a w miarę możliwości także przez różne zgodne modele lub systemy AI;
+1. utworzenie rejestru kandydatów i zamrożenie korpusu ośmiu publikacji zgodnie z protokołem doboru;
+2. wykonanie dla każdej publikacji dwóch niezależnych przebiegów w osobnych czatach tego samego systemu AI;
 3. automatyczne sprawdzanie struktury wyników i półautomatyczne porównywanie rozbieżności;
 4. dokumentowanie problemów metody bez zmieniania wstecz wyników już zakończonych przebiegów;
-5. sprawdzanie przenośności pakietu umiejętności poza obecne środowisko;
-6. podjęcie decyzji po kalibracji, czy projekt 0.2 może stać się kolejną stabilną wersją.
+5. podjęcie decyzji po kalibracji, jakie zmiany powinny znaleźć się w kolejnej wersji projektu;
+6. przeprowadzenie testów z innymi systemami AI dopiero jako osobnego etapu sprawdzania przenośności.
 
-Szczegółowy protokół dalszej kalibracji pozostaje częścią prac rozwojowych.
+Szczegółowe zasady zawiera `kalibracja/0.2/protokol-doboru-publikacji.md`.
 
 ## Licencja
 
