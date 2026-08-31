@@ -76,7 +76,7 @@ To pierwsza zamrożona wersja robocza. Została użyta w początkowej serii ocen
 
 ### Wersja 0.2-draft
 
-To projekt zmian przeznaczony do dalszej kalibracji. Dodaje między innymi:
+To projekt zmian użyty w zakończonej serii kalibracyjnej powtarzalności. Dodaje między innymi:
 
 - dokładniejsze reguły ustalania, czy problem dotyczy rdzenia publikacji;
 - test sprawdzający, czy poprawienie problemów wymagałoby drobnej czy strukturalnej zmiany tekstu;
@@ -85,7 +85,7 @@ To projekt zmian przeznaczony do dalszej kalibracji. Dodaje między innymi:
 - zapisywanie wersji ocenianych materiałów;
 - walidowane dane ustrukturyzowane do porównywania przebiegów.
 
-Wersja 0.2-draft nie jest jeszcze stabilnym standardem. Umiejętność używa jej tylko wtedy, gdy polecenie wyraźnie wybiera tę wersję. Jej reguły mogą się zmienić po analizie dalszych prób.
+Wersja 0.2-draft nie jest jeszcze stabilnym standardem. Umiejętność używa jej tylko wtedy, gdy polecenie wyraźnie wybiera tę wersję. Właściwa seria ośmiu publikacji i szesnastu przebiegów została zakończona 31 sierpnia 2026 r. Jej reguł i wyników nie zmienia się wstecz; wnioski posłużą do przygotowania osobnej kolejnej wersji.
 
 ## Główne zasady
 
@@ -106,7 +106,10 @@ Ocena powinna:
 
 ### Kalibracja
 
-- `kalibracja/0.2/protokol-doboru-publikacji.md` — formalne zasady tworzenia, wyboru i zamrożenia korpusu do kalibracji powtarzalności AI.
+- `kalibracja/0.2/protokol-doboru-publikacji.md` — formalne zasady tworzenia, wyboru i zamrożenia korpusu do kalibracji powtarzalności AI;
+- `kalibracja/0.2/rejestr-kandydatow.md` — zamknięta pula 24 kandydatów;
+- `kalibracja/0.2/rejestr-korpusu.md` — osiem wybranych publikacji i kolejność ocen;
+- `kalibracja/0.2/wyniki-serii.md` — ogólne wyniki zakończonej serii.
 
 ### Metodologia
 
@@ -142,20 +145,35 @@ W zaślepionym powtórzeniu pięciu analiz oba przebiegi wskazywały zasadniczo 
 - werdykt był identyczny w 60% przypadków;
 - drugi przebieg był średnio o 0,40 punktu surowszy.
 
-Największa niejednoznaczność dotyczyła przejścia od wykrytych problemów do werdyktu, szczególnie rozstrzygnięcia, czy błąd podważa rdzeń publikacji. Projekt 0.2 próbuje zmniejszyć tę niejednoznaczność, lecz wymaga dalszych niezależnych prób.
+Największa niejednoznaczność dotyczyła przejścia od wykrytych problemów do werdyktu, szczególnie rozstrzygnięcia, czy błąd podważa rdzeń publikacji. Projekt 0.2 powstał, aby ograniczyć tę niejednoznaczność.
+
+## Wyniki właściwej serii 0.2
+
+Zgodnie z zamrożonym protokołem oceniono osiem polskojęzycznych publikacji. Każda otrzymała dwa niezależne przebiegi w odizolowanych kontekstach tego samego rodzaju systemu AI.
+
+Najważniejsze wyniki:
+
+- zgodność werdyktu: **8/8 przypadków (100%)**;
+- identyczne wpisy A–L: **81/96 (84,4%)**;
+- różnica najwyżej jednego punktu: **93/94 wspólnie liczbowych ocen (98,9%)**;
+- średnia bezwzględna różnica: **0,16 punktu**;
+- praktycznie brak stałej tendencji drugiego przebiegu do surowszego lub łagodniejszego oceniania.
+
+Największe rozbieżności dotyczyły wymiarów K — przejrzystości epistemicznej, G — precyzji pojęć oraz stosowania `nd` w wymiarze C. Szczegóły i ograniczenia zawiera [publiczne podsumowanie wyników](kalibracja/0.2/wyniki-serii.md).
+
+Wynik pokazuje powtarzalność w badanym środowisku. Nie jest jeszcze dowodem pełnej trafności metodologii ani porównaniem różnych systemów AI.
 
 ## Następny etap
 
 Plan dalszych prac obejmuje:
 
-1. utworzenie rejestru kandydatów i zamrożenie korpusu ośmiu publikacji zgodnie z protokołem doboru;
-2. wykonanie dla każdej publikacji dwóch odizolowanych przebiegów uruchamianych przez koordynatora AI, bez ręcznego przeklejania poleceń przez użytkownika;
-3. automatyczne sprawdzanie struktury wyników i półautomatyczne porównywanie rozbieżności;
-4. dokumentowanie problemów metody bez zmieniania wstecz wyników już zakończonych przebiegów;
-5. podjęcie decyzji po kalibracji, jakie zmiany powinny znaleźć się w kolejnej wersji projektu;
-6. przeprowadzenie testów z innymi systemami AI dopiero jako osobnego etapu sprawdzania przenośności.
+1. dokończenie zbiorczego dopasowania map twierdzeń i problemów dla ośmiu par;
+2. przygotowanie jawnej listy niejednoznaczności ujawnionych w serii;
+3. zaprojektowanie kolejnej wersji jako osobnego projektu, bez zmiany wyników i reguł 0.2 wstecz;
+4. doprecyzowanie przede wszystkim wymiarów C, G i K, grupowania twierdzeń oraz oceny późniejszej dezaktualizacji;
+5. podjęcie osobnej decyzji o sposobie testowania trafności i przenośności między systemami AI.
 
-Szczegółowe zasady zawiera `kalibracja/0.2/protokol-doboru-publikacji.md`.
+Metodologia 0.1 pozostaje wersją domyślną umiejętności. Wersję 0.2-draft nadal należy wybierać jawnie.
 
 ## Licencja
 
