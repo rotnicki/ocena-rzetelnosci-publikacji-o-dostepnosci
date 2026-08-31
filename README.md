@@ -16,7 +16,7 @@ Ten projekt dostarcza wspólny sposób pracy. Określa między innymi:
 - jak opisywać niepewność i ograniczenia;
 - jak zapisać wynik, żeby można go było porównać z innym przebiegiem.
 
-Projekt jest tworzony przede wszystkim dla AI działającej pod kontrolą człowieka. Człowiek wybiera publikację, cel i wersję metody oraz może sprawdzać źródła i rozbieżności. Nie musi jednak ręcznie powtarzać całej analizy wykonanej przez AI.
+Projekt jest tworzony przede wszystkim dla AI działającej pod kontrolą człowieka. Koordynator AI może wybierać publikacje zgodnie z protokołem, uruchamiać niezależne oceny, zapisywać i porównywać wyniki. Człowiek zatwierdza najważniejsze decyzje dotyczące metodologii i nie musi ręcznie tworzyć nowych czatów ani przeklejać poleceń.
 
 ## Jak wygląda pojedyncza ocena
 
@@ -149,7 +149,7 @@ Największa niejednoznaczność dotyczyła przejścia od wykrytych problemów do
 Plan dalszych prac obejmuje:
 
 1. utworzenie rejestru kandydatów i zamrożenie korpusu ośmiu publikacji zgodnie z protokołem doboru;
-2. wykonanie dla każdej publikacji dwóch niezależnych przebiegów w osobnych czatach tego samego systemu AI;
+2. wykonanie dla każdej publikacji dwóch odizolowanych przebiegów uruchamianych przez koordynatora AI, bez ręcznego przeklejania poleceń przez użytkownika;
 3. automatyczne sprawdzanie struktury wyników i półautomatyczne porównywanie rozbieżności;
 4. dokumentowanie problemów metody bez zmieniania wstecz wyników już zakończonych przebiegów;
 5. podjęcie decyzji po kalibracji, jakie zmiany powinny znaleźć się w kolejnej wersji projektu;
