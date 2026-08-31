@@ -16,7 +16,7 @@ Ten projekt dostarcza wspólny sposób pracy. Określa między innymi:
 - jak opisywać niepewność i ograniczenia;
 - jak zapisać wynik, żeby można go było porównać z innym przebiegiem.
 
-Projekt jest tworzony przede wszystkim dla AI działającej pod kontrolą człowieka. Człowiek wybiera publikację, cel i wersję metody oraz może sprawdzać źródła i rozbieżności. Nie musi jednak ręcznie powtarzać całej analizy wykonanej przez AI.
+Projekt jest tworzony przede wszystkim dla AI działającej pod kontrolą człowieka. Koordynator AI może wybierać publikacje zgodnie z protokołem, uruchamiać niezależne oceny, zapisywać i porównywać wyniki. Człowiek zatwierdza najważniejsze decyzje dotyczące metodologii i nie musi ręcznie tworzyć nowych czatów ani przeklejać poleceń.
 
 ## Jak wygląda pojedyncza ocena
 
@@ -104,6 +104,10 @@ Ocena powinna:
 
 ## Co znajduje się w repozytorium
 
+### Kalibracja
+
+- `kalibracja/0.2/protokol-doboru-publikacji.md` — formalne zasady tworzenia, wyboru i zamrożenia korpusu do kalibracji powtarzalności AI.
+
 ### Metodologia
 
 - `metodologia/standard.md` — zamrożony standard 0.1 zachowany dla zgodności dotychczasowych odsyłaczy;
@@ -144,14 +148,14 @@ Największa niejednoznaczność dotyczyła przejścia od wykrytych problemów do
 
 Plan dalszych prac obejmuje:
 
-1. kontynuowanie niezależnych ocen publikacji różnych autorów i różnych typów;
-2. porównywanie powtórzeń wykonanych w odrębnych kontekstach, a w miarę możliwości także przez różne zgodne modele lub systemy AI;
+1. utworzenie rejestru kandydatów i zamrożenie korpusu ośmiu publikacji zgodnie z protokołem doboru;
+2. wykonanie dla każdej publikacji dwóch odizolowanych przebiegów uruchamianych przez koordynatora AI, bez ręcznego przeklejania poleceń przez użytkownika;
 3. automatyczne sprawdzanie struktury wyników i półautomatyczne porównywanie rozbieżności;
 4. dokumentowanie problemów metody bez zmieniania wstecz wyników już zakończonych przebiegów;
-5. sprawdzanie przenośności pakietu umiejętności poza obecne środowisko;
-6. podjęcie decyzji po kalibracji, czy projekt 0.2 może stać się kolejną stabilną wersją.
+5. podjęcie decyzji po kalibracji, jakie zmiany powinny znaleźć się w kolejnej wersji projektu;
+6. przeprowadzenie testów z innymi systemami AI dopiero jako osobnego etapu sprawdzania przenośności.
 
-Szczegółowy protokół dalszej kalibracji pozostaje częścią prac rozwojowych.
+Szczegółowe zasady zawiera `kalibracja/0.2/protokol-doboru-publikacji.md`.
 
 ## Licencja
 
