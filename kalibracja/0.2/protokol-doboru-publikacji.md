@@ -26,11 +26,13 @@ Jest to kalibracja powtarzalności AI w jednym środowisku.
 
 Dla każdej publikacji wykonuje się dwa niezależne przebiegi:
 
-- w dwóch nowych i oddzielnych czatach;
+- w dwóch odizolowanych kontekstach roboczych uruchamianych przez koordynatora procesu;
 - bez udostępniania drugiemu przebiegowi wyniku pierwszego;
 - przy użyciu tej samej wersji metodologii i tego samego protokołu;
 - przy możliwie podobnym środowisku, ustawieniach i narzędziach;
 - z zapisaniem wszystkich znanych różnic środowiska.
+
+Odizolowanym kontekstem może być osobny czat, agent roboczy albo odrębne wywołanie systemu AI, o ile nie otrzymuje historii drugiego przebiegu ani jego wyniku. Użytkownik nie musi ręcznie tworzyć czatów ani przeklejać poleceń.
 
 Oba przebiegi mogą wykonywać ten sam system AI. Użycie dwóch różnych systemów AI nie jest wymagane w tej serii. Porównanie różnych systemów może zostać przeprowadzone później jako osobny test przenośności.
 
@@ -232,14 +234,16 @@ Jeżeli centralna treść zmieni się pomiędzy przebiegami, ocen nie przedstawi
 
 ## 14. Zasady niezależnych przebiegów
 
-Dla każdego przypadku przygotowuje się dwa polecenia różniące się wyłącznie:
+Przebiegi uruchamia koordynator procesu. Użytkownik nie musi ręcznie tworzyć nowych czatów ani przeklejać poleceń. Koordynator przygotowuje dwa przebiegi na podstawie poleceń różniących się wyłącznie:
 
 - identyfikatorem przebiegu;
 - techniczną informacją konieczną do rozróżnienia plików.
 
+Oba przebiegi należy uruchomić przed ich porównaniem. Koordynator przekazuje każdemu ten sam pakiet wejściowy, odbiera i zapisuje wyniki, ale nie przekazuje jednemu przebiegowi wyniku drugiego.
+
 Każdy przebieg:
 
-- rozpoczyna się w nowym czacie;
+- rozpoczyna się w nowym, odizolowanym kontekście bez historii rozmowy koordynatora i drugiego przebiegu;
 - nie otrzymuje wyniku, wyciągu ani raportu drugiego przebiegu;
 - nie korzysta z wcześniejszych analiz tej publikacji;
 - nie korzysta z wyników innych przypadków do zmieniania punktacji;
@@ -257,7 +261,7 @@ Należy:
 
 1. zachować informację o nieudanej próbie;
 2. nie poprawiać jej częściowych ocen;
-3. rozpocząć nowy przebieg w nowym czacie;
+3. rozpocząć nowy przebieg w nowym, odizolowanym kontekście;
 4. nadać mu nowy identyfikator wskazujący ponowienie;
 5. zachować to samo polecenie, metodologię, protokół i materiał.
 
