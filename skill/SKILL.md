@@ -9,141 +9,125 @@ Apply one fixed, evidence-led workflow to every publication. Evaluate the public
 
 ## Load the governing materials
 
-Select and record the methodology version before reading the publication critically. Use version 0.1 unless the user or a frozen calibration prompt explicitly selects another version.
+Select and record the methodology version before reading the publication critically. Use version 0.1 unless the user or a frozen calibration prompt explicitly selects another version. Never combine rules from different versions.
 
 For version 0.1:
 
 - read [references/standard.md](references/standard.md) completely;
-- use [references/wzor-raportu.md](references/wzor-raportu.md) for the full report;
-- use [references/karta-oceny.md](references/karta-oceny.md) for the score profile.
+- use [references/wzor-raportu.md](references/wzor-raportu.md) and [references/karta-oceny.md](references/karta-oceny.md).
 
-For the 0.2 draft:
+For version 0.2 draft:
 
-- first read the complete 0.1 standard as the retained base;
-- then read [references/standard-0.2-projekt.md](references/standard-0.2-projekt.md) and treat it as controlling where the versions differ;
-- read [references/kotwice-0.2.md](references/kotwice-0.2.md) completely before scoring;
+- read the complete 0.1 standard as its retained base;
+- read [references/standard-0.2-projekt.md](references/standard-0.2-projekt.md), then [references/kotwice-0.2.md](references/kotwice-0.2.md);
 - use [references/wzor-raportu-0.2.md](references/wzor-raportu-0.2.md) and [references/karta-oceny-0.2.md](references/karta-oceny-0.2.md);
-- validate structured outputs against [references/wynik-0.2.schema.json](references/wynik-0.2.schema.json) and, for calibration work, [references/wyciag-kalibracyjny-0.2.schema.json](references/wyciag-kalibracyjny-0.2.schema.json).
-- run `python3 scripts/validate_0_2.py result wynik.json` and, when applicable, `python3 scripts/validate_0_2.py extract wyciag-kalibracyjny.json` before saving or returning files.
+- validate data against [references/wynik-0.2.schema.json](references/wynik-0.2.schema.json) and [references/wyciag-kalibracyjny-0.2.schema.json](references/wyciag-kalibracyjny-0.2.schema.json);
+- run `python3 scripts/validate_0_2.py result wynik.json` and, when applicable, `python3 scripts/validate_0_2.py extract wyciag-kalibracyjny.json`.
 
-Never silently substitute one version for another. Treat the detailed standard and its version-specific overlay as authoritative if this file differs from them.
+For version 0.3 draft:
 
-## Freeze the method
+- read the standalone [references/standard-0.3.md](references/standard-0.3.md) and [references/kotwice-0.3.md](references/kotwice-0.3.md) completely; do not load 0.1 or 0.2 as a base;
+- use [references/wzor-raportu-0.3.md](references/wzor-raportu-0.3.md) and [references/karta-oceny-0.3.md](references/karta-oceny-0.3.md);
+- validate data against [references/wynik-0.3.schema.json](references/wynik-0.3.schema.json) and [references/wyciag-kalibracyjny-0.3.schema.json](references/wyciag-kalibracyjny-0.3.schema.json);
+- run `python3 scripts/validate_0_3.py result wynik.json` and, when applicable, `python3 scripts/validate_0_3.py extract wyciag-kalibracyjny.json`.
 
-Record the methodology version and, when available, its source commit before reading the publication critically. Do not change criteria, anchors, weights, verdict rules, or output vocabulary during an analysis or a calibration series.
+Treat the selected standard as authoritative if this file differs from it. The 0.3 materials are a public working draft, not a frozen release.
 
-Also record the evaluator environment as far as it is knowable: evaluator type, model or reviewer name, model snapshot or version, reasoning setting, available tools, analysis date, and whether memory, project context, or private repositories were available. Write `not_available` instead of guessing.
+## Freeze the method and environment
 
-When evaluating a predefined calibration set:
+Before the critical pass, record the selected methodology version and identifier. Also record the evaluator type, name or model, model snapshot, reasoning setting, tools, analysis date, and access to memory, project context, and private repositories. Use `not_available` instead of guessing.
 
-1. Fix the article list and order before scoring.
-2. Complete each article as a separate case.
-3. Do not use one article's score to raise or lower another article's score.
-4. Record suspected methodology defects separately without applying them to later cases.
-5. Compare cases and propose revisions only after the entire set is complete.
+Do not change criteria, anchors, verdict rules, or output vocabulary during an analysis or frozen calibration series. In a predefined series, fix the publication list and order first, keep cases separate, record suspected defects without applying them mid-series, and revise only after the series ends.
 
 ## Acquire and delimit the material
 
-1. Open the supplied publication and obtain its complete available content, including relevant tables, code, images, footnotes, attachments, and linked material that forms part of the argument.
-2. Record title, author, URL, dates, language, publication type, outlet, declared audience, purpose, and completeness.
-3. Inspect the outlet's about page or equivalent only to establish audience, purpose, and editorial context.
-4. Separate the main article from newsletters, advertisements, event notices, and unrelated roundups. State which sections affect the main score.
-5. Classify each inspected item as main content, central external material, additional material, or excluded material.
-6. For every central external material, record its exact URL, access date, and an immutable identifier such as a commit, release, document version, or archived snapshot when available. If no immutable identifier exists, state that explicitly.
-7. If the full material is unavailable, mark the assessment partial and do not infer missing content.
-8. Do not store or reproduce a full copyrighted article unless the user has a lawful basis and explicitly requests storage. Prefer a URL, metadata, short quotations, and faithful paraphrases.
+1. Obtain the complete available publication, including central tables, code, images, footnotes, attachments, and linked material on which the argument depends.
+2. Verify the title, authorship or editorial signature, publisher, outlet, dates, language, type, purpose, audience, and completeness. Do not infer authorship from the domain alone.
+3. Separate the main publication from advertisements, newsletters, event notices, and unrelated material.
+4. Classify each inspected item using the selected standard's material roles. Record exact URLs, access dates, versions, and immutable identifiers when available.
+5. If full material is unavailable, mark the assessment partial and do not infer missing content.
+6. Do not reproduce a full copyrighted publication without a lawful basis and explicit request. Prefer metadata, short quotations, and faithful paraphrases.
 
-## Perform two independent passes
+## Perform two internal passes
 
 ### Pass 1: interpret
 
 Before checking truth:
 
 - prepare a neutral summary;
-- identify the intended audience and assumed knowledge;
-- state the author's purpose and main conclusion;
-- distinguish information, instruction, legal commentary, opinion, personal experience, and promotion;
-- list the strongest reasonable version of the main claims.
+- identify the audience, assumed knowledge, purpose, promise, and main conclusion;
+- distinguish information, instruction, legal commentary, opinion, experience, and promotion;
+- state the strongest reasonable version of the main claims.
 
-Do not let later discoveries rewrite the neutral summary.
+Do not let later findings rewrite this neutral summary.
 
 ### Pass 2: verify and assess
 
-Build a claim map covering every statement material to the conclusion or likely reader action. Assign each claim the categories and fields required by the standard.
+Build a claim map covering every statement material to the conclusion or likely reader action. For 0.3, split a statement whenever part of it could receive a different category, importance, result, or source set. Record confidence in the completeness of the claim map.
 
-Verify claims using sources appropriate to the claim:
+Verify claims against sources appropriate to their type, prioritizing:
 
-1. current legislation, official journals, and judgments;
-2. standards and specifications from their issuing bodies;
+1. legislation, official journals, and judgments;
+2. standards and specifications from issuing bodies;
 3. official explanations and implementation techniques;
 4. product documentation for declared behavior;
-5. peer-reviewed studies and adequately documented user research;
+5. peer-reviewed research and adequately documented user studies;
 6. representative user organizations and strong expert literature.
 
-Open and read the supporting section. Do not treat search snippets as evidence. For technical, legal, financial, medical, standards, or current claims, browse current primary sources by default. Record the access date and relevant version.
+Open and read the relevant source section. Do not use search snippets as evidence. Record access dates and versions. Separate historical accuracy at publication time from current applicability when law, standards, technology, or guidance changed later.
 
-For each claim, distinguish:
+For each claim, distinguish requirements from guidance and preferences; errors from simplifications, omissions, interpretations, and unresolved evidence; tested behavior from universal claims; and individual experience from population evidence. Under 0.3, explain why the chosen result is more appropriate than the adjacent result category.
 
-- a binding requirement from guidance, a sufficient technique, or a preference;
-- a factual error from simplification, omission, ambiguity, interpretation, opinion, and unresolved evidence;
-- normative wording from implementation advice;
-- tested behavior in one environment from universal behavior;
-- an individual account from evidence about a population.
+## Assess language for the actual audience
 
-## Assess language and audience comprehension
+Establish the audience and language profile before assigning G, H, or L. Identify terms necessary to understand the core, their first use, whether they are explained or clear in context, and their effect on comprehension.
 
-Analyze comprehension separately from factual correctness. Examine:
+Keep the dimensions separate:
 
-- unexplained terminology and assumed domain knowledge;
-- sentence and paragraph structure;
-- argument order and transitions;
-- headings, lists, examples, metaphors, irony, and digressions;
-- ambiguity between related technical concepts;
-- whether code and examples are syntactically valid and safe to copy;
-- whether each declared audience subgroup can follow the reasoning and act safely.
+- G concerns correctness, precision, and consistency of terminology;
+- H concerns whether the intended audience can follow the argument;
+- L concerns whether the publication fulfils the promise of its format and outlet.
 
-Give one main score relative to the outlet's declared audience. Also state briefly when comprehension differs materially between subgroups, such as developers, coordinators, auditors, and users of assistive technologies.
+Do not penalize specialist vocabulary merely for being specialist. Apply the 0.3 score caps when unexplained core terminology blocks a substantial nonspecialist audience or defeats a declared popularizing purpose. State that this is an expert assessment unless user testing was performed.
 
-## Score without averaging away the profile
+## Group issues and determine the verdict
 
-Score all twelve dimensions from 0 to 4 using the anchors in the standard. Justify each score with article-specific evidence. Do not calculate or present a weighted total unless weights were fixed before seeing the article.
+Do not turn every claim defect into a separate problem. Under 0.3, group defects only when they share one underlying cause, correction, and practical effect; otherwise keep them separate. Explain each grouping and propose a correction.
 
-When using the 0.2 draft, use `nd` only under its strict applicability rule and justify every `nd`. Before finalizing each numeric score, compare the evidence with both adjacent anchors. For every score of 0, 1, or 4, name the evidence that crosses the relevant boundary. Do not normalize scores merely to make a series look consistent.
+Assign severity and confidence separately. For every large or critical issue under 0.2 or 0.3, assign centrality and application risk. Under 0.3, explicitly perform both the centrality test and application-risk test required by the standard.
 
-Assign problem severity and confidence separately. Under the 0.2 draft, also assign centrality and application risk to every large or critical problem. Determine the verdict with the version-specific decision sequence and counterfactual-correction test; do not infer it from a sum, average, or raw problem count. Explain whether the material can be recommended:
+Score A–L from 0 to 4 or `nd` only where the selected version permits it. Compare each score with adjacent anchors. For 0, 1, or 4, identify the boundary-crossing evidence. Do not calculate a total or infer the verdict from an average or raw issue count.
 
-- without qualification;
-- only with named corrections or supplementary sources;
-- not for practical use.
+Determine the descriptive verdict using the selected standard's decision sequence and counterfactual-correction test. State whether the publication is safe to recommend without qualification, only with named corrections or additional sources, or not for practical use.
 
-## Produce and store outputs
+## Produce and validate outputs
 
-Produce three case files when persistent comparison is requested:
+When persistent comparison is requested, produce:
 
-- `metryka.yaml` — publication, method, scope, and limitations;
-- `analiza.md` — the full human-readable report in the required order;
-- `wynik.json` — scores, claim results, severities, verdict, confidence, sources, and limitations.
+- `metryka.yaml` — publication, method, environment, scope, and limitations;
+- `analiza.md` — the complete human-readable report;
+- `wynik.json` — the complete structured result;
+- `wyciag-kalibracyjny.json` — the compact comparison record for 0.2 or 0.3 calibration work.
 
-Use stable identifiers and closed vocabulary consistently. Validate JSON and YAML before saving.
+Use stable identifiers and the selected version's closed vocabulary. Run the matching validator before saving or returning structured files. A validator checks structure and internal consistency, not the truth of the assessment.
 
-For a 0.2 calibration case, always produce both:
+When the user designates an analysis repository, save each case under a unique dated directory. Do not place article copies, full case analyses, or private working material in a public methodology repository.
 
-- the complete report;
-- a compact calibration extract conforming to the 0.2 calibration schema.
+## Run independent calibration assessments
 
-When the result is delivered only in chat, put the compact extract in one complete JSON code block so it can be copied without reconstructing the full report. Do not require repository access and do not write to a repository unless the user explicitly authorizes it.
+Two calibration assessments A and B must not know each other's result. If the environment can create isolated workers or contexts, the coordinating agent should run both assessments itself, preserve their isolation, validate the outputs, and then compare them. Do not require the user to copy prompts between empty chats when the environment can safely provide that isolation.
 
-If the user has designated a private analysis repository, save each case under a unique dated directory there. Do not place article copies or sensitive working material in a public methodology repository. Save general methodology observations separately from the case report.
+If isolated execution is unavailable, say so before starting and provide a reproducible handoff. Do not present two mutually informed passes as independent assessments.
 
 ## Report progress during long work
 
-When the user requests ongoing updates, report at least these milestones:
+When ongoing updates are requested, report at least:
 
 1. full text obtained and scope fixed;
 2. interpretive pass complete;
-3. claim map complete and source verification underway;
+3. claim map complete and verification underway;
 4. scoring and verdict complete;
 5. files validated and saved;
 6. transition to the next case.
 
-Keep updates concise and do not announce a conclusion before the evidence pass is complete.
+Keep updates concise and do not announce a conclusion before verification is complete.

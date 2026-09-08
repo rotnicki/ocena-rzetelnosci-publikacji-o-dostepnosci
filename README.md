@@ -87,6 +87,14 @@ To projekt zmian użyty w zakończonej serii kalibracyjnej powtarzalności. Doda
 
 Wersja 0.2-draft nie jest jeszcze stabilnym standardem. Umiejętność używa jej tylko wtedy, gdy polecenie wyraźnie wybiera tę wersję. Właściwa seria ośmiu publikacji i szesnastu przebiegów została zakończona 31 sierpnia 2026 r. Jej reguł i wyników nie zmienia się wstecz; wnioski posłużą do przygotowania osobnej kolejnej wersji.
 
+### Projekt 0.3
+
+To publiczna wersja robocza przygotowana na podstawie wniosków z serii 0.2. Jest pełnym, samodzielnym dokumentem i nie wymaga łączenia zasad 0.1 z poprawkami 0.2.
+
+Projekt doprecyzowuje między innymi podział twierdzeń, granice wyników, grupowanie problemów, stosowanie `nd`, ocenę zmian zachodzących po publikacji oraz wpływ niewyjaśnionego żargonu na zrozumiałość i dopasowanie tekstu do jego celu.
+
+Projekt 0.3 nie jest wydaniem `v0.3.0`. Może służyć do przeglądu i testów dopiero po świadomym wybraniu tej wersji. Jego reguły mogą się zmienić przed zamrożeniem.
+
 ## Główne zasady
 
 Ocena powinna:
@@ -119,6 +127,7 @@ Ocena powinna:
 - `metodologia/0.2/kotwice.md` — szczegółowe kotwice ocen 0–4 dla wymiarów A–L;
 - `metodologia/0.2/wynik.schema.json` — schemat pełnego wyniku;
 - `metodologia/0.2/wyciag-kalibracyjny.schema.json` — schemat krótkiego wyniku do porównywania przebiegów.
+- `metodologia/0.3/` — samodzielna metodologia 0.3, kotwice i schematy w statusie publicznego projektu roboczego.
 
 ### Szablony, umiejętność i narzędzia
 
@@ -126,6 +135,7 @@ Ocena powinna:
 - `skill/SKILL.md` — główna instrukcja działania umiejętności AI i wyboru wersji;
 - `skill/references/` — kopie materiałów metodologicznych używane przez umiejętność;
 - `skill/scripts/validate_0_2.py` — walidator pełnego wyniku i wyciągu kalibracyjnego;
+- `skill/scripts/validate_0_3.py` — walidator danych projektu 0.3;
 - `skill/agents/openai.yaml` — opcjonalne metadane interfejsu dla środowiska OpenAI.
 
 Formalne pliki metodologii są źródłem obowiązujących reguł. Ten README służy ich prostemu objaśnieniu i nie zastępuje standardu.
@@ -165,15 +175,9 @@ Wynik pokazuje powtarzalność w badanym środowisku. Nie jest jeszcze dowodem p
 
 ## Następny etap
 
-Plan dalszych prac obejmuje:
+Publiczny projekt 0.3 podlega teraz przeglądowi spójności i testom na nowych przypadkach. Dopiero po zatwierdzeniu, zamrożeniu i końcowej kontroli może powstać wydanie `v0.3.0`.
 
-1. dokończenie zbiorczego dopasowania map twierdzeń i problemów dla ośmiu par;
-2. przygotowanie jawnej listy niejednoznaczności ujawnionych w serii;
-3. zaprojektowanie kolejnej wersji jako osobnego projektu, bez zmiany wyników i reguł 0.2 wstecz;
-4. doprecyzowanie przede wszystkim wymiarów C, G i K, grupowania twierdzeń oraz oceny późniejszej dezaktualizacji;
-5. podjęcie osobnej decyzji o sposobie testowania trafności i przenośności między systemami AI.
-
-Metodologia 0.1 pozostaje wersją domyślną umiejętności. Wersję 0.2-draft nadal należy wybierać jawnie.
+Metodologia 0.1 pozostaje wersją domyślną źródłowej umiejętności. Wersję 0.2 lub projekt 0.3 należy wybierać jawnie. Osobna paczka robocza 0.3 ustawia projekt 0.3 jako aktywny i zawiera wszystkie potrzebne pliki bez konieczności pobierania metodologii z repozytorium.
 
 ## Licencja
 
