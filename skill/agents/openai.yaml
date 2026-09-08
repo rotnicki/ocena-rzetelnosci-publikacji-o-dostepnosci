@@ -3,8 +3,6 @@ interface:
   short_description: Porównywalna ocena rzetelności publikacji
   default_prompt: Użyj $assess-accessibility-articles, aby ocenić rzetelność wskazanej
     publikacji o dostępności.
-  icon_small: assets/icon.svg
-  icon_large: assets/icon.svg
 policy:
   products:
   - chatgpt

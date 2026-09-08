@@ -9,7 +9,7 @@ Apply one fixed, evidence-led workflow to every publication. Evaluate the public
 
 ## Load the governing materials
 
-Before assessing a publication, read [references/standard.md](references/standard.md) completely. Use version 0.1 unless the user explicitly selects another version.
+This version-specific package is fixed to methodology 0.1. Before assessing a publication, read [references/standard.md](references/standard.md) completely.
 
 Read these additional files when producing deliverables:
 

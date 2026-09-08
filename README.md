@@ -44,4 +44,4 @@ Do publicznego projektu trafiają jedynie ogólne wnioski służące poprawianiu
 
 ## Licencja
 
-Licencja projektu nie została jeszcze wybrana. Do czasu jej jednoznacznego wskazania nie należy zakładać prawa do kopiowania, modyfikowania ani rozpowszechniania zawartości poza uprawnieniami wynikającymi z obowiązującego prawa.
+Metodologia, instrukcje umiejętności AI, szablony i pozostałe materiały tekstowe są udostępniane na licencji **CC BY 4.0**. Kod oraz techniczne pliki konfiguracyjne są udostępniane na licencji **MIT**. Szczegóły zawiera plik [`LICENSE.md`](LICENSE.md).
