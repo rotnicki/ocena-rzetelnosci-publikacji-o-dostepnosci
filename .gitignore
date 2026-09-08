@@ -1,0 +1,5 @@
+dist/
+release-work/
+verify/
+__pycache__/
+*.pyc

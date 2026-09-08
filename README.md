@@ -177,4 +177,6 @@ Metodologia 0.1 pozostaje wersją domyślną umiejętności. Wersję 0.2-draft n
 
 ## Licencja
 
-Licencja projektu nie została jeszcze wybrana. Do czasu jej jednoznacznego wskazania nie należy zakładać prawa do kopiowania, modyfikowania ani rozpowszechniania zawartości poza uprawnieniami wynikającymi z obowiązującego prawa.
+Metodologia, instrukcje umiejętności AI, szablony i pozostałe materiały tekstowe są udostępniane na licencji **CC BY 4.0**. Kod, skrypty, schematy JSON i techniczne pliki konfiguracyjne są udostępniane na licencji **MIT**. Szczegóły i zalecany sposób wskazywania autorstwa zawiera plik [`LICENSE.md`](LICENSE.md).
+
+Zasady numerowania, zamrażania i publikowania kolejnych wersji opisuje dokument [`WERSJONOWANIE.md`](WERSJONOWANIE.md).
