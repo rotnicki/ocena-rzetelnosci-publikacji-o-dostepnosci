@@ -9,7 +9,7 @@ Apply one fixed, evidence-led workflow to every publication. Evaluate the public
 
 ## Load the governing materials
 
-Select and record the methodology version before reading the publication critically. Use version 0.1 unless the user or a frozen calibration prompt explicitly selects another version.
+This version-specific package is fixed to methodology 0.2. Treat the included 0.1 materials only as the retained base required by 0.2; do not select 0.1 as the active version.
 
 For version 0.1:
 

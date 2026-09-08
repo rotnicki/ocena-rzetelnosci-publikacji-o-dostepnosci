@@ -1,0 +1,16 @@
+{
+  "name": "assess-accessibility-articles",
+  "version": "0.2.0",
+  "status": "experimental-frozen",
+  "methodology_version": "0.2",
+  "source_commit": "c3280da26d2bf0a5a44dfcddc9105180bf3d4267",
+  "licenses": {
+    "text_and_methodology": "CC-BY-4.0",
+    "code_and_technical_files": "MIT"
+  },
+  "packaging_adjustments": [
+    "The active methodology version is explicit in SKILL.md.",
+    "References to icon files absent from the historical source were removed.",
+    "License files and this release manifest were added."
+  ]
+}
