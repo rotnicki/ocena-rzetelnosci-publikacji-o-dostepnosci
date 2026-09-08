@@ -1,0 +1,56 @@
+name: Publish historical releases
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/publish-historical-releases.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out complete history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build version-specific skill packages
+        run: python3 scripts/build_skill_release.py
+
+      - name: Publish v0.1.0
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v0.1.0 >/dev/null 2>&1; then
+            echo "v0.1.0 already exists; leaving it unchanged."
+          else
+            gh release create v0.1.0 \
+              dist/assess-accessibility-articles-v0.1.0.zip \
+              dist/assess-accessibility-articles-v0.1.0.zip.sha256 \
+              --target release/v0.1.0 \
+              --title "0.1.0 — pierwsza zamrożona wersja eksperymentalna" \
+              --notes-file wydania/v0.1.0.md \
+              --prerelease
+          fi
+
+      - name: Publish v0.2.0
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v0.2.0 >/dev/null 2>&1; then
+            echo "v0.2.0 already exists; leaving it unchanged."
+          else
+            gh release create v0.2.0 \
+              dist/assess-accessibility-articles-v0.2.0.zip \
+              dist/assess-accessibility-articles-v0.2.0.zip.sha256 \
+              --target release/v0.2.0 \
+              --title "0.2.0 — zamrożona wersja eksperymentalna użyta w kalibracji" \
+              --notes-file wydania/v0.2.0.md \
+              --prerelease
+          fi

@@ -37,6 +37,8 @@ Opisy opublikowanych wydań są przechowywane także w katalogu `wydania/`, aby 
 
 Historyczne paczki 0.1.0 i 0.2.0 buduje skrypt `scripts/build_skill_release.py`. Pobiera on zawartość skilla z przypisanego źródłowego commita, jednoznacznie ustawia aktywną wersję metodologii, usuwa odsyłacze do nieobecnych historycznie ikon oraz dodaje manifest i licencje. Nie zmienia treści metodologii ani kotwic ocen.
 
+Publikację historycznych wydań wykonuje kontrolowany proces GitHub Actions zapisany w `.github/workflows/publish-historical-releases.yml`. Proces buduje paczki od początku, tworzy brakujące znaczniki na gałęziach wydawniczych, dołącza ZIP-y i sumy kontrolne oraz oznacza wydania jako przedpremierowe. Jeżeli wydanie już istnieje, pozostawia je bez zmian.
+
 Paczka instalacyjna musi zawierać obowiązkowy `SKILL.md` oraz wszystkie pliki, do których się odwołuje. Nie może wymagać pobierania metodologii z tego repozytorium podczas działania. Zewnętrzny dostęp może być nadal potrzebny do pobrania ocenianej publikacji i sprawdzenia jej twierdzeń w źródłach.
 
 ## Wydania historyczne
