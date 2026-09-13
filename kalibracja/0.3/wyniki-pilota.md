@@ -50,4 +50,4 @@ Powyższe punkty są wnioskami z pilota. Zmiany wpływające na znaczenie metodo
 
 ## Ograniczenia
 
-To mały test wykonany przez jeden typ systemu AI. Nie dowodzi jeszcze trafności metody, przenośności między systemami ani stabilności na szerszym korpusie. Dynamiczne strony nie miały wspólnej zapisanej migawki, a w jednym przypadku nie były dostępne dane surowe i pełna dokumentacja metody.
+To mały test wykonany przez jeden typ systemu AI. Wszystkie trzy przypadki zakończyły się tym samym rodzajem werdyktu, więc pilotaż nie sprawdził granic między czterema kategoriami werdyktu. Nie dowodzi jeszcze trafności metody, przenośności między systemami ani stabilności na szerszym korpusie. Dynamiczne strony nie miały wspólnej zapisanej migawki, a w jednym przypadku nie były dostępne dane surowe i pełna dokumentacja metody.
