@@ -27,7 +27,7 @@ Wartość `nd` stosować wyłącznie według reguły ze standardu 0.3. Profil od
 | 0 | Zasadnicza baza faktograficzna jest fałszywa, sfabrykowana albo sprzeczna z bezpośrednimi dowodami, a materiał prowadzi do poważnie błędnego obrazu rzeczywistości. |
 
 - **Granica 1/2:** pojedynczy ważny błąd przy zachowanym poprawnym rdzeniu wskazuje na 2; fałszywa przesłanka, bez której główny wniosek upada, wskazuje na 1.
-- **Granica 2/3:** lokalna pomyłka bez wpływu na wniosek wskazuje na 3; błąd zmieniający zakres lub część praktycznego wniosku wskazuje na 2.
+- **Granica 2/3:** A=3, gdy wszystkie fakty kluczowe i ważne dla działania pozostają poprawne, a błąd jest lokalny i nie zmienia zakresu żadnego ważnego wniosku. A=2, gdy co najmniej jeden ważny błąd faktograficzny zmienia zakres, znaczenie albo zastosowanie dla istotnej grupy, nawet jeżeli główna teza pozostaje do uratowania ograniczoną korektą.
 
 ## B. Poprawność prawna i normatywna
 
@@ -69,8 +69,8 @@ Wartość `nd` stosować wyłącznie według reguły ze standardu 0.3. Profil od
 | 1 | Kluczowe twierdzenia oparto głównie na niepodanych, słabych, nieaktualnych lub błędnie przedstawionych źródłach; czytelnik nie może bezpiecznie zaufać argumentacji. |
 | 0 | Źródła są sfabrykowane, systematycznie przeinaczone albo publikacja pozoruje dowody dla centralnej tezy, której żaden wykorzystany materiał nie wspiera. |
 
-- **Granica 1/2:** brak źródeł dla części ważnych twierdzeń przy możliwej niezależnej weryfikacji wskazuje na 2; brak podstaw dla samego rdzenia wskazuje na 1.
-- **Granica 2/3:** kilka brakujących linków pomocniczych wskazuje na 3; brak źródła dla ważnej liczby, reguły lub uogólnienia wskazuje na 2.
+- **Granica 1/2:** D=2, gdy rdzeń można niezależnie odtworzyć z odpowiednich źródeł, lecz część ważnych twierdzeń nie jest bezpośrednio śledzalna dla czytelnika albo opiera się na źródłach słabszych niż dostępne. D=1, gdy sama podstawa rdzenia jest niepodana, niedostępna, nieadekwatna lub tak słaba, że czytelnik nie może bezpiecznie zaufać głównej argumentacji bez zbudowania jej od nowa.
+- **Granica 2/3:** D=3, gdy rdzeń oraz ważne twierdzenia o wysokim ryzyku są łatwo powiązane z odpowiednimi źródłami, a luki dotyczą elementów pomocniczych. D=2, gdy co najmniej jedna ważna liczba, reguła, metoda lub generalizacja nie ma bezpośredniej podstawy albo wykorzystuje źródło wyraźnie słabsze od dostępnego źródła pierwotnego.
 
 Nie karać automatycznie felietonu za brak aparatu naukowego. Oceniać podstawy adekwatne do faktycznych twierdzeń i ryzyka użycia.
 
@@ -113,11 +113,11 @@ G ocenia poprawność, jednoznaczność i konsekwencję terminów. Sam trudny, a
 | 0 | Podstawowe pojęcia są odwrócone, wewnętrznie sprzeczne albo tak nieokreślone, że publikacja nie ma stabilnego znaczenia. |
 
 - **Granica 1/2:** lokalne pomieszanie „techniki” z „wymaganiem” wskazuje na 2; oparcie całej porady na ich utożsamieniu wskazuje na 1.
-- **Granica 2/3:** pojedyncza nieostrość bez wpływu na działanie wskazuje na 3; powtarzająca się dwuznaczność wpływająca na wniosek wskazuje na 2.
+- **Granica 2/3:** G=3, gdy terminologia jest zasadniczo poprawna, a pojedyncza nieostrość nie zmienia ważnego odczytania. G=2, gdy nieostrość jest powtarzalnym wzorcem albo choć jeden materialny termin miesza zakres, status prawny, wymaganie, zalecenie lub praktyczne znaczenie w sposób mogący zmienić wniosek odbiorcy.
 
 ## H. Zrozumiałość dla zakładanego odbiorcy
 
-H ocenia rzeczywistą możliwość prześledzenia wywodu przez odbiorcę ustalonego przed krytyką. Należy wykorzystać profil zakładanej wiedzy i listę terminów koniecznych dla rdzenia.
+H ocenia rzeczywistą możliwość prześledzenia wywodu osobno przez każdą istotną grupę odbiorców ustaloną przed krytyką. Należy wykorzystać profil zakładanej wiedzy i listę terminów koniecznych dla rdzenia. Ogólny wynik H jest najniższą oceną wśród istotnych grup objętych obietnicą konkretnej publikacji.
 
 | Ocena | Kotwica |
 | ---: | --- |
@@ -129,7 +129,7 @@ H ocenia rzeczywistą możliwość prześledzenia wywodu przez odbiorcę ustalon
 
 - **Granica 1/2:** trudny tekst, którego główną myśl można odtworzyć po wyjaśnieniu kilku pojęć, wskazuje na 2; konieczność eksperta do zrekonstruowania toku wskazuje na 1.
 - **Granica 2/3:** kilka objaśnionych terminów specjalistycznych wskazuje na 3; seria niewyjaśnionych terminów koniecznych dla rdzenia wskazuje na 2.
-- **Ograniczenie:** gdy seria niewyjaśnionych terminów koniecznych do zrozumienia głównej tezy blokuje znaczącą część niespecjalistycznych odbiorców, H nie może przekroczyć 2. Jeżeli bez pomocy eksperta nie da się odtworzyć głównego toku, H nie może przekroczyć 1.
+- **Ograniczenie:** jeżeli niewyjaśnione terminy blokują ważną część tekstu dla istotnej grupy niespecjalistycznej, H nie może przekroczyć 2. Jeżeli bez pomocy eksperta nie da się odtworzyć głównej myśli, H nie może przekroczyć 1.
 
 ## I. Użyteczność i bezpieczeństwo zaleceń
 
@@ -186,7 +186,7 @@ K ocenia jawność statusu wiedzy, a nie samą liczbę przypisów. Brak źróde�
 
 - **Granica 1/2:** inspirujący felieton niespełniający roli samodzielnego poradnika, ale jasno ograniczony, wskazuje na 2; materiał przedstawiany jako poradnik, który nie umożliwia bezpiecznego działania, wskazuje na 1.
 - **Granica 2/3:** skrótowość właściwa newsletterowi wskazuje na 3; pominięcie informacji koniecznej dla wyraźnie deklarowanej grupy zawodowej wskazuje na 2.
-- **Ograniczenie:** jeżeli publikacja ma funkcję popularyzatorską, a zrozumienie rdzenia wymaga niewskazanej wiedzy specjalistycznej, L nie może przekroczyć 2.
+- **Ograniczenie:** jeżeli miejsce publikacji deklaruje funkcję popularyzatorską, a zrozumienie rdzenia wymaga nieujawnionej wiedzy specjalistycznej, L nie może przekroczyć 2.
 
 W materiale prezentującym eksperymentalny artefakt oddzielić uczciwość opisu eksperymentu od bezpieczeństwa zachęty do używania artefaktu. Samo ostrzeżenie o możliwych błędach nie spełnia obietnicy praktycznej, jeżeli publikacja równocześnie promuje kopiowanie lub stosowanie wadliwego rezultatu.
 

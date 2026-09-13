@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/feature/0.3-draft/metodologia/0.3/porownanie-pary-0.3.schema.json",
+  "title": "Porównanie pary niezależnych ocen A i B — metodologia 0.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "comparison_id", "publication_id", "run_a_id", "run_b_id", "methodology",
+    "same_material_version", "material_version_rationale", "audience_profile_comparison", "score_comparison",
+    "verdict_comparison", "claim_matches", "issue_matches", "coverage_metrics", "aggregate_metrics",
+    "disagreements", "conclusions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.3-draft"},
+    "comparison_id": {"$ref": "#/$defs/nonempty"}, "publication_id": {"$ref": "#/$defs/nonempty"},
+    "run_a_id": {"$ref": "#/$defs/nonempty"}, "run_b_id": {"$ref": "#/$defs/nonempty"},
+    "methodology": {
+      "type": "object", "additionalProperties": false, "required": ["version", "identifier"],
+      "properties": {"version": {"const": "0.3-draft"}, "identifier": {"$ref": "#/$defs/nonempty"}}
+    },
+    "same_material_version": {"type": "boolean"}, "material_version_rationale": {"$ref": "#/$defs/nonempty"},
+    "audience_profile_comparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["outlet_type_agreement", "purpose_agreement", "declared_audience_agreement", "article_audience_agreement", "required_knowledge_agreement", "confidence_agreement", "group_scores", "rationale"],
+      "properties": {
+        "outlet_type_agreement": {"type": "boolean"}, "purpose_agreement": {"type": "boolean"},
+        "declared_audience_agreement": {"type": "boolean"}, "article_audience_agreement": {"type": "boolean"},
+        "required_knowledge_agreement": {"type": "boolean"}, "confidence_agreement": {"type": "boolean"},
+        "group_scores": {"type": "array", "items": {"$ref": "#/$defs/groupComparison"}}, "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "score_comparison": {"type": "array", "minItems": 12, "maxItems": 12, "items": {"$ref": "#/$defs/scoreComparison"}},
+    "verdict_comparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["a_verdict", "b_verdict", "agreement", "a_counterfactual_correction", "b_counterfactual_correction", "rationale"],
+      "properties": {
+        "a_verdict": {"$ref": "#/$defs/verdict"}, "b_verdict": {"$ref": "#/$defs/verdict"}, "agreement": {"type": "boolean"},
+        "a_counterfactual_correction": {"$ref": "#/$defs/correction"}, "b_counterfactual_correction": {"$ref": "#/$defs/correction"},
+        "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "claim_matches": {"type": "array", "items": {"$ref": "#/$defs/claimMatch"}},
+    "issue_matches": {"type": "array", "items": {"$ref": "#/$defs/issueMatch"}},
+    "coverage_metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["a_claims_total", "b_claims_total", "a_issues_total", "b_issues_total", "a_claims_mapped", "b_claims_mapped", "a_issues_mapped", "b_issues_mapped"],
+      "properties": {
+        "a_claims_total": {"type": "integer", "minimum": 0}, "b_claims_total": {"type": "integer", "minimum": 0},
+        "a_issues_total": {"type": "integer", "minimum": 0}, "b_issues_total": {"type": "integer", "minimum": 0},
+        "a_claims_mapped": {"type": "integer", "minimum": 0}, "b_claims_mapped": {"type": "integer", "minimum": 0},
+        "a_issues_mapped": {"type": "integer", "minimum": 0}, "b_issues_mapped": {"type": "integer", "minimum": 0}
+      }
+    },
+    "aggregate_metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["exact_score_agreement", "within_one_score_agreement", "mean_absolute_score_difference", "score_difference_direction", "verdict_agreement", "one_to_one_claim_result_agreement", "all_issue_centrality_agreement", "all_issue_risk_agreement", "major_critical_centrality_agreement", "major_critical_risk_agreement", "nd_disagreements"],
+      "properties": {
+        "exact_score_agreement": {"type": "number", "minimum": 0, "maximum": 1}, "within_one_score_agreement": {"type": "number", "minimum": 0, "maximum": 1},
+        "mean_absolute_score_difference": {"type": ["number", "null"], "minimum": 0, "maximum": 4},
+        "score_difference_direction": {"enum": ["a_higher", "b_higher", "balanced", "not_comparable"]}, "verdict_agreement": {"type": "boolean"},
+        "one_to_one_claim_result_agreement": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "all_issue_centrality_agreement": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "all_issue_risk_agreement": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "major_critical_centrality_agreement": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "major_critical_risk_agreement": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "nd_disagreements": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/dimension"}}
+      }
+    },
+    "disagreements": {"type": "array", "items": {"$ref": "#/$defs/disagreement"}},
+    "conclusions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonempty"}}
+  },
+  "$defs": {
+    "nonempty": {"type": "string", "minLength": 1},
+    "dimension": {"enum": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]},
+    "scoreValue": {"oneOf": [{"type": "integer", "minimum": 0, "maximum": 4}, {"const": "nd"}]},
+    "relation": {"enum": ["one_to_one", "one_to_many", "many_to_one", "many_to_many", "a_only", "b_only"]},
+    "verdict": {"enum": ["rzetelny", "rzetelny_z_niewielkimi_zastrzezeniami", "rzetelny_z_istotnymi_zastrzezeniami", "nierzetelny", "nie_mozna_rozstrzygnac"]},
+    "correction": {"enum": ["ograniczona", "strukturalna", "nie_dotyczy"]},
+    "idArray": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "triState": {"enum": ["yes", "no", "not_comparable"]},
+    "groupComparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["audience", "a_h", "b_h", "a_l", "b_l", "rationale"],
+      "properties": {
+        "audience": {"$ref": "#/$defs/nonempty"}, "a_h": {"type": ["integer", "null"], "minimum": 0, "maximum": 4},
+        "b_h": {"type": ["integer", "null"], "minimum": 0, "maximum": 4}, "a_l": {"type": ["integer", "null"], "minimum": 0, "maximum": 4},
+        "b_l": {"type": ["integer", "null"], "minimum": 0, "maximum": 4}, "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "scoreComparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dimension", "a_score", "b_score", "exact_agreement", "difference", "rationale"],
+      "properties": {
+        "dimension": {"$ref": "#/$defs/dimension"}, "a_score": {"$ref": "#/$defs/scoreValue"}, "b_score": {"$ref": "#/$defs/scoreValue"},
+        "exact_agreement": {"type": "boolean"}, "difference": {"type": ["integer", "null"], "minimum": 0, "maximum": 4}, "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "claimMatch": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relation", "a_ids", "b_ids", "semantic_summary", "result_agreement", "atomization_difference", "rationale"],
+      "properties": {
+        "relation": {"$ref": "#/$defs/relation"}, "a_ids": {"$ref": "#/$defs/idArray"}, "b_ids": {"$ref": "#/$defs/idArray"},
+        "semantic_summary": {"$ref": "#/$defs/nonempty"}, "result_agreement": {"enum": ["exact", "adjacent", "different", "not_comparable"]},
+        "atomization_difference": {"$ref": "#/$defs/nonempty"}, "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "issueMatch": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relation", "a_ids", "b_ids", "semantic_summary", "severity_agreement", "centrality_agreement", "risk_agreement", "grouping_difference", "rationale"],
+      "properties": {
+        "relation": {"$ref": "#/$defs/relation"}, "a_ids": {"$ref": "#/$defs/idArray"}, "b_ids": {"$ref": "#/$defs/idArray"},
+        "semantic_summary": {"$ref": "#/$defs/nonempty"}, "severity_agreement": {"$ref": "#/$defs/triState"},
+        "centrality_agreement": {"$ref": "#/$defs/triState"}, "risk_agreement": {"$ref": "#/$defs/triState"},
+        "grouping_difference": {"$ref": "#/$defs/nonempty"}, "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "disagreement": {
+      "type": "object", "additionalProperties": false, "required": ["area", "summary", "likely_source", "effect"],
+      "properties": {
+        "area": {"enum": ["audience_profile", "score", "verdict", "nd", "atomization", "claim_result", "issue_grouping", "severity", "centrality", "risk", "language", "outlet_fit", "other"]},
+        "summary": {"$ref": "#/$defs/nonempty"}, "likely_source": {"$ref": "#/$defs/nonempty"}, "effect": {"$ref": "#/$defs/nonempty"}
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""Technical consistency checks for the complete 0.3 draft package."""
+
+from __future__ import annotations
+
+import json
+import re
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class PackageTests(unittest.TestCase):
+    def test_skill_copies_match_public_sources(self) -> None:
+        pairs = {
+            ROOT / "metodologia/0.3/standard.md": ROOT / "skill/references/standard-0.3.md",
+            ROOT / "metodologia/0.3/kotwice.md": ROOT / "skill/references/kotwice-0.3.md",
+            ROOT / "metodologia/0.3/wynik.schema.json": ROOT / "skill/references/wynik-0.3.schema.json",
+            ROOT / "metodologia/0.3/wyciag-kalibracyjny.schema.json": ROOT / "skill/references/wyciag-kalibracyjny-0.3.schema.json",
+            ROOT / "metodologia/0.3/porownanie-pary-0.3.schema.json": ROOT / "skill/references/porownanie-pary-0.3.schema.json",
+            ROOT / "szablony/0.3/wzor-raportu.md": ROOT / "skill/references/wzor-raportu-0.3.md",
+            ROOT / "szablony/0.3/karta-oceny.md": ROOT / "skill/references/karta-oceny-0.3.md",
+            ROOT / "szablony/0.3/wzor-porownania.md": ROOT / "skill/references/wzor-porownania-0.3.md",
+        }
+        for source, copy in pairs.items():
+            self.assertEqual(source.read_bytes(), copy.read_bytes(), f"Niezgodna kopia: {copy}")
+
+    def test_internal_skill_links_exist(self) -> None:
+        skill_dir = ROOT / "skill"
+        content = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
+        links = re.findall(r"\[[^\]]+\]\(([^)]+)\)", content)
+        missing = [link for link in links if "://" not in link and not (skill_dir / link).is_file()]
+        self.assertEqual([], missing)
+
+    def test_local_schema_refs_resolve(self) -> None:
+        for name in ("wynik.schema.json", "wyciag-kalibracyjny.schema.json", "porownanie-pary-0.3.schema.json"):
+            schema = json.loads((ROOT / "metodologia/0.3" / name).read_text(encoding="utf-8"))
+            definitions = schema.get("$defs", {})
+
+            def visit(value: object) -> None:
+                if isinstance(value, dict):
+                    reference = value.get("$ref")
+                    if isinstance(reference, str) and reference.startswith("#/$defs/"):
+                        self.assertIn(reference.removeprefix("#/$defs/"), definitions, f"Nierozwiązane {reference} w {name}")
+                    for child in value.values():
+                        visit(child)
+                elif isinstance(value, list):
+                    for child in value:
+                        visit(child)
+
+            visit(schema)
+
+    def test_approved_rules_are_present(self) -> None:
+        standard = (ROOT / "metodologia/0.3/standard.md").read_text(encoding="utf-8")
+        anchors = (ROOT / "metodologia/0.3/kotwice.md").read_text(encoding="utf-8")
+        required_standard = [
+            "Trudny i specjalistyczny język publikacji nie może sam w sobie stanowić dowodu",
+            "minimalną uczciwą naprawę wady",
+            "porownanie-pary-0.3.schema.json",
+            "fragment albo lokalizacja publikacji → dokładna liczba, kod lub treść źródłowa",
+            "poziom centralności, poziom ryzyka zastosowania i krótkie uzasadnienie są obowiązkowe dla wszystkich problemów",
+        ]
+        for phrase in required_standard:
+            self.assertIn(phrase, standard)
+        for phrase in ("A=3", "D=2", "D=3", "G=3", "najniższą oceną"):
+            self.assertIn(phrase, anchors)
+
+
+if __name__ == "__main__":
+    unittest.main()

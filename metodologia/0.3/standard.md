@@ -61,6 +61,10 @@ Nie należy mylić tych dwóch przebiegów wewnętrznych z dwoma niezależnymi o
 
 Należy przyjmować najmocniejsze rozsądne znaczenie zgodne z tekstem. Nie wolno tworzyć słabszej wersji stanowiska, aby łatwiej je skrytykować. Życzliwa interpretacja nie oznacza pomijania błędów, przemilczeń ani mylących uproszczeń.
 
+Życzliwa parafraza nie może usuwać ani osłabiać kwantyfikatorów, absolutów, przeczeń, wyjątków, warunków, zakresu podmiotowego lub przedmiotowego ani statusu prawnego lub normatywnego wypowiedzi. Nie może zmieniać „musi” na „warto”, „zawsze” na „często”, „zapewnia zgodność” na „pomaga w zgodności” ani obowiązku na rekomendację.
+
+Jeżeli wypowiedź zawiera poprawny sens węższy i błędny sens szerszy, mapa zachowuje oba znaczenia albo rozdziela je na osobne twierdzenia. Najmocniejsza rozsądna interpretacja musi nadal być interpretacją tekstu, a nie jego naprawioną wersją.
+
 ### 3.4. Tekst, nie autor
 
 Rozpoznawalność, stanowisko, organizacja i wcześniejsza reputacja autora nie mogą podnosić ani obniżać oceny. Informacje o autorze i wydawcy można wykorzystać tylko do ustalenia deklarowanego odbiorcy, celu, autorstwa i charakteru miejsca publikacji.
@@ -112,7 +116,6 @@ Przed analizą należy ustalić:
 - datę dostępu;
 - język;
 - rodzaj publikacji;
-- deklarowanego albo rozsądnie przewidywanego odbiorcę;
 - deklarowany cel i główną obietnicę;
 - kompletność materiału.
 
@@ -131,7 +134,7 @@ Dla treści głównej i materiału centralnego należy zapisać URL, datę dost�
 
 Jeżeli dwa przebiegi kalibracyjne użyły różnych wersji materiału centralnego, nie są ścisłym powtórzeniem tego samego przypadku.
 
-## 6. Rodzaj, odbiorca i profil językowy
+## 6. Rodzaj, miejsce publikacji, odbiorcy i profil językowy
 
 ### 6.1. Rodzaj publikacji
 
@@ -153,17 +156,85 @@ Należy wskazać jeden lub kilka rodzajów:
 
 Rodzaj wpływa na oczekiwania, ale nie zwalnia z odpowiedzialności za sprawdzalne twierdzenia.
 
-### 6.2. Profil odbiorcy
+### 6.2. Obowiązkowe rozpoznanie miejsca, celu i odbiorców
 
-Przed punktacją trzeba zapisać:
+Przed krytyczną oceną języka oraz przed nadaniem ocen G, H i L oceniający musi rozpoznać kontekst publikacji. Jeżeli elementy są dostępne, sprawdza co najmniej:
 
-- główną grupę odbiorców;
-- istotne podgrupy, jeżeli ich rozumienie może się różnić;
-- czy odbiorca został zadeklarowany, wywnioskowany, czy ustalony na obu podstawach;
-- wiedzę, którą publikacja otwarcie albo milcząco zakłada;
-- czy miejsce lub tekst deklarują funkcję popularyzatorską.
+1. stronę główną serwisu;
+2. stronę „O nas” lub „Informacje”;
+3. opis bloga albo newslettera;
+4. stronę zapisu do newslettera;
+5. opis kategorii albo cyklu publikacji;
+6. politykę redakcyjną;
+7. opis autora;
+8. sposób promowania publikacji;
+9. bezpośrednie zwroty do czytelników w artykule;
+10. wiedzę rzeczywiście potrzebną do zrozumienia tekstu.
 
-### 6.3. Profil językowy
+Dla każdego elementu zapisuje `sprawdzono`, `niedostepne`, `nie_odnaleziono` albo `nie_dotyczy`, wraz z adresem, lokalizacją i datą dostępu, jeżeli są dostępne. Braku informacji nie wolno zastępować domysłem. Informacji o autorze i wydawcy używa się wyłącznie do ustalenia celu, odbiorców, autorstwa i charakteru miejsca, a nie do oceny wiarygodności na podstawie reputacji.
+
+Przebieg krytyczny G, H i L nie może rozpocząć się przed zapisaniem profilu. Jeżeli profil nie może zostać wiarygodnie ustalony, raport wskazuje ten fakt jawnie, nadaje ustaleniu niską pewność i przedstawia co najmniej dwa rozsądne warianty odbiorcy, jeżeli prowadziłyby do innej oceny H lub L.
+
+### 6.3. Hierarchia dowodów dotyczących odbiorców i celu
+
+Dowody stosuje się w następującej kolejności:
+
+1. bezpośrednia deklaracja wydawcy lub autora dotycząca odbiorców konkretnej publikacji;
+2. deklarowany cel oraz odbiorcy całego serwisu, bloga, newslettera, kategorii albo cyklu;
+3. sposób przedstawiania i promowania publikacji;
+4. bezpośrednie wskazówki w artykule, w tym zwroty do czytelników i nazwane zastosowania;
+5. zaobserwowany poziom trudności tekstu.
+
+Poziom trudności jest cechą podlegającą ocenie, a nie samodzielnym dowodem specjalistycznego przeznaczenia publikacji.
+
+**Trudny i specjalistyczny język publikacji nie może sam w sobie stanowić dowodu, że publikacja jest przeznaczona dla specjalistów.**
+
+Jeżeli miejsce publikacji deklaruje funkcję popularyzatorską albo kieruje treści również do niespecjalistów, oceniający nie może pominąć tej grupy tylko dlatego, że konkretny artykuł jest trudny. Ogólna deklaracja miejsca tworzy domniemanie objęcia tej grupy. Można je zawęzić tylko za pomocą wyraźnego i dostępnego oznaczenia konkretnego artykułu, kategorii albo cyklu jako materiału dla węższej grupy.
+
+W razie sprzeczności dowodów raport zachowuje oba ustalenia, wskazuje dowód wyższej rangi i wyjaśnia, dlaczego jeden przeważa. Nie wolno ukrywać sprzeczności przez wybór wygodniejszego profilu.
+
+### 6.4. Obowiązkowy profil kontekstu publikacji
+
+Profil zapisuje:
+
+- rodzaj miejsca publikacji;
+- deklarowany cel miejsca publikacji;
+- deklarowanych odbiorców;
+- rozsądnie przewidywanych odbiorców;
+- dodatkowe istotne grupy odbiorców;
+- odbiorców konkretnego artykułu;
+- wiedzę zadeklarowaną jako wymagana;
+- wiedzę rzeczywiście potrzebną do zrozumienia tekstu;
+- dowody wykorzystane do każdego ustalenia;
+- sprzeczności między opisem miejsca a treścią artykułu;
+- pewność profilu: `wysoka`, `srednia` albo `niska`;
+- stan ustalenia: `ustalony`, `czesciowo_ustalony` albo `nieustalony_wiarygodnie`.
+
+Każde ustalenie wskazuje identyfikatory wspierających dowodów. Dowód zapisuje rodzaj, rangę 1–5, URL, lokalizację, datę dostępu oraz krótki cytat lub wierną parafrazę.
+
+Pewność jest wysoka, gdy istnieje bezpośrednia deklaracja odpowiedniej rangi i nie ma nierozwiązanej materialnej sprzeczności. Jest średnia, gdy spójne dowody pośrednie pozwalają na rozsądny profil. Jest niska, gdy pozostają tylko wskazówki artykułu, poziom trudności albo sprzeczne dowody.
+
+Jeżeli odbiorcy nie mogą zostać wiarygodnie ustaleni, nie wolno bez odpowiednich dowodów uznać ich za specjalistów. Należy zapisać warianty profilu i wrażliwość H oraz L na te warianty. Wynik H pozostaje liczbowy, ale przy równorzędnych wariantach przyjmuje ostrożniejszy wynik i niską pewność.
+
+### 6.5. Publikacje dla grup mieszanych
+
+Dla każdej istotnej grupy odbiorców należy osobno ocenić możliwość zrozumienia rdzenia i zapisać `group_h_score` od 0 do 4, wymagane założenia oraz bariery.
+
+Grupa jest istotna, jeżeli jest bezpośrednio zadeklarowana dla publikacji lub miejsca albo jeżeli cel, promocja i przewidywane użycie wskazują, że publikacja składa wobec niej materialną obietnicę. Sama możliwość przypadkowego trafienia na stronę nie czyni grupy istotną.
+
+Ogólna ocena H odpowiada najniższej ocenie wśród istotnych grup objętych obietnicą konkretnej publikacji. Grupa zadeklarowana dla całego miejsca pozostaje objęta domniemaniem, chyba że artykuł, kategoria albo cykl został wyraźnie i dostępnie oznaczony jako przeznaczony dla węższej grupy.
+
+Trudności grupy wpływają tylko na opis ograniczeń, a nie na ogólną ocenę H, jeżeli grupa nie jest zadeklarowana, nie jest rozsądnie przewidywaną grupą celu i nie otrzymuje od publikacji materialnej obietnicy.
+
+Tekstu nie wolno uznać za zrozumiały dla grupy mieszanej tylko dlatego, że rozumie go specjalista.
+
+Jeżeli niewyjaśnione terminy blokują ważną część tekstu dla istotnej grupy niespecjalistycznej, H nie może być wyższe niż 2. Jeżeli bez pomocy eksperta nie można odtworzyć głównej myśli, H nie może być wyższe niż 1.
+
+Jeżeli miejsce deklaruje funkcję popularyzatorską, ale zrozumienie rdzenia wymaga nieujawnionej wiedzy specjalistycznej, L nie może być wyższe niż 2.
+
+Niezbędny termin specjalistyczny nie obniża wyniku tylko dlatego, że jest specjalistyczny, jeżeli został poprawnie użyty i wystarczająco wyjaśniony w tekście, kontekście lub łatwo dostępnym materiale, do którego publikacja prowadzi przed użyciem terminu do ważnego wniosku.
+
+### 6.6. Profil językowy
 
 Należy wskazać terminy i skróty konieczne do zrozumienia rdzenia oraz ustalić dla każdego:
 
@@ -183,6 +254,7 @@ Przed sprawdzaniem prawdziwości należy:
 - przygotować neutralne streszczenie;
 - wskazać główną tezę i podstawowe zastosowanie praktyczne;
 - ustalić odbiorcę, cel, obietnicę i zakładaną wiedzę;
+- zapisać profil miejsca i odbiorców wraz z hierarchią dowodów, sprzecznościami i pewnością;
 - odróżnić informację, instrukcję, komentarz prawny, opinię, doświadczenie i promocję;
 - przedstawić najmocniejszą rozsądną wersję głównych twierdzeń;
 - ustalić rolę centralnych materiałów zewnętrznych.
@@ -232,19 +304,26 @@ Weryfikowalność:
 
 ### 8.4. Reguła atomizacji
 
-Oddzielny wpis tworzy się, gdy część wypowiedzi może otrzymać inny wynik, kategorię, znaczenie albo zestaw źródeł niż pozostała część.
+Oddzielny wpis tworzy się, gdy część wypowiedzi może mieć inny wynik, kategorię, znaczenie, zestaw źródeł, punkt odniesienia w czasie albo skutek praktyczny.
 
 Należy rozdzielać w szczególności:
 
-- datę od skutku prawnego;
-- zakres podmiotów od zakresu produktów lub usług;
-- fakt od zalecenia;
-- korzyść prawdopodobną od gwarantowanej;
-- kilka technik, jeżeli ich poprawność może być różna.
+- fakt, przyczynę i skutek, jeżeli każde wymaga osobnej podstawy;
+- obowiązek, zakres, warunek i wyjątek, jeżeli mogą być ocenione odmiennie;
+- każdą liczbę albo kategorię z wyliczenia, jeżeli może pochodzić z innej wartości źródłowej;
+- przykłady kodu lub techniki, jeżeli ich poprawność może być różna;
+- opis stanu historycznego i twierdzenie o stanie obecnym;
+- twierdzenie opisowe i wynikające z niego zalecenie.
 
-Nie należy rozdzielać wyliczenia, gdy wszystkie elementy mają ten sam status, podstawę i skutek.
+Nie rozdziela się składników, które tracą sens bez wspólnego warunku lub kwantyfikatora. Przy rozdzieleniu warunek, wyjątek, przeczenie i zakres powtarza się w każdym wpisie, którego dotyczy.
 
-Przed zamknięciem każdego wpisu trzeba zastosować test: „Czy część tego wpisu mogłaby być zgodna, a inna niezgodna?”. Jeżeli tak, wpis należy rozdzielić.
+Przed zamknięciem wpisu oceniający odpowiada na trzy pytania:
+
+1. czy dowolna część może otrzymać inny wynik;
+2. czy wymaga innego źródła;
+3. czy jej błąd miałby inny skutek.
+
+Jedna odpowiedź „tak” wymaga rozdzielenia, chyba że spowodowałoby to utratę znaczenia zależnego; wyjątek trzeba uzasadnić w polu `atomization_rationale`.
 
 ### 8.5. Minimalny wpis
 
@@ -257,11 +336,19 @@ Każdy wpis zawiera:
 - kategorię;
 - znaczenie;
 - weryfikowalność;
+- uzasadnienie atomizacji;
+- odtwarzalny ślad ekstrakcji;
 - wynik;
 - uzasadnienie granicy wyniku;
 - pewność;
 - identyfikatory źródeł;
 - możliwy skutek błędu albo niejasności.
+
+Każde twierdzenie w kalibracji zawiera odtwarzalny ślad:
+
+`fragment albo lokalizacja publikacji → dokładna liczba, kod lub treść źródłowa → wierna parafraza → wynik`.
+
+Jeżeli krótki cytat nie jest potrzebny albo jego zapis byłby nieproporcjonalny, wystarcza dokładna lokalizacja. Dla liczby zapisuje się licznik, mianownik, jednostkę i warunek. Dla kodu zapisuje się minimalny fragment potrzebny do oceny. Dla wykresu zapisuje się serię, kategorię i odczytaną wartość. Ślad wskazuje identyfikatory źródeł weryfikacyjnych. Parafraza i wynik w śladzie muszą być zgodne z głównymi polami twierdzenia.
 
 ### 8.6. Dopasowanie w kalibracji
 
@@ -283,7 +370,15 @@ Stosuje się następujące wartości:
 
 `nierozstrzygniete` i `nieweryfikowalne` nie są punktami pomiędzy zgodnością a niezgodnością.
 
-Każdy wpis musi zawierać krótkie uzasadnienie wyboru wyniku względem najbliższej rozsądnej alternatywy. Brak źródła w publikacji nie jest dowodem fałszu; wpływa przede wszystkim na wymiar D.
+Przy granicznych przypadkach stosuje się następującą kolejność:
+
+1. `niezgodne`, gdy zasadnicza treść twierdzenia w zwykłym, kontekstowym odczytaniu przeczy najlepszym dostępnym źródłom; węższa prawdziwa teza nie ratuje wypowiedzianej tezy szerszej;
+2. `mylace`, gdy literalny fragment da się obronić, lecz zakres, kategoryczność, zestawienie lub pominięty kontekst z dużym prawdopodobieństwem prowadzi istotnego odbiorcę do błędnego wniosku;
+3. `czesciowo_zgodne`, gdy dająca się wskazać materialna część twierdzenia jest poprawna, a inna część lub warunek wymaga korekty, lecz po nazwanym ograniczeniu pozostaje bezpieczny i użyteczny sens;
+4. `nierozstrzygniete`, gdy po adekwatnym wyszukaniu istnieją wiarygodne sprzeczne podstawy albo brakuje materiału potrzebnego do odpowiedzialnego wyboru; nie stosuje się tej wartości tylko dlatego, że oceniający nie znalazł szybkiego potwierdzenia;
+5. `mylace` zamiast `nierozstrzygniete`, gdy problemem nie jest stan dowodów, lecz znany sposób, w jaki tekst prowadzi odbiorcę do błędnego wniosku.
+
+Każdy wpis musi zawierać krótkie uzasadnienie wyboru wyniku względem najbliższej rozsądnej alternatywy oraz jedno zdanie wyjaśniające, dlaczego ją odrzucono. Brak źródła w publikacji nie jest dowodem fałszu; wpływa przede wszystkim na wymiar D.
 
 ## 10. Źródła
 
@@ -325,6 +420,14 @@ Późniejsza zmiana prawa, standardu albo technologii nie może automatycznie ob
 
 Oba ustalenia trzeba opisać osobno wraz z uzasadnieniem.
 
+Jeżeli strona podaje datę publikacji i późniejszą datę aktualizacji, oceniający najpierw ustala, którą wersję treści rzeczywiście pozyskał.
+
+- Jeżeli istnieje wiarygodna migawka wersji pierwotnej, poprawność na dzień publikacji ocenia się na jej podstawie.
+- Jeżeli wersja pierwotna nie jest dostępna, nie wolno przypisywać obecnej treści dacie publikacji. Pole poprawności pierwotnej otrzymuje `nierozstrzygniete`, a raport wskazuje brak możliwości odtworzenia.
+- Aktualnie dostępny tekst ocenia się na dzień dostępu jako bieżącą użyteczność.
+- Data aktualizacji może być punktem odniesienia tylko dla stanu deklarowanego przez wydawcę; bez niezmiennej migawki nie dowodzi dokładnej treści strony w tym dniu. Pewność oceny tego stanu nie może być wysoka.
+- Późniejszej poprawki nie wolno użyć do podniesienia historycznej oceny wersji pierwotnej, a dawnego błędu nie wolno przypisać wersji obecnej bez dowodu, że pozostał.
+
 ## 12. Wartość `nd`
 
 Domyślnie każdy wymiar A–L otrzymuje ocenę liczbową. `nd` oznacza „nie dotyczy”, a nie brak danych, niską jakość ani trudność oceniającego.
@@ -357,10 +460,20 @@ Problem krytyczny wymaga łącznie: potwierdzonego błędu lub bardzo wysokiej p
 - `istotne_wsparcie`;
 - `element_poboczny`.
 
-Centralność ocenia się względem konkretnej publikacji, nie ogólnej ważności tematu. Dla problemu dużego i krytycznego trzeba odpowiedzieć:
+Centralność ocenia się względem konkretnej publikacji, nie ogólnej ważności tematu.
 
-1. czy jego usunięcie zmienia główną tezę, podstawowe zalecenie lub obiecany rezultat;
-2. czy po usunięciu publikacja nadal realizuje deklarowany cel.
+W teście centralności „usunięcie problemu” oznacza najpierw **minimalną uczciwą naprawę wady przy zachowaniu zamierzonego tematu i funkcji publikacji**: poprawienie błędu, dodanie koniecznego warunku, zapewnienie brakującego odpowiednika albo zawężenie wniosku do zakresu wspieranego przez dowody.
+
+Nie oznacza automatycznego skasowania całej sekcji zawierającej problem. Usunięcie całej części stosuje się dopiero wtedy, gdy nie istnieje prawdziwa, udokumentowana wersja zachowująca jej funkcję. Wtedy raport zapisuje oba kroki: próbę minimalnej naprawy i skutek koniecznego usunięcia lub zastąpienia części.
+
+Centralność odpowiada na pytanie, czy po uczciwej naprawie trzeba zmienić główną tezę, podstawowe zalecenie, obiecany rezultat albo deklarowane zastosowanie. Nie mierzy samej długości poprawki.
+
+Dla problemu dużego i krytycznego trzeba odpowiedzieć:
+
+1. jaka jest minimalna uczciwa naprawa;
+2. czy naprawa zmienia główną tezę, podstawowe zalecenie, obiecany rezultat lub deklarowane zastosowanie;
+3. czy po naprawie publikacja nadal realizuje deklarowany cel;
+4. czy konieczne jest usunięcie albo zastąpienie części.
 
 ### 13.3. Ryzyko zastosowania
 
@@ -376,6 +489,10 @@ Dla problemu dużego i krytycznego trzeba zapisać:
 4. krótkie uzasadnienie wyniku.
 
 Centralność nie wyznacza automatycznie ryzyka, a ryzyko nie wyznacza centralności.
+
+W zwykłej pojedynczej ocenie pełny test składowy centralności i ryzyka pozostaje obowiązkowy dla problemów dużych i krytycznych. W każdej ocenie należącej do kalibracji poziom centralności, poziom ryzyka zastosowania i krótkie uzasadnienie są obowiązkowe dla wszystkich problemów, także średnich i małych.
+
+Dla problemów średnich i małych nie trzeba wypełniać pełnej listy składowych testu, chyba że mogą wpłynąć na werdykt, grupowanie albo różnią się między przebiegami. Porównanie zgodności centralności i ryzyka podaje osobno dla wszystkich dopasowanych problemów oraz dla podzbioru problemów dużych i krytycznych.
 
 ### 13.4. Pewność
 
@@ -410,7 +527,7 @@ Nie wolno:
 ### 14.1. Rozdział G, H i L
 
 - **G** ocenia poprawność, jednoznaczność i konsekwencję terminów.
-- **H** ocenia rzeczywistą możliwość zrozumienia tekstu przez zakładanego odbiorcę.
+- **H** ocenia rzeczywistą możliwość zrozumienia tekstu osobno przez każdą istotną grupę odbiorców, a wynik ogólny ustala według reguły z rozdziału 6.5.
 - **L** ocenia zgodność języka, szczegółowości i treści z celem oraz miejscem publikacji.
 
 Nie należy obniżać G wyłącznie za trudny, ale poprawny termin. Niewyjaśniony termin obniża H, a przy niespełnionej obietnicy popularyzacji także L.
@@ -418,6 +535,14 @@ Nie należy obniżać G wyłącznie za trudny, ale poprawny termin. Niewyjaśnio
 Jeżeli seria niewyjaśnionych terminów koniecznych do zrozumienia głównej tezy blokuje znaczącą część niespecjalistycznych odbiorców, H nie może przekroczyć 2. Jeżeli bez pomocy eksperta nie da się odtworzyć głównego toku, H nie może przekroczyć 1.
 
 Jeżeli publikacja ma funkcję popularyzatorską, a jej rdzeń wymaga niewskazanej wiedzy specjalistycznej, L nie może przekroczyć 2.
+
+Ten sam brak może wpływać na więcej niż jeden wymiar wyłącznie wtedy, gdy raport opisze odmienny skutek w każdym z nich:
+
+- C odpowiada za poprawność działania technologii, kodu, mechanizmu, narzędzia, danych technicznych albo dostępności centralnego artefaktu, gdy publikacja składa o nim twierdzenie techniczne;
+- D odpowiada za jakość, adekwatność i śledzalność podstaw, z których czytelnik ma zweryfikować twierdzenie;
+- H odpowiada za możliwość zrozumienia przekazu przez istotne grupy odbiorców, w tym za dostępność sposobu przedstawienia danych, kodu i wykresów.
+
+Brak tekstowego odpowiednika wykresu wpływa na H, jeżeli blokuje zrozumienie danych. Wpływa na D, jeżeli uniemożliwia prześledzenie wartości lub metody. Wpływa na C tylko wtedy, gdy publikacja twierdzi, że artefakt jest technicznie dostępny albo działanie artefaktu jest częścią ocenianej porady. Nie wolno obniżyć wszystkich trzech wymiarów jednym zdaniem „wykres jest niedostępny”.
 
 ## 15. Sekwencja werdyktu
 
@@ -500,7 +625,7 @@ Raport musi zawierać w kolejności:
 1. metrykę publikacji i przebiegu;
 2. zakres, materiały i ograniczenia;
 3. neutralne streszczenie;
-4. odbiorcę, cel, miejsce i profil językowy;
+4. profil miejsca, celu i odbiorców wraz z dowodami, sprzecznościami i pewnością;
 5. najważniejsze tezy;
 6. mapę i weryfikację twierdzeń;
 7. poprawność historyczną i bieżącą użyteczność;
@@ -513,7 +638,7 @@ Raport musi zawierać w kolejności:
 14. pewność mapy, werdyktu i pokrycie źródłowe;
 15. wykaz źródeł.
 
-Pełny `wynik.json` musi być zgodny z `wynik.schema.json`. W kalibracji tworzy się także `wyciag-kalibracyjny.json`. Wartości maszynowe stosują `snake_case` bez polskich znaków, a raport używa naturalnego języka.
+Pełny `wynik.json` musi być zgodny z `wynik.schema.json`. W kalibracji tworzy się także `wyciag-kalibracyjny.json`, a po zamknięciu pary — `porownanie-pary.json` i raport według wspólnego wzoru. Wartości maszynowe stosują `snake_case` bez polskich znaków, a raport używa naturalnego języka.
 
 ## 18. Kalibracja i porównanie niezależnych ocen
 
@@ -552,6 +677,14 @@ Raportować co najmniej:
 
 Miary statystyczne, takie jak ważona kappa Cohena, są pomocnicze i nie zastępują analizy rozbieżności.
 
+### 18.4. Wspólny format porównania pary
+
+Każda para A/B w kalibracji kończy się jednym raportem porównawczym Markdown i jednym plikiem JSON zgodnym ze schematem `porownanie-pary-0.3.schema.json`. Porównanie powstaje dopiero po zamknięciu i walidacji obu przebiegów.
+
+Dopasowanie odbywa się według znaczenia, nie numerów lokalnych. Dopuszczalne relacje to `one_to_one`, `one_to_many`, `many_to_one`, `many_to_many`, `a_only` i `b_only`. Każdy identyfikator twierdzenia i problemu z A oraz B występuje w mapowaniu dokładnie raz.
+
+Porównanie obejmuje: tożsamość wersji materiału i metodologii; profile miejsca i odbiorców; G, H i L dla każdej grupy; wszystkie A–L i `nd`; werdykt i korektę kontrfaktyczną; atomizację twierdzeń; wyniki twierdzeń; grupowanie problemów; znaczenie, centralność i ryzyko; wpisy jednostronne; źródła rozbieżności oraz zbiorcze miary wymagane w rozdziale 18.3.
+
 ## 19. Kontrola jakości
 
 Przed zamknięciem analizy należy potwierdzić:
@@ -560,21 +693,25 @@ Przed zamknięciem analizy należy potwierdzić:
 2. autorstwo, wydawca i daty zostały sprawdzone;
 3. metodologia została zamrożona przed krytyką;
 4. neutralne streszczenie powstało przed weryfikacją;
-5. profil odbiorcy, wiedzy zakładanej i języka został zapisany;
-6. mapa obejmuje rdzeń i działania odbiorcy;
-7. zastosowano test atomizacji;
-8. każde źródło faktycznie odczytano;
-9. wynik każdego twierdzenia ma uzasadnienie granicy;
-10. poprawność historyczną oddzielono od bieżącej użyteczności;
-11. każde `nd` ma prawidłowe uzasadnienie;
-12. każdą ocenę porównano z kotwicami sąsiednimi;
-13. każdy problem duży i krytyczny ma test centralności i ryzyka;
-14. sposób grupowania problemów został uzasadniony;
-15. werdykt przeszedł test korekty;
-16. pewność mapy, werdyktu i pokrycie źródłowe zapisano osobno;
-17. dane strukturalne przeszły walidację;
-18. raport nie przechowuje pełnej kopii chronionej publikacji bez podstawy;
-19. wynik nie został dostrojony do wcześniejszych przypadków.
+5. przed oceną G, H i L sprawdzono dostępne elementy miejsca publikacji i zapisano dowody, sprzeczności oraz pewność profilu;
+6. zrozumiałość oceniono osobno dla każdej istotnej grupy objętej obietnicą publikacji;
+7. mapa obejmuje rdzeń i działania odbiorcy;
+8. zastosowano test atomizacji i zapisano uzasadnienia wyjątków;
+9. każde twierdzenie ma kompletny ślad od fragmentu publikacji do wyniku;
+10. każde źródło faktycznie odczytano;
+11. wynik każdego twierdzenia ma uzasadnienie granicy;
+12. poprawność historyczną oddzielono od bieżącej użyteczności i ustalono podstawę wersji;
+13. każde `nd` ma prawidłowe uzasadnienie;
+14. każdą ocenę porównano z kotwicami sąsiednimi;
+15. każdy problem duży i krytyczny ma pełny test centralności i ryzyka;
+16. w kalibracji każdy problem ma centralność, ryzyko i krótkie uzasadnienie;
+17. sposób grupowania problemów został uzasadniony;
+18. werdykt przeszedł test korekty;
+19. pewność mapy, werdyktu i pokrycie źródłowe zapisano osobno;
+20. dane strukturalne przeszły walidację;
+21. w kalibracji para ma kompletne mapowanie semantyczne twierdzeń i problemów;
+22. raport nie przechowuje pełnej kopii chronionej publikacji bez podstawy;
+23. wynik nie został dostrojony do wcześniejszych przypadków.
 
 ## 20. Role AI i człowieka
 

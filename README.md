@@ -91,7 +91,7 @@ Wersja 0.2-draft nie jest jeszcze stabilnym standardem. Umiejętność używa je
 
 To publiczna wersja robocza przygotowana na podstawie wniosków z serii 0.2. Jest pełnym, samodzielnym dokumentem i nie wymaga łączenia zasad 0.1 z poprawkami 0.2.
 
-Projekt doprecyzowuje między innymi podział twierdzeń, granice wyników, grupowanie problemów, stosowanie `nd`, ocenę zmian zachodzących po publikacji oraz wpływ niewyjaśnionego żargonu na zrozumiałość i dopasowanie tekstu do jego celu.
+Projekt doprecyzowuje między innymi podział twierdzeń, granice wyników, grupowanie problemów, stosowanie `nd`, ocenę zmian zachodzących po publikacji oraz wpływ niewyjaśnionego żargonu na zrozumiałość i dopasowanie tekstu do jego celu. Przed oceną G, H i L wymaga udokumentowanego sprawdzenia miejsca publikacji, celu i istotnych grup odbiorców. Dodaje też jeden format porównania niezależnych przebiegów A i B.
 
 Projekt 0.3 nie jest wydaniem `v0.3.0`. Może służyć do przeglądu i testów dopiero po świadomym wybraniu tej wersji. Jego reguły mogą się zmienić przed zamrożeniem.
 
@@ -128,15 +128,15 @@ Ocena powinna:
 - `metodologia/0.2/kotwice.md` — szczegółowe kotwice ocen 0–4 dla wymiarów A–L;
 - `metodologia/0.2/wynik.schema.json` — schemat pełnego wyniku;
 - `metodologia/0.2/wyciag-kalibracyjny.schema.json` — schemat krótkiego wyniku do porównywania przebiegów.
-- `metodologia/0.3/` — samodzielna metodologia 0.3, kotwice i schematy w statusie publicznego projektu roboczego.
+- `metodologia/0.3/` — samodzielna metodologia 0.3, kotwice oraz schematy wyniku, wyciągu i porównania pary w statusie publicznego projektu roboczego.
 
 ### Szablony, umiejętność i narzędzia
 
-- `szablony/0.1/` i `szablony/0.2/` — wersjonowane karty oraz wzory raportów;
+- `szablony/0.1/`, `szablony/0.2/` i `szablony/0.3/` — wersjonowane karty, wzory raportów oraz wzór porównania pary 0.3;
 - `skill/SKILL.md` — główna instrukcja działania umiejętności AI i wyboru wersji;
 - `skill/references/` — kopie materiałów metodologicznych używane przez umiejętność;
 - `skill/scripts/validate_0_2.py` — walidator pełnego wyniku i wyciągu kalibracyjnego;
-- `skill/scripts/validate_0_3.py` — walidator danych projektu 0.3;
+- `skill/scripts/validate_0_3.py` — walidator pełnego wyniku, wyciągu i porównania pary projektu 0.3;
 - `skill/agents/openai.yaml` — opcjonalne metadane interfejsu dla środowiska OpenAI.
 
 Formalne pliki metodologii są źródłem obowiązujących reguł. Ten README służy ich prostemu objaśnieniu i nie zastępuje standardu.

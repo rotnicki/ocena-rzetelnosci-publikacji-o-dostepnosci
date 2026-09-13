@@ -10,6 +10,8 @@ Projekt 0.3:
 - rozdziela historyczną poprawność publikacji od jej dzisiejszej przydatności;
 - dokładniej ocenia język względem odbiorcy i celu miejsca publikacji;
 - dodaje jawne testy centralności problemu i ryzyka zastosowania.
+- wymaga udokumentowanego profilu miejsca, celu i grup odbiorców przed oceną G, H i L;
+- wprowadza wspólny format semantycznego porównania par A/B.
 
 Pliki:
 
@@ -17,5 +19,6 @@ Pliki:
 - `kotwice.md` — znaczenie ocen 0–4 w wymiarach A–L;
 - `wynik.schema.json` — schemat pełnego wyniku;
 - `wyciag-kalibracyjny.schema.json` — schemat skrótu do porównywania przebiegów.
+- `porownanie-pary-0.3.schema.json` — schemat kompletnego porównania dwóch przebiegów A/B.
 
 Historyczne wersje 0.1 i 0.2 pozostają niezmienione. Zmiany w tym katalogu obowiązują wyłącznie wtedy, gdy oceniający świadomie wybierze projekt 0.3.

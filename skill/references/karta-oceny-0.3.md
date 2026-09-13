@@ -14,6 +14,7 @@
 - Pełna treść dostępna: tak / nie / częściowo
 - Centralne materiały i ich wersje:
 - Wersja i identyfikator metodologii:
+- Tryb kalibracyjny: tak / nie
 - Oceniający lub model:
 - Wersja modelu, ustawienie rozumowania i narzędzia:
 - Dostęp do pamięci, projektu i prywatnego laboratorium:
@@ -24,10 +25,22 @@
 - Podstawowe zastosowanie:
 - Liczba twierdzeń:
 - Test atomizacji wykonany: tak / nie
+- Każde twierdzenie ma ślad od fragmentu do wyniku: tak / nie
 - Pewność mapy: wysoka / średnia / niska
 - Uzasadnienie:
 
-## Profil językowy
+## Profil miejsca, odbiorców i języka
+
+- Dziesięć elementów kontekstu sprawdzone i opisane: tak / nie
+- Rodzaj i cel miejsca publikacji:
+- Deklarowani odbiorcy i dowody:
+- Rozsądnie przewidywani odbiorcy i dowody:
+- Odbiorcy artykułu i dowody:
+- Wiedza deklarowana / rzeczywiście potrzebna:
+- Sprzeczności:
+- Stan profilu: ustalony / czesciowo_ustalony / nieustalony_wiarygodnie
+- Pewność profilu: wysoka / srednia / niska
+- Warianty profilu i wpływ na H/L:
 
 - Wiedza zakładana:
 - Terminy konieczne dla rdzenia:
@@ -37,6 +50,9 @@
 ## Aktualność
 
 - Poprawność historyczna:
+- Wersja pierwotna dostępna: tak / nie
+- Oceniana wersja historyczna:
+- Dowody wersji i pewność:
 - Bieżąca użyteczność:
 - Uzasadnienie różnicy:
 
@@ -59,11 +75,21 @@
 
 Każde `nd` wymaga uzasadnienia. Sprawdzić ograniczenia H i L dla niewyjaśnionych terminów.
 
-## Problemy duże i krytyczne
+## Problemy
 
 | ID | Znaczenie | Centralność | Ryzyko | Pewność | Wynik testu centralności | Wynik testu ryzyka | Główna poprawka |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  |  |  |  |
+
+W kalibracji centralność, ryzyko i krótkie uzasadnienia są obowiązkowe dla każdego problemu. Pełne testy są zawsze obowiązkowe dla problemów dużych i krytycznych.
+
+## Zrozumiałość grup
+
+| Istotna grupa | Objęta obietnicą artykułu | H 0–4 | Bariery i uzasadnienie |
+| --- | --- | ---: | --- |
+|  | tak / nie |  |  |
+
+- Ogólne H, czyli minimum dla grup objętych obietnicą:
 
 ## Werdykt
 

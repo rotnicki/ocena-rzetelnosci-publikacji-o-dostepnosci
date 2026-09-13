@@ -16,6 +16,7 @@
 - Pełna treść dostępna: tak / nie / częściowo
 - Wersja i identyfikator metodologii:
 - Metodologia zamrożona przed krytyką: tak / nie
+- Tryb kalibracyjny: tak / nie
 - Rodzaj oceniającego: człowiek / AI / zespół
 - Nazwa oceniającego lub modelu:
 - Wersja lub migawka modelu:
@@ -37,14 +38,44 @@ Opisać materiały wyłączone, braki dostępu oraz ograniczenia odtworzenia wer
 
 Przedstawić cel, tok wywodu i wnioski autora bez oceny poprawności. Streszczenie przygotować przed weryfikacją i później go nie przepisywać pod wpływem wyniku.
 
-## 4. Odbiorca, cel, miejsce i profil językowy
+## 4. Miejsce, cel, odbiorcy i profil językowy
 
-- Główny odbiorca:
-- Podstawa ustalenia: zadeklarowany / wywnioskowany / mieszana
-- Istotne podgrupy:
-- Deklarowany cel i główna obietnica:
+### Sprawdzone elementy kontekstu
+
+| Element | Stan | URL lub lokalizacja | Data dostępu | Uwaga |
+| --- | --- | --- | --- | --- |
+| Strona główna | sprawdzono / niedostepne / nie_odnaleziono / nie_dotyczy |  |  |  |
+| O nas |  |  |  |  |
+| Opis bloga lub newslettera |  |  |  |  |
+| Zapis do newslettera |  |  |  |  |
+| Kategoria lub cykl |  |  |  |  |
+| Polityka redakcyjna |  |  |  |  |
+| Opis autora |  |  |  |  |
+| Promocja publikacji |  |  |  |  |
+| Zwroty do czytelników |  |  |  |  |
+| Rzeczywiście wymagana wiedza |  |  |  |  |
+
+### Dowody i ustalenia
+
+| ID dowodu | Ranga 1–5 | Rodzaj | URL i lokalizacja | Data dostępu | Krótki cytat lub wierna parafraza |
+| --- | ---: | --- | --- | --- | --- |
+| AUD-001 |  |  |  |  |  |
+
+- Rodzaj miejsca publikacji — wartość i dowody:
+- Deklarowany cel miejsca — wartość i dowody:
+- Deklarowani odbiorcy — wartości i dowody:
+- Rozsądnie przewidywani odbiorcy — wartości i dowody:
+- Dodatkowe istotne grupy — wartości i dowody:
+- Odbiorcy konkretnego artykułu — wartości i dowody:
+- Główny roboczy odbiorca przyjęty do dalszej analizy:
+- Wiedza deklarowana jako wymagana — wartości i dowody:
+- Wiedza rzeczywiście potrzebna — wartości i dowody:
+- Sprzeczności między opisem miejsca a artykułem — opis i dowody:
+- Stan profilu: ustalony / czesciowo_ustalony / nieustalony_wiarygodnie
+- Pewność profilu: wysoka / srednia / niska
+- Uzasadnienie pewności:
+- Warianty profilu przy niepewności oraz wpływ na H i L:
 - Funkcja popularyzatorska: tak / nie
-- Wiedza jawnie lub milcząco zakładana:
 - Ocena jest ekspercka, nie jest testem z użytkownikami: tak
 
 ### Terminy konieczne do zrozumienia rdzenia
@@ -67,9 +98,15 @@ Przedstawić cel, tok wywodu i wnioski autora bez oceny poprawności. Streszczen
 
 ## 6. Weryfikacja twierdzeń
 
-| ID | ID dopasowania | Lokalizacja | Twierdzenie | Kategoria | Znaczenie | Weryfikowalność | Wynik | Uzasadnienie granicy wyniku | Źródła | Skutek | Pewność |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T-001 |  |  |  |  |  |  |  |  |  |  |  |
+| ID | ID dopasowania | Lokalizacja | Twierdzenie | Uzasadnienie atomizacji | Kategoria | Znaczenie | Weryfikowalność | Wynik | Uzasadnienie granicy wyniku | Źródła | Skutek | Pewność |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| T-001 |  |  |  |  |  |  |  |  |  |  |  |  |
+
+### Ślad każdego twierdzenia
+
+| ID | Fragment lub lokalizacja publikacji | Dokładna liczba, kod lub treść źródłowa | Wierna parafraza | Źródła weryfikacyjne | Wynik |
+| --- | --- | --- | --- | --- | --- |
+| T-001 |  |  |  |  |  |
 
 - Liczba twierdzeń:
 - Pewność mapy twierdzeń: wysoka / średnia / niska
@@ -81,8 +118,13 @@ Przedstawić cel, tok wywodu i wnioski autora bez oceny poprawności. Streszczen
 
 - Poprawność według stanu na datę publikacji:
 - Uzasadnienie:
+- Wersja pierwotna dostępna: tak / nie
+- Oceniana wersja historyczna: original / archived_update / current_after_update / not_reconstructable
+- Dowody wersji:
+- Pewność oceny historycznej: wysoka / srednia / niska
 - Bieżąca użyteczność aktualnie dostępnej wersji:
 - Uzasadnienie:
+- Podstawa oceny wersji bieżącej:
 - Istotne zmiany prawa, standardów, technologii albo materiału:
 
 ## 8. Ocena w dwunastu wymiarach
@@ -110,24 +152,32 @@ Wymienić mocne strony poparte konkretnymi elementami publikacji.
 
 ## 10. Problemy według znaczenia
 
-| ID | Problem | Powiązane twierdzenia | Znaczenie | Centralność | Ryzyko | Pewność | Główna poprawka | Uzasadnienie grupowania |
+| ID | Problem | Powiązane twierdzenia | Znaczenie | Centralność i uzasadnienie | Ryzyko i uzasadnienie | Pewność | Główna poprawka | Uzasadnienie grupowania |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | P-001 |  |  |  |  |  |  |  |  |
 
 Dla każdego problemu dużego i krytycznego dodatkowo zapisać:
 
-- Czy usunięcie problemu zmienia główną tezę, zalecenie lub rezultat:
-- Czy po usunięciu publikacja realizuje cel:
+- Minimalna uczciwa naprawa:
+- Czy naprawa zmienia główną tezę, zalecenie, rezultat lub zastosowanie:
+- Czy po naprawie publikacja realizuje cel:
+- Czy konieczne jest usunięcie albo zastąpienie części:
 - Prawdopodobieństwo działania odbiorcy:
 - Dotkliwość możliwego skutku:
 - Odwracalność skutku:
 - Uzasadnienie ryzyka:
 
+W kalibracji centralność, ryzyko zastosowania i krótkie uzasadnienia są obowiązkowe dla każdego problemu, również średniego i małego. Pełny test składowy pozostaje obowiązkowy dla problemów dużych i krytycznych.
+
 Następnie pogrupować problemy pod nagłówkami: krytyczne, duże, średnie i małe.
 
 ## 11. Zrozumiałość dla grup odbiorców
 
-Ocenić osobno głównego odbiorcę i podgrupy, jeżeli różnice są istotne. Wyraźnie zaznaczyć, że jest to ocena ekspercka, a nie wynik badania z użytkownikami.
+| Istotna grupa | Objęta obietnicą artykułu | H 0–4 | Założenia | Bariery | Dowody | Uzasadnienie zakresu |
+| --- | --- | ---: | --- | --- | --- | --- |
+|  | tak / nie |  |  |  |  |  |
+
+Ogólne H jest najniższym H wśród istotnych grup objętych obietnicą publikacji. Wyraźnie zaznaczyć, że jest to ocena ekspercka, a nie wynik badania z użytkownikami.
 
 ## 12. Zalecane poprawki
 
@@ -162,4 +212,4 @@ Podać bezpośrednie odsyłacze, tytuły, wersje lub daty dokumentów i daty dos
 
 ## Oddzielny rezultat kalibracyjny
 
-Jeżeli analiza należy do serii kalibracyjnej, utworzyć także `wyciag-kalibracyjny.json` zgodny ze schematem 0.3. Wyciąg nie jest kolejną częścią raportu.
+Jeżeli analiza należy do serii kalibracyjnej, utworzyć także `wyciag-kalibracyjny.json` zgodny ze schematem 0.3. Po zamknięciu i walidacji obu przebiegów utworzyć `porownanie-pary.md` i `porownanie-pary.json` według wspólnego wzoru i schematu. Wyciąg i porównanie nie są kolejnymi częściami raportu oceny.
