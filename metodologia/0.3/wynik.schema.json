@@ -319,16 +319,9 @@
           "scores": {
             "properties": {
               "H": {
-                "oneOf": [
-                  {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 2
-                  },
-                  {
-                    "const": "nd"
-                  }
-                ]
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2
               }
             }
           }
@@ -362,16 +355,9 @@
           "scores": {
             "properties": {
               "L": {
-                "oneOf": [
-                  {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 2
-                  },
-                  {
-                    "const": "nd"
-                  }
-                ]
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2
               }
             }
           }

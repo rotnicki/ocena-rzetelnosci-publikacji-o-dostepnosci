@@ -187,6 +187,21 @@ class ValidatorTests(unittest.TestCase):
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
 
+    def test_blocking_language_excludes_nd(self) -> None:
+        result = valid_result()
+        result["audience_profile"]["unexplained_core_terms_block_nonspecialists"] = True
+        result["scores"]["H"] = "nd"
+        result["scores"]["L"] = "nd"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+        extract = valid_extract()
+        extract["audience_language"]["unexplained_core_terms_block_nonspecialists"] = True
+        extract["scores"]["H"] = "nd"
+        extract["scores"]["L"] = "nd"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_extract(extract)
+
     def test_technical_claim_excludes_nd(self) -> None:
         result = valid_result()
         result["scores"]["C"] = "nd"

@@ -163,10 +163,16 @@ def validate_audience(value: object, path: str = "audience_profile") -> dict:
 
 def validate_language_caps(profile: dict, scores: dict, path: str = "scores") -> None:
     blocked = profile["unexplained_core_terms_block_nonspecialists"]
-    if blocked and isinstance(scores["H"], int) and scores["H"] > 2:
-        fail(f"{path}.H", "przy blokującym żargonie H nie może przekroczyć 2")
-    if profile["popularizing_purpose"] and blocked and isinstance(scores["L"], int) and scores["L"] > 2:
-        fail(f"{path}.L", "dla niespełnionej funkcji popularyzatorskiej L nie może przekroczyć 2")
+    if blocked:
+        if scores["H"] == "nd":
+            fail(f"{path}.H", "przy blokującym żargonie H musi mieć ocenę liczbową")
+        if scores["H"] > 2:
+            fail(f"{path}.H", "przy blokującym żargonie H nie może przekroczyć 2")
+    if profile["popularizing_purpose"] and blocked:
+        if scores["L"] == "nd":
+            fail(f"{path}.L", "dla niespełnionej funkcji popularyzatorskiej L musi mieć ocenę liczbową")
+        if scores["L"] > 2:
+            fail(f"{path}.L", "dla niespełnionej funkcji popularyzatorskiej L nie może przekroczyć 2")
 
 
 def validate_result(data: object) -> None:
