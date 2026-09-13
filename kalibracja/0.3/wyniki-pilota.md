@@ -2,9 +2,15 @@
 
 **Data:** 13 września 2026 r.  
 **Status:** wynik pilota projektu; nie jest zatwierdzeniem ani wydaniem 0.3  
-**Zakres:** 3 publikacje różnego rodzaju, 6 odizolowanych przebiegów A/B
+**Zakres wykonanych prac:** 1 polski przypadek diagnostyczny i 2 pomocnicze testy międzyjęzykowe w języku angielskim; 6 odizolowanych przebiegów A/B
 
 Pełne analizy przypadków są przechowywane poza repozytorium publicznym. Ten dokument zawiera wyłącznie zagregowane informacje potrzebne do oceny działania metodologii.
+
+## Korekta opisu zakresu
+
+Pierwotne podsumowanie zbyt szeroko przedstawiało trzy publikacje jako jeden równorzędny pilotaż. Polski artykuł pozostał przypadkiem diagnostycznym ujawniającym problem ustalania odbiorców. Digidop i WebAIM należy traktować jako pomocnicze testy angielskie, a nie jako dwa główne przypadki polskiego pilota.
+
+Dobór dwóch tekstów angielskich był zmianą zakresu dokonaną bez wcześniejszego zatwierdzenia właściciela projektu. Ogranicza to możliwość oceny polskiego języka, żargonu i wymiarów G, H oraz L. Nie usunięto, nie przeliczono ani nie poprawiono wstecz żadnego zakończonego wyniku A/B.
 
 ## Kontrola techniczna
 
@@ -12,7 +18,9 @@ Standard, kotwice, szablony, schematy, walidator i pakiet umiejętności odpowia
 
 Po poprawce testy walidatora, zgodność kopii referencyjnych, kontrola struktury pakietu i odtwarzalna budowa ZIP przechodzą. Historyczne wersje 0.1 i 0.2 nie zostały zmienione.
 
-## Wyniki zagregowane
+## Wyniki zagregowane całego wykonanego zestawu
+
+Poniższe liczby opisują jeden przypadek polski i dwa testy angielskie łącznie. Nie są wynikiem trzytekstowego polskiego pilota i nie potwierdzają jeszcze stabilności G, H oraz L w polskich warunkach komunikacyjnych.
 
 | Miara | Wynik |
 |---|---:|
@@ -45,9 +53,10 @@ Po poprawce testy walidatora, zgodność kopii referencyjnych, kontrola struktur
 - test centralności potrzebuje jednoznacznego obiektu kontrfaktycznego;
 - brak wspólnego schematu raportu porównawczego utrudnia automatyczne agregowanie;
 - ograniczenie H/L dla blokującego żargonu nie zostało uruchomione w tym korpusie i wymaga osobnego testu regresyjnego.
+- ustalanie odbiorców wymaga dowodowego profilu miejsca publikacji i zakazu wnioskowania o specjalistycznym odbiorcy wyłącznie z trudności tekstu.
 
 Powyższe punkty są wnioskami z pilota. Zmiany wpływające na znaczenie metodologii nie zostały wprowadzone i wymagają osobnego zatwierdzenia.
 
 ## Ograniczenia
 
-To mały test wykonany przez jeden typ systemu AI. Wszystkie trzy przypadki zakończyły się tym samym rodzajem werdyktu, więc pilotaż nie sprawdził granic między czterema kategoriami werdyktu. Nie dowodzi jeszcze trafności metody, przenośności między systemami ani stabilności na szerszym korpusie. Dynamiczne strony nie miały wspólnej zapisanej migawki, a w jednym przypadku nie były dostępne dane surowe i pełna dokumentacja metody.
+To mały zestaw techniczno-diagnostyczny wykonany przez jeden typ systemu AI. Zawiera tylko jeden polski przypadek, dlatego właściwy polski pilotaż pozostaje do wykonania. Wszystkie trzy przypadki zakończyły się tym samym rodzajem werdyktu, więc zestaw nie sprawdził granic między czterema kategoriami werdyktu. Nie dowodzi jeszcze trafności metody, przenośności między systemami ani stabilności na szerszym korpusie. Dynamiczne strony nie miały wspólnej zapisanej migawki, a w jednym przypadku nie były dostępne dane surowe i pełna dokumentacja metody.
