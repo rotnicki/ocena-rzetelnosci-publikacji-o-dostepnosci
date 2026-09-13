@@ -118,6 +118,7 @@ Ocena powinna:
 - `kalibracja/0.2/rejestr-kandydatow.md` — zamknięta pula 24 kandydatów;
 - `kalibracja/0.2/rejestr-korpusu.md` — osiem wybranych publikacji i kolejność ocen;
 - `kalibracja/0.2/wyniki-serii.md` — ogólne wyniki zakończonej serii.
+- `kalibracja/0.3/wyniki-pilota.md` — zagregowane wyniki pilota projektu 0.3, bez pełnych analiz przypadków.
 
 ### Metodologia
 
