@@ -2,7 +2,7 @@
 
 **Data:** 13 września 2026 r.  
 **Status:** wynik pilota projektu; nie jest zatwierdzeniem ani wydaniem 0.3  
-**Zakres wykonanych prac:** 1 polski przypadek diagnostyczny i 2 pomocnicze testy międzyjęzykowe w języku angielskim; 6 odizolowanych przebiegów A/B
+**Zakres wykonanych prac:** wcześniejszy przypadek diagnostyczny i 2 pomocnicze testy angielskie oraz nowy podstawowy pilotaż 5 polskich publikacji; łącznie 16 odizolowanych przebiegów, przy czym oba zestawy są raportowane osobno
 
 Pełne analizy przypadków są przechowywane poza repozytorium publicznym. Ten dokument zawiera wyłącznie zagregowane informacje potrzebne do oceny działania metodologii.
 
@@ -18,7 +18,7 @@ Standard, kotwice, szablony, schematy, walidator i pakiet umiejętności odpowia
 
 Po poprawce testy walidatora, zgodność kopii referencyjnych, kontrola struktury pakietu i odtwarzalna budowa ZIP przechodzą. Historyczne wersje 0.1 i 0.2 nie zostały zmienione.
 
-## Wyniki zagregowane całego wykonanego zestawu
+## Wyniki zagregowane wcześniejszego zestawu diagnostycznego
 
 Poniższe liczby opisują jeden przypadek polski i dwa testy angielskie łącznie. Nie są wynikiem trzytekstowego polskiego pilota i nie potwierdzają jeszcze stabilności G, H oraz L w polskich warunkach komunikacyjnych.
 
@@ -59,4 +59,52 @@ Powyższe punkty są wnioskami z pilota. Zmiany wpływające na znaczenie metodo
 
 ## Ograniczenia
 
-To mały zestaw techniczno-diagnostyczny wykonany przez jeden typ systemu AI. Zawiera tylko jeden polski przypadek, dlatego właściwy polski pilotaż pozostaje do wykonania. Wszystkie trzy przypadki zakończyły się tym samym rodzajem werdyktu, więc zestaw nie sprawdził granic między czterema kategoriami werdyktu. Nie dowodzi jeszcze trafności metody, przenośności między systemami ani stabilności na szerszym korpusie. Dynamiczne strony nie miały wspólnej zapisanej migawki, a w jednym przypadku nie były dostępne dane surowe i pełna dokumentacja metody.
+To mały zestaw techniczno-diagnostyczny wykonany przez jeden typ systemu AI. Zawierał tylko jeden polski przypadek, dlatego sam nie mógł zastąpić właściwego polskiego pilotażu opisanego niżej. Wszystkie trzy przypadki zakończyły się tym samym rodzajem werdyktu, więc zestaw nie sprawdził granic między czterema kategoriami werdyktu. Nie dowodzi jeszcze trafności metody, przenośności między systemami ani stabilności na szerszym korpusie. Dynamiczne strony nie miały wspólnej zapisanej migawki, a w jednym przypadku nie były dostępne dane surowe i pełna dokumentacja metody.
+
+## Nowy podstawowy pilotaż polski po zmianach M1–M14
+
+Nowy pilotaż objął pięć polskojęzycznych publikacji z pięciu różnych miejsc publikacji: tekst ekspercki, popularyzatorski, techniczny, urzędowy oraz komercyjny. Dla każdej publikacji wykonano dwa odizolowane przebiegi A i B. Poniżej podano wyłącznie dane zbiorcze; pełne oceny pozostają w prywatnym laboratorium.
+
+| Miara | Wynik |
+|---|---:|
+| Dokładna zgodność A–L | 48/60 (80,0%) |
+| Zgodność A–L w granicy jednego punktu | 60/60 (100%) |
+| Średnia bezwzględna różnica | 0,20 punktu |
+| Zgodność werdyktu | 5/5 par (100%) |
+| Twierdzenia z odpowiednikiem semantycznym po obu stronach | 330/364 (90,7%) |
+| Dokładna zgodność wyniku twierdzeń w relacjach 1:1 | 78/126 (61,9%) |
+| Problemy z odpowiednikiem semantycznym po obu stronach | 61/72 (84,7%) |
+| Zgodność centralności / ryzyka wspólnych problemów | 77,8% / 77,8% |
+| Rozbieżności `nd` | 0 |
+
+### Co działa w projekcie 0.3
+
+- profil miejsca, celu i głównych odbiorców był zgodny w każdej parze;
+- wszystkie różnice A–L mieściły się w jednym punkcie;
+- oceny E, I i L były identyczne we wszystkich pięciu parach;
+- werdykt, zakres wymaganej korekty i ostrożność polecenia były zgodne w każdej parze;
+- wspólny format porównania zapewnił jednokrotne pokrycie wszystkich twierdzeń i problemów;
+- reguła ustalania H na podstawie istotnych grup odbiorców została zastosowana we wszystkich przebiegach.
+
+### Co zawiodło albo pozostało słabe
+
+- wymiar H był dokładnie zgodny tylko w 2 z 5 par; największą trudność stanowiły publikacje dla grup mieszanych;
+- wiedza rzeczywiście potrzebna odbiorcy i pewność profilu były zgodne tylko w 2 z 5 par;
+- liczba twierdzeń w jednym przebiegu wahała się od 23 do 57, co wskazuje na nadal niestabilną atomizację;
+- liczba problemów wahała się od 5 do 10, a dokładna zgodność ich znaczenia była niższa niż zgodność ocen A–L;
+- wszystkie 10 przebiegów zakończyło się jednym rodzajem werdyktu, dlatego pilotaż nie sprawdził rozróżniania wszystkich progów;
+- nie wystąpiły `nd`, problem krytyczny ani werdykt o braku możliwości rozstrzygnięcia;
+- grupowe L nie było zapisywane w dostatecznie jednolity sposób;
+- walidator nie sprawdza jeszcze wszystkich zależności między wynikiem, wyciągiem i porównaniem, choć bieżącą serię zweryfikowano dodatkowymi kontrolami.
+
+### Zmiany do rozważenia przed kandydatem wydawniczym
+
+- dodać dokładniejsze przykłady atomizacji i grupowania problemów;
+- doprecyzować granice H=2/3 i H=3/4 dla grup niespecjalistycznych i mieszanych;
+- ujednolicić znaczenie oraz zapis oceny L według grup;
+- doprecyzować poziomy pewności profilu odbiorców i wiedzy wymaganej od czytelnika;
+- rozbudować walidator o kontrole zależności między wszystkimi plikami;
+- przygotować osobny korpus sprawdzający pozostałe werdykty, `nd`, problem krytyczny i brak rozstrzygnięcia;
+- sprawdzić przenośność metodologii na innych oceniających i systemach.
+
+Powyższe punkty są wnioskami z pilota, a nie wdrożonymi zmianami zasad. Wersje 0.1 i 0.2 pozostały nietknięte. PR nr 8 nie został scalony i nie utworzono znacznika ani wydania 0.3.
