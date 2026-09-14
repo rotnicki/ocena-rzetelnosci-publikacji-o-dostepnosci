@@ -123,6 +123,7 @@ Ocena powinna:
 - `kalibracja/0.3/wyniki-B1.md` — bezpieczne, zagregowane wyniki zakończonego B1, bez powiązania nazwanych publikacji z negatywnymi wynikami;
 - `kalibracja/0.3/kontrola-techniczna-S1-S10.md` — historyczna kontrola techniczna stanu sprzed wykonania B1.
 - `kalibracja/0.3/kontrola-techniczna-S1-S15.md` — aktualna kontrola techniczna projektu po wdrożeniu T1–T2 i S11–S15.
+- `kalibracja/0.3/protokol-B2.md` — przygotowany protokół badania przenośności między ChatGPT, Gemini i Grokiem; oceny B2 nie zostały rozpoczęte.
 
 ### Metodologia
 
@@ -180,7 +181,7 @@ Wynik pokazuje powtarzalność w badanym środowisku. Nie jest jeszcze dowodem p
 
 ## Następny etap
 
-Badanie B1 zakończono proceduralnie. Wynikające z niego techniczne poprawki T1–T2 oraz doprecyzowania S11–S15 zostały wdrożone i obowiązują wyłącznie w przyszłych ocenach. B2 nie zostało rozpoczęte i wymaga osobnego protokołu oraz decyzji.
+Badanie B1 zakończono proceduralnie. Wynikające z niego techniczne poprawki T1–T2 oraz doprecyzowania S11–S15 zostały wdrożone i obowiązują wyłącznie w przyszłych ocenach. Protokół B2 i odizolowane pakiety wejściowe zostały przygotowane do zatwierdzenia; żadna ocena B2 nie została jeszcze rozpoczęta.
 
 Publiczny projekt 0.3 nadal podlega przeglądowi spójności. Dopiero po dalszych testach, zatwierdzeniu, zamrożeniu i końcowej kontroli może powstać wydanie `v0.3.0`.
 
