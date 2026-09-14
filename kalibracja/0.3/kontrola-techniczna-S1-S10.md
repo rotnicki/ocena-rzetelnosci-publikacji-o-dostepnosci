@@ -8,6 +8,11 @@
 
 **Wynik:** kontrola zakończona pomyślnie
 
+> **Aktualizacja stanu projektu — 14 września 2026 r.:** ten raport opisuje
+> kontrolę wykonaną przed zatwierdzeniem projektu B1. Po tej kontroli rozpoczęto
+> wyłącznie przygotowanie B1: protokół, dobór korpusu i rejestry przed ocenami.
+> Ocen B1 nie rozpoczęto. B2 nadal nie zostało rozpoczęte.
+
 ## Stan wdrożenia
 
 S1–S8 doprecyzowują atomizację twierdzeń, wyniki porównań, grupowanie problemów, granice H, ocenę L według grup, profil odbiorców, bariery językowe oraz relację werdyktu z bezpiecznym poleceniem.
@@ -48,7 +53,8 @@ Raporty kontroli walidatora po pilocie oraz wdrożenia S1–S8 zachowano jako do
 - `git diff --check` nie wykrywa błędów formatowania;
 - wersje 0.1 i 0.2 pozostały niezmienione;
 - wyniki zakończonych przebiegów i pilota nie zostały przeliczone wstecz;
-- B1 i B2 nie zostały rozpoczęte;
+- w chwili wykonania tej kontroli B1 i B2 nie zostały rozpoczęte; późniejszy
+  stan prac przygotowawczych B1 opisuje nota na początku dokumentu;
 - PR nr 8 pozostaje roboczy i niescalony;
 - nie utworzono znacznika ani wydania 0.3.
 

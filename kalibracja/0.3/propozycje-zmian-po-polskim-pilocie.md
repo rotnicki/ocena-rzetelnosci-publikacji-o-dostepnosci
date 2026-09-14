@@ -4,6 +4,11 @@
 **Status:** S1–S10 zatwierdzone 14 września 2026 r. i wdrożone na gałęzi projektu 0.3; B1–B2 pozostają propozycjami
 **Podstawa:** pięć polskich publikacji, po dwa odizolowane przebiegi A/B
 
+> **Dokument historyczny — aktualizacja stanu 14 września 2026 r.:** S1–S10
+> zostały zatwierdzone i wdrożone. Następnie zatwierdzono projekt B1 i
+> rozpoczęto przygotowanie jego protokołu, korpusu oraz rejestrów. Ocen B1 nie
+> rozpoczęto. B2 pozostaje propozycją i nie zostało rozpoczęte.
+
 ## 1. Najważniejsza rekomendacja
 
 Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 ustanawia osobny kontrakt techniczny obowiązujący przyszłe serie. Badania B1–B2 pozostają propozycjami wymagającymi osobnej decyzji.

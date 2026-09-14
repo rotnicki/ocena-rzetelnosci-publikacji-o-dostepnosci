@@ -102,6 +102,7 @@ class PackageTests(unittest.TestCase):
         self.assertIn("Kontrola techniczna wdrożenia S1–S10", current)
         self.assertIn("S9 i S10 są wdrożone", current)
         self.assertIn("B1 i B2 nie zostały rozpoczęte", current)
+        self.assertIn("Ocen B1 nie rozpoczęto", current)
 
         pilot = (calibration / "wyniki-pilota.md").read_text(encoding="utf-8")
         self.assertIn("S1–S10 zostały następnie osobno zatwierdzone i wdrożone", pilot)
