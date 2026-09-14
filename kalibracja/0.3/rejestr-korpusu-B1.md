@@ -72,7 +72,7 @@ przypisany do publikacji.
 
 Kontrolę wykonano 14 września 2026 r. przed utworzeniem commita:
 
-- 70 z 70 testów przeszło, w tym 5 nowych testów rejestrów B1;
+- 71 z 71 testów przeszło, w tym 6 nowych testów rejestrów B1;
 - wszystkie pliki Pythona przeszły kontrolę składni;
 - 12 schematów jest poprawnymi dokumentami JSON, a lokalne `$ref` są
   rozwiązywalne;
