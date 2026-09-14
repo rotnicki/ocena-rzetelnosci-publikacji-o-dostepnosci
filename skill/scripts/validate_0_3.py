@@ -103,6 +103,18 @@ def number(value: object, path: str, minimum: float = 0, maximum: float = 1) -> 
     return float(value)
 
 
+def same(value: object, expected: object, path: str) -> None:
+    if value != expected:
+        fail(path, "wartość nie odpowiada powiązanemu plikowi")
+
+
+def agreement_rate(items: list[dict], field: str) -> float | None:
+    comparable = [item[field] for item in items if item[field] in {"yes", "no"}]
+    if not comparable:
+        return None
+    return comparable.count("yes") / len(comparable)
+
+
 def url(value: object, path: str) -> str:
     value = text(value, path)
     parsed = urlparse(value)
@@ -557,8 +569,12 @@ def validate_result(data: object) -> None:
     exact(rationales, set(DIMENSIONS), "score_rationales")
     for key in DIMENSIONS:
         text(rationales[key], f"score_rationales.{key}")
+    if any(claim["category"] in {"P", "S"} for claim in claims) and scores["B"] == "nd":
+        fail("scores.B", "twierdzenie prawne lub normatywne wyklucza 'nd'")
     if any(claim["category"] == "T" for claim in claims) and scores["C"] == "nd":
         fail("scores.C", "twierdzenie techniczne wyklucza 'nd'")
+    if any(claim["category"] == "Z" for claim in claims) and scores["I"] == "nd":
+        fail("scores.I", "zalecenie wyklucza 'nd'")
     verdict = enum(root["verdict"], VERDICTS, "verdict")
     basis = text_array(root["verdict_basis_issue_ids"], "verdict_basis_issue_ids", unique=True)
     unknown = sorted(set(basis) - issue_ids)
@@ -573,6 +589,8 @@ def validate_result(data: object) -> None:
         fail("verdict", "ten werdykt nie może współistnieć z problemem dużym lub krytycznym")
     if verdict == "nie_mozna_rozstrzygnac" and correction != "nie_dotyczy":
         fail("counterfactual_correction", "dla tego werdyktu wymagane jest nie_dotyczy")
+    if verdict != "nie_mozna_rozstrzygnac" and correction == "nie_dotyczy":
+        fail("counterfactual_correction", "nie_dotyczy jest dozwolone tylko przy braku możliwości rozstrzygnięcia")
     enum(root["verdict_confidence"], CONFIDENCE, "verdict_confidence")
     enum(root["source_coverage"], {"pelne", "wystarczajace", "czesciowe", "niewystarczajace"}, "source_coverage")
     enum(root["safe_recommendation"], {"bez_zastrzezen", "z_niewielkimi_korektami", "z_nazwanymi_korektami_lub_zrodlami", "nie_do_praktycznego_uzycia", "nie_mozna_ocenic"}, "safe_recommendation")
@@ -580,7 +598,7 @@ def validate_result(data: object) -> None:
     text_array(root["limitations"], "limitations")
 
 
-def validate_extract(data: object) -> None:
+def validate_extract(data: object, result: dict | None = None) -> None:
     root = obj(data, "root")
     keys = {
         "schema_version", "analysis_id", "publication_id", "methodology", "evaluator", "material_versions",
@@ -675,6 +693,52 @@ def validate_extract(data: object) -> None:
     enum(root["verdict_confidence"], CONFIDENCE, "verdict_confidence")
     enum(root["source_coverage"], {"pelne", "wystarczajace", "czesciowe", "niewystarczajace"}, "source_coverage")
     enum(root["counterfactual_correction"], {"ograniczona", "strukturalna", "nie_dotyczy"}, "counterfactual_correction")
+
+    if result is not None:
+        validate_result(result)
+        same(root["analysis_id"], result["analysis_id"], "analysis_id")
+        same(root["publication_id"], result["publication"]["publication_id"], "publication_id")
+        same(root["methodology"], {
+            "version": result["methodology"]["version"],
+            "identifier": result["methodology"]["identifier"],
+        }, "methodology")
+        same(root["evaluator"], result["evaluator"], "evaluator")
+        expected_materials = [
+            {key: material[key] for key in ("material_id", "role", "url", "version")}
+            for material in result["materials"]
+            if material["role"] in {"tresc_glowna", "material_centralny_zewnetrzny"}
+        ]
+        same(root["material_versions"], expected_materials, "material_versions")
+        result_context = result["publication_context"]
+        # Pola opisowe wyciągu są z założenia skrótem i mogą być parafrazą.
+        # Mechanicznie porównujemy tylko wartości kategoryczne, które nie tracą
+        # znaczenia podczas kondensowania raportu.
+        same(context["profile_status"], result_context["profile_status"], "publication_context_summary.profile_status")
+        same(context["profile_confidence"], result_context["profile_confidence"], "publication_context_summary.profile_confidence")
+        result_audience = result["audience_profile"]
+        for key in (
+            "popularizing_purpose", "unexplained_core_terms_block_nonspecialists",
+            "core_requires_undisclosed_specialist_knowledge", "core_unrecoverable_without_expert",
+        ):
+            same(audience[key], result_audience[key], f"audience_language.{key}")
+        result_groups = result_audience["group_comprehension"]
+        if len(group_scores) != len(result_groups):
+            fail("audience_language.group_scores", "liczba grup nie odpowiada pełnemu wynikowi")
+        for index, (summary_group, result_group) in enumerate(zip(group_scores, result_groups)):
+            for key in ("significant", "included_in_article_promise", "group_h_score"):
+                same(summary_group[key], result_group[key], f"audience_language.group_scores[{index}].{key}")
+        for key in (
+            "claim_count", "claim_map_confidence", "scores", "issue_counts", "verdict",
+            "verdict_confidence", "source_coverage", "counterfactual_correction",
+        ):
+            same(root[key], result[key], key)
+        if len(issues) != len(result["issues"]):
+            fail("issues", "liczba problemów nie odpowiada pełnemu wynikowi")
+        for index, (summary_issue, result_issue) in enumerate(zip(issues, result["issues"])):
+            # Uzasadnienia w wyciągu mogą być skrócone. Identyfikator i pola
+            # kategoryczne muszą pozostać dokładnie takie jak w pełnym wyniku.
+            for key in ("issue_id", "severity", "centrality", "application_risk", "confidence"):
+                same(summary_issue[key], result_issue[key], f"issues[{index}].{key}")
 
 
 def validate_relation(relation: str, a_ids: list[str], b_ids: list[str], path: str) -> None:
@@ -873,6 +937,14 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
             fail("comparison", "identyfikatory przebiegów nie odpowiadają wynikom")
         if root["publication_id"] != result_a["publication"]["publication_id"] or root["publication_id"] != result_b["publication"]["publication_id"]:
             fail("comparison", "identyfikator publikacji nie odpowiada wynikom")
+        method_a = {key: result_a["methodology"][key] for key in ("version", "identifier")}
+        method_b = {key: result_b["methodology"][key] for key in ("version", "identifier")}
+        same(method_b, method_a, "results.methodology")
+        same(root["methodology"], method_a, "methodology")
+        same(verdict["a_verdict"], result_a["verdict"], "verdict_comparison.a_verdict")
+        same(verdict["b_verdict"], result_b["verdict"], "verdict_comparison.b_verdict")
+        same(verdict["a_counterfactual_correction"], result_a["counterfactual_correction"], "verdict_comparison.a_counterfactual_correction")
+        same(verdict["b_counterfactual_correction"], result_b["counterfactual_correction"], "verdict_comparison.b_counterfactual_correction")
         expected = {
             "a_claims": {item["claim_id"] for item in result_a["claims"]}, "b_claims": {item["claim_id"] for item in result_b["claims"]},
             "a_issues": {item["issue_id"] for item in result_a["issues"]}, "b_issues": {item["issue_id"] for item in result_b["issues"]},
@@ -892,11 +964,83 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
             if rows[dimension]["a_score"] != result_a["scores"][dimension] or rows[dimension]["b_score"] != result_b["scores"][dimension]:
                 fail(f"score_comparison.{dimension}", "wyniki nie odpowiadają plikom A/B")
 
+        claims_a = {item["claim_id"]: item for item in result_a["claims"]}
+        claims_b = {item["claim_id"]: item for item in result_b["claims"]}
+        one_to_one_claims = []
+        for index, match in enumerate(root["claim_matches"]):
+            path = f"claim_matches[{index}].result_agreement"
+            if match["relation"] in {"a_only", "b_only"}:
+                same(match["result_agreement"], "not_comparable", path)
+            elif match["relation"] == "one_to_one":
+                one_to_one_claims.append(match)
+                results_equal = (
+                    claims_a[match["a_ids"][0]]["result"]
+                    == claims_b[match["b_ids"][0]]["result"]
+                )
+                if (match["result_agreement"] == "exact") != results_equal:
+                    fail(path, "exact musi odpowiadać identyczności wyników twierdzeń 1:1")
+
+        issues_a = {item["issue_id"]: item for item in result_a["issues"]}
+        issues_b = {item["issue_id"]: item for item in result_b["issues"]}
+        for index, match in enumerate(root["issue_matches"]):
+            path = f"issue_matches[{index}]"
+            if match["relation"] in {"a_only", "b_only"}:
+                for field in ("severity_agreement", "centrality_agreement", "risk_agreement"):
+                    same(match[field], "not_comparable", f"{path}.{field}")
+            elif match["relation"] == "one_to_one":
+                issue_a = issues_a[match["a_ids"][0]]
+                issue_b = issues_b[match["b_ids"][0]]
+                fields = {
+                    "severity_agreement": "severity",
+                    "centrality_agreement": "centrality",
+                    "risk_agreement": "application_risk",
+                }
+                for agreement_field, result_field in fields.items():
+                    expected_agreement = "yes" if issue_a[result_field] == issue_b[result_field] else "no"
+                    same(match[agreement_field], expected_agreement, f"{path}.{agreement_field}")
+
+        expected_claim_rate = None
+        if one_to_one_claims:
+            expected_claim_rate = sum(
+                match["result_agreement"] == "exact" for match in one_to_one_claims
+            ) / len(one_to_one_claims)
+        bilateral_issues = [
+            match for match in root["issue_matches"] if match["a_ids"] and match["b_ids"]
+        ]
+        major_critical_issues = [
+            match for match in bilateral_issues
+            if any(issues_a[identifier]["severity"] in {"duze", "krytyczne"} for identifier in match["a_ids"])
+            or any(issues_b[identifier]["severity"] in {"duze", "krytyczne"} for identifier in match["b_ids"])
+        ]
+        expected_cross_metrics = {
+            "one_to_one_claim_result_agreement": expected_claim_rate,
+            "all_issue_centrality_agreement": agreement_rate(bilateral_issues, "centrality_agreement"),
+            "all_issue_risk_agreement": agreement_rate(bilateral_issues, "risk_agreement"),
+            "major_critical_centrality_agreement": agreement_rate(major_critical_issues, "centrality_agreement"),
+            "major_critical_risk_agreement": agreement_rate(major_critical_issues, "risk_agreement"),
+        }
+        for key, expected_value in expected_cross_metrics.items():
+            actual_value = metrics[key]
+            if expected_value is None:
+                if actual_value is not None:
+                    fail(f"aggregate_metrics.{key}", "oczekiwano null")
+            elif actual_value is None or abs(actual_value - expected_value) > 1e-9:
+                fail(f"aggregate_metrics.{key}", f"oczekiwano {expected_value}")
+
+
+def reject_duplicate_keys(pairs: list[tuple[str, object]]) -> dict:
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            fail("JSON", f"powtórzony klucz {key!r}")
+        result[key] = value
+    return result
+
 
 def load_json(path: Path) -> object:
     try:
         with path.open(encoding="utf-8") as source:
-            return json.load(source)
+            return json.load(source, object_pairs_hook=reject_duplicate_keys)
     except (OSError, json.JSONDecodeError) as error:
         fail(str(path), str(error))
 
@@ -907,14 +1051,21 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("path", type=Path)
     parser.add_argument("--result-a", type=Path)
     parser.add_argument("--result-b", type=Path)
+    parser.add_argument("--result", type=Path, help="pełny wynik odpowiadający wyciągowi")
     args = parser.parse_args(argv)
     try:
         data = load_json(args.path)
         if args.kind == "result":
+            if args.result is not None or args.result_a is not None or args.result_b is not None:
+                fail("result", "ten tryb nie przyjmuje dodatkowych plików wynikowych")
             validate_result(data)
         elif args.kind == "extract":
-            validate_extract(data)
+            if args.result_a is not None or args.result_b is not None:
+                fail("extract", "użyj --result zamiast --result-a/--result-b")
+            validate_extract(data, load_json(args.result) if args.result is not None else None)
         else:
+            if args.result is not None:
+                fail("comparison", "użyj --result-a i --result-b")
             if args.result_a is None or args.result_b is None:
                 fail("comparison", "wymagane --result-a i --result-b")
             validate_comparison(data, load_json(args.result_a), load_json(args.result_b))

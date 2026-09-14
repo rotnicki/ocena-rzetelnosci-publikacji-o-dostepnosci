@@ -30,7 +30,7 @@ For version 0.3 draft:
 - use [references/wzor-raportu-0.3.md](references/wzor-raportu-0.3.md) and [references/karta-oceny-0.3.md](references/karta-oceny-0.3.md);
 - validate data against [references/wynik-0.3.schema.json](references/wynik-0.3.schema.json), [references/wyciag-kalibracyjny-0.3.schema.json](references/wyciag-kalibracyjny-0.3.schema.json), and, for A/B comparisons, [references/porownanie-pary-0.3.schema.json](references/porownanie-pary-0.3.schema.json);
 - use [references/wzor-porownania-0.3.md](references/wzor-porownania-0.3.md) after both independent runs are closed and validated;
-- run `python3 scripts/validate_0_3.py result wynik.json` and, when applicable, `python3 scripts/validate_0_3.py extract wyciag-kalibracyjny.json`.
+- run `python3 scripts/validate_0_3.py result wynik.json` and, when applicable, cross-check the extract with `python3 scripts/validate_0_3.py extract wyciag-kalibracyjny.json --result wynik.json`.
 - validate a pair with `python3 scripts/validate_0_3.py comparison porownanie-pary.json --result-a A/wynik.json --result-b B/wynik.json`.
 
 Treat the selected standard as authoritative if this file differs from it. The 0.3 materials are a public working draft, not a frozen release.

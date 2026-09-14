@@ -6,6 +6,7 @@ from __future__ import annotations
 import copy
 import importlib.util
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -127,10 +128,13 @@ def valid_extract() -> dict:
         "methodology": {"version": "0.3-draft", "identifier": "test-commit"}, "evaluator": evaluator(),
         "material_versions": [{"material_id": "M-001", "role": "tresc_glowna", "url": "https://example.com/article", "version": "2026-01-01"}],
         "publication_context_summary": {"outlet_type": "blog popularyzatorski", "outlet_declared_purpose": "wyjaśnianie dostępności", "declared_audiences": ["osoby początkujące"], "article_audiences": ["osoby początkujące", "praktycy"], "actually_required_knowledge": ["podstawy dostępności"], "conflicts": [], "profile_status": "ustalony", "profile_confidence": "wysoka"},
-        "audience_language": {"primary_audience": "osoby początkujące", "popularizing_purpose": True, "unexplained_core_terms_block_nonspecialists": False, "core_requires_undisclosed_specialist_knowledge": False, "core_unrecoverable_without_expert": False, "group_scores": [{"audience": "osoby początkujące", "significant": True, "included_in_article_promise": True, "group_h_score": 3}]},
+        "audience_language": {"primary_audience": "osoby początkujące", "popularizing_purpose": True, "unexplained_core_terms_block_nonspecialists": False, "core_requires_undisclosed_specialist_knowledge": False, "core_unrecoverable_without_expert": False, "group_scores": [
+            {"audience": "osoby początkujące", "significant": True, "included_in_article_promise": True, "group_h_score": 3},
+            {"audience": "praktycy", "significant": True, "included_in_article_promise": True, "group_h_score": 4},
+        ]},
         "claim_count": 1, "claim_map_confidence": "wysoka", "scores": scores(),
         "issue_counts": {"krytyczne": 0, "duze": 0, "srednie": 0, "male": 1},
-        "issues": [{"issue_id": "P-001", "severity": "male", "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.", "application_risk": "niskie", "application_risk_rationale": "Skutek lokalny.", "confidence": "wysoka"}],
+        "issues": [{"issue_id": "P-001", "severity": "male", "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.", "application_risk": "niskie", "application_risk_rationale": "Skutek jest lokalny.", "confidence": "wysoka"}],
         "central_findings": ["Rdzeń jest poprawny."], "verdict": "rzetelny_z_niewielkimi_zastrzezeniami",
         "verdict_confidence": "wysoka", "source_coverage": "pelne", "counterfactual_correction": "ograniczona",
     }
@@ -158,8 +162,33 @@ class ValidatorTests(unittest.TestCase):
         result_a = valid_result("A")
         result_b = valid_result("B")
         VALIDATOR.validate_result(result_a)
-        VALIDATOR.validate_extract(valid_extract())
+        VALIDATOR.validate_extract(valid_extract(), result_a)
         VALIDATOR.validate_comparison(valid_comparison(), result_a, result_b)
+
+    def test_rejects_duplicate_json_keys(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "duplicate.json"
+            path.write_text('{"schema_version":"0.3-draft","schema_version":"inna"}', encoding="utf-8")
+            with self.assertRaises(VALIDATOR.ValidationError):
+                VALIDATOR.load_json(path)
+
+    def test_extract_crosscheck_rejects_mismatch(self) -> None:
+        extract = valid_extract()
+        extract["claim_count"] = 2
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_extract(extract, valid_result("A"))
+
+    def test_extract_crosscheck_allows_shortened_prose(self) -> None:
+        extract = valid_extract()
+        extract["publication_context_summary"]["outlet_declared_purpose"] = "krótszy opis celu"
+        extract["issues"][0]["centrality_rationale"] = "Skrócone uzasadnienie."
+        VALIDATOR.validate_extract(extract, valid_result("A"))
+
+    def test_extract_crosscheck_rejects_changed_issue_classification(self) -> None:
+        extract = valid_extract()
+        extract["issues"][0]["application_risk"] = "srednie"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_extract(extract, valid_result("A"))
 
     def test_requires_all_ten_context_checks(self) -> None:
         result = valid_result()
@@ -217,6 +246,26 @@ class ValidatorTests(unittest.TestCase):
     def test_claim_trace_must_match_claim(self) -> None:
         result = valid_result()
         result["claims"][0]["extraction_trace"]["paraphrase"] = "Inna parafraza."
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_legal_and_normative_claims_exclude_nd_for_b(self) -> None:
+        result = valid_result()
+        result["claims"][0]["category"] = "S"
+        result["scores"]["B"] = "nd"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_recommendation_excludes_nd_for_i(self) -> None:
+        result = valid_result()
+        result["claims"][0]["category"] = "Z"
+        result["scores"]["I"] = "nd"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_not_applicable_correction_requires_unresolved_verdict(self) -> None:
+        result = valid_result()
+        result["counterfactual_correction"] = "nie_dotyczy"
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
 
@@ -283,6 +332,44 @@ class ValidatorTests(unittest.TestCase):
     def test_comparison_rejects_incorrect_aggregate_metric(self) -> None:
         comparison = valid_comparison()
         comparison["aggregate_metrics"]["exact_score_agreement"] = 0.5
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_comparison(comparison, valid_result("A"), valid_result("B"))
+
+    def test_comparison_rejects_different_method_identifier(self) -> None:
+        comparison = valid_comparison()
+        comparison["methodology"]["identifier"] = "inny-commit"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_comparison(comparison, valid_result("A"), valid_result("B"))
+
+    def test_comparison_rejects_verdict_not_matching_results(self) -> None:
+        comparison = valid_comparison()
+        comparison["verdict_comparison"]["a_verdict"] = "rzetelny"
+        comparison["verdict_comparison"]["agreement"] = False
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_comparison(comparison, valid_result("A"), valid_result("B"))
+
+    def test_comparison_rejects_false_exact_claim_agreement(self) -> None:
+        comparison = valid_comparison()
+        result_b = valid_result("B")
+        result_b["claims"][0]["result"] = "czesciowo_zgodne"
+        result_b["claims"][0]["extraction_trace"]["result"] = "czesciowo_zgodne"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_comparison(comparison, valid_result("A"), result_b)
+
+    def test_comparison_rejects_false_issue_agreement(self) -> None:
+        comparison = valid_comparison()
+        result_b = valid_result("B")
+        result_b["issues"][0]["centrality"] = "rdzen"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_comparison(comparison, valid_result("A"), result_b)
+
+    def test_comparison_recalculates_claim_and_issue_metrics(self) -> None:
+        comparison = valid_comparison()
+        comparison["aggregate_metrics"]["one_to_one_claim_result_agreement"] = 0.5
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_comparison(comparison, valid_result("A"), valid_result("B"))
+        comparison = valid_comparison()
+        comparison["aggregate_metrics"]["all_issue_risk_agreement"] = 0.5
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_comparison(comparison, valid_result("A"), valid_result("B"))
 
