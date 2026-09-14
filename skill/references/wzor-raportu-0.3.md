@@ -124,14 +124,15 @@ Przedstawić cel, tok wywodu i wnioski autora bez oceny poprawności. Streszczen
 
 - Poprawność według stanu na datę publikacji:
 - Uzasadnienie:
-- Wersja pierwotna dostępna: tak / nie
-- Oceniana wersja historyczna: original / archived_update / current_after_update / not_reconstructable
+- Wersja historyczna odtwarzalna: true / false
+- Oceniana wersja historyczna: original / archived_update / not_reconstructable
 - Dowody wersji:
 - Pewność oceny historycznej: wysoka / srednia / niska
 - Bieżąca użyteczność aktualnie dostępnej wersji:
 - Uzasadnienie:
 - Podstawa oceny wersji bieżącej:
 - Istotne zmiany prawa, standardów, technologii albo materiału:
+- Transformacje materiału i podstawa uznania równoważności:
 
 ## 8. Ocena w dwunastu wymiarach
 

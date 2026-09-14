@@ -76,7 +76,7 @@ Verify claims against sources appropriate to their type, prioritizing:
 5. peer-reviewed research and adequately documented user studies;
 6. representative user organizations and strong expert literature.
 
-Open and read the relevant source section. Do not use search snippets as evidence. Record access dates and versions. Separate historical accuracy at publication time from current applicability when law, standards, technology, or guidance changed later.
+Open and read the relevant source section. Do not use search snippets as evidence. Record access dates and versions. Separate historical accuracy at publication time from current applicability when law, standards, technology, or guidance changed later. Treat a historical version as reconstructable only when identified evidence preserves the assessed content, date or version, and necessary scope; a current page, current checksum, unchanged URL, metadata, cache, search result, or change note is not sufficient by itself.
 
 For each claim, distinguish requirements from guidance and preferences; errors from simplifications, omissions, interpretations, and unresolved evidence; tested behavior from universal claims; and individual experience from population evidence. Under 0.3, explain why the chosen result is more appropriate than the adjacent result category. Preserve the trace `publication fragment or location → exact source value, code, or content → faithful paraphrase → result`.
 

@@ -52,9 +52,10 @@
 ## Aktualność
 
 - Poprawność historyczna:
-- Wersja pierwotna dostępna: tak / nie
+- Wersja historyczna odtwarzalna: true / false
 - Oceniana wersja historyczna:
 - Dowody wersji i pewność:
+- Transformacje materiału i podstawa uznania równoważności:
 - Bieżąca użyteczność:
 - Uzasadnienie różnicy:
 

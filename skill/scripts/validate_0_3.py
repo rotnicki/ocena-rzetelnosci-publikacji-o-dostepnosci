@@ -443,10 +443,10 @@ def validate_safe_recommendation(verdict: str, recommendation: object, rationale
         fail("safe_recommendation_rationale", "ostrzejsze polecenie wymaga osobnego uzasadnienia")
 
 
-def validate_temporal(value: object, publication: dict, material_ids: set[str], path: str = "temporal_assessment") -> None:
+def validate_temporal(value: object, materials: dict[str, dict], path: str = "temporal_assessment") -> None:
     value = obj(value, path)
     keys = {
-        "historical_accuracy", "historical_rationale", "original_version_available",
+        "historical_accuracy", "historical_rationale", "historical_version_reconstructable",
         "assessed_historical_version", "version_evidence_ids", "historical_confidence",
         "current_applicability", "current_rationale", "current_version_basis", "material_changes",
     }
@@ -455,21 +455,28 @@ def validate_temporal(value: object, publication: dict, material_ids: set[str], 
     enum(value["current_applicability"], CLAIM_RESULTS, f"{path}.current_applicability")
     for key in ("historical_rationale", "current_rationale", "current_version_basis"):
         text(value[key], f"{path}.{key}")
-    original = boolean(value["original_version_available"], f"{path}.original_version_available")
-    assessed = enum(value["assessed_historical_version"], {"original", "archived_update", "current_after_update", "not_reconstructable"}, f"{path}.assessed_historical_version")
+    reconstructable = boolean(value["historical_version_reconstructable"], f"{path}.historical_version_reconstructable")
+    assessed = enum(value["assessed_historical_version"], {"original", "archived_update", "not_reconstructable"}, f"{path}.assessed_historical_version")
     version_evidence_ids = text_array(value["version_evidence_ids"], f"{path}.version_evidence_ids", unique=True)
-    unknown = sorted(set(version_evidence_ids) - material_ids)
+    unknown = sorted(set(version_evidence_ids) - set(materials))
     if unknown:
         fail(f"{path}.version_evidence_ids", f"nieznane materiały: {', '.join(unknown)}")
     confidence = enum(value["historical_confidence"], CONFIDENCE, f"{path}.historical_confidence")
     text_array(value["material_changes"], f"{path}.material_changes")
-    if original and assessed != "original":
-        fail(f"{path}.assessed_historical_version", "dostępna wersja pierwotna wymaga wartości original")
-    if publication["updated_at"] is not None and not original:
-        if assessed != "not_reconstructable" or value["historical_accuracy"] != "nierozstrzygniete":
-            fail(path, "brak wersji pierwotnej strony aktualizowanej wymaga not_reconstructable i nierozstrzygniete")
-    if assessed in {"archived_update", "current_after_update"} and confidence == "wysoka":
-        fail(f"{path}.historical_confidence", "stan bez niezmiennej wersji pierwotnej nie może mieć wysokiej pewności")
+    if reconstructable:
+        if assessed not in {"original", "archived_update"}:
+            fail(f"{path}.assessed_historical_version", "odtworzona wersja historyczna wymaga original albo archived_update")
+        if not version_evidence_ids:
+            fail(f"{path}.version_evidence_ids", "odtworzona wersja historyczna wymaga dowodu")
+        if not any(materials[identifier]["immutable"] == "tak" for identifier in version_evidence_ids):
+            fail(f"{path}.version_evidence_ids", "co najmniej jeden dowód wersji musi mieć immutable: tak")
+    else:
+        if assessed != "not_reconstructable":
+            fail(f"{path}.assessed_historical_version", "brak rekonstrukcji wymaga not_reconstructable")
+        if value["historical_accuracy"] != "nierozstrzygniete":
+            fail(f"{path}.historical_accuracy", "brak rekonstrukcji wymaga nierozstrzygniete")
+        if confidence != "niska":
+            fail(f"{path}.historical_confidence", "brak rekonstrukcji wymaga niskiej pewności oceny historycznej")
 
 
 def validate_full_test(issue: dict, path: str) -> None:
@@ -530,6 +537,7 @@ def validate_result(data: object) -> None:
     if not materials:
         fail("materials", "wymagany co najmniej jeden materiał")
     material_ids = set()
+    material_by_id = {}
     for index, material in enumerate(materials):
         path = f"materials[{index}]"
         material = obj(material, path)
@@ -538,6 +546,7 @@ def validate_result(data: object) -> None:
         if material_id in material_ids:
             fail(f"{path}.material_id", "powtórzony identyfikator")
         material_ids.add(material_id)
+        material_by_id[material_id] = material
         enum(material["role"], {"tresc_glowna", "material_centralny_zewnetrzny", "material_dodatkowy", "material_wylaczony"}, f"{path}.role")
         url(material["url"], f"{path}.url")
         for key in ("accessed_at", "version", "scope"):
@@ -548,7 +557,7 @@ def validate_result(data: object) -> None:
     validate_evaluator(root["evaluator"])
     _context, evidence_ids = validate_publication_context(root["publication_context"])
     profile = validate_audience(root["audience_profile"], evidence_ids)
-    validate_temporal(root["temporal_assessment"], publication, material_ids)
+    validate_temporal(root["temporal_assessment"], material_by_id)
     enum(root["claim_map_confidence"], CONFIDENCE, "claim_map_confidence")
     text(root["claim_map_confidence_rationale"], "claim_map_confidence_rationale")
 

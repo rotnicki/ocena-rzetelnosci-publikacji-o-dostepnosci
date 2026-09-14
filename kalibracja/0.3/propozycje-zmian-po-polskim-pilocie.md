@@ -1,12 +1,12 @@
 # Propozycje zmian po polskim pilotażu 0.3
 
 **Data:** 14 września 2026 r.  
-**Status:** S1–S8 zatwierdzone 14 września 2026 r. i wdrożone na gałęzi projektu 0.3; S9–S10 oraz B1–B2 pozostają propozycjami
+**Status:** S1–S9 zatwierdzone 14 września 2026 r. i wdrożone na gałęzi projektu 0.3; S10 zatwierdzona do osobnego wdrożenia; B1–B2 pozostają propozycjami
 **Podstawa:** pięć polskich publikacji, po dwa odizolowane przebiegi A/B
 
 ## 1. Najważniejsza rekomendacja
 
-Przed kandydatem wydawniczym warto przyjąć zmiany S1–S8. Usuwają one luki ujawnione przez pilota bez przebudowy celu metodologii. Zmiany S9–S10 oraz B1–B2 lepiej zatwierdzić osobno: wpływają odpowiednio na techniczny kontrakt danych i na projekt kolejnego badania.
+Zmiany S1–S9 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 zatwierdzono jako osobny kontrakt techniczny do wdrożenia przed badaniami B1 i B2. Same badania B1–B2 pozostają propozycjami wymagającymi osobnej decyzji.
 
 | ID | Rodzaj | Rekomendacja | Główny obszar |
 | --- | --- | --- | --- |
@@ -18,8 +18,8 @@ Przed kandydatem wydawniczym warto przyjąć zmiany S1–S8. Usuwają one luki u
 | S6 | znaczeniowa | przyjąć | profil i pewność odbiorców |
 | S7 | znaczeniowa i strukturalna | przyjąć | językowa bariera jako problem |
 | S8 | znaczeniowa | przyjąć | werdykt i bezpieczne polecenie |
-| S9 | znaczeniowa | rozważyć | wersja historyczna publikacji |
-| S10 | strukturalna | rozważyć | jednolita metryka przebiegu |
+| S9 | znaczeniowa | przyjąć po korekcie — wdrożono | wersja historyczna publikacji |
+| S10 | strukturalna | przyjąć po korekcie — zatwierdzono | jednolita metryka przebiegu |
 | B1 | badawcza | przyjąć | pokrycie nieprzetestowanych progów |
 | B2 | badawcza | przyjąć | przenośność między oceniającymi |
 
@@ -227,13 +227,15 @@ Przed kandydatem wydawniczym warto przyjąć zmiany S1–S8. Usuwają one luki u
 
 ## S9. Rekonstrukcja wersji historycznej bez migawki
 
-**Proponowane brzmienie** — uzupełnienie § 11.2:
+**Zatwierdzone brzmienie** — uzupełnienie § 11:
 
-> Data publikacji, data aktualizacji, pamięć podręczna, opis zmiany albo niezmieniony adres nie dowodzą samodzielnie treści wcześniejszej wersji. Wersję historyczną uznaje się za odtworzoną tylko na podstawie niezmiennej migawki, archiwum, repozytorium wersji albo innego źródła zachowującego treść z danego dnia.
+> Bieżącą treścią jest treść rzeczywiście pozyskana w dniu dostępu. Można ją oceniać pod względem bieżącej użyteczności, lecz nie wolno przypisywać jej wcześniejszej dacie bez osobnego dowodu wersji.
 >
-> Gdy takiego źródła brak, `original_version_reconstructable` musi mieć wartość `false`, a ocena historyczna pozostaje `nierozstrzygniete`. Ocenia się bieżąco pozyskaną treść i jawnie oddziela twierdzenia o jej obecnym stanie od deklaracji wydawcy, że strona została zaktualizowana.
+> Wersję historyczną uznaje się za odtworzoną tylko wtedy, gdy dowód zachowuje rzeczywistą treść, identyfikuje datę lub wersję, obejmuje zakres potrzebny do oceny oraz ma stabilny i sprawdzalny identyfikator. Sama data publikacji lub aktualizacji, bieżąca suma kontrolna, niezmieniony URL, wynik wyszukiwania, pamięć podręczna, opis zmiany albo brak oznaczenia aktualizacji nie dowodzą dawnej treści.
 >
-> Przeskalowanie lub techniczna rekompresja obrazu nie tworzy innej wersji znaczeniowej, jeżeli treść, kolejność i czytelność informacji pozostają niezmienione; zmianę tę trzeba udokumentować.
+> Gdy warunki rekonstrukcji nie są spełnione, `historical_version_reconstructable` ma wartość `false`, oceniana wersja ma wartość `not_reconstructable`, poprawność historyczna pozostaje `nierozstrzygniete`, a jej pewność jest niska. Odtworzona wersja wymaga co najmniej jednego dowodu zachowującego treść i oznaczonego `immutable: tak`.
+>
+> Przeskalowanie, zmiana kodowania lub techniczna rekompresja nie tworzą innej wersji znaczeniowej tylko wtedy, gdy zachowano całą treść, kolejność, znaczenie i czytelność; transformację i podstawę równoważności trzeba udokumentować.
 
 **Prosto:** bez zachowanej starej kopii nie zgadujemy, co dokładnie było na stronie w dniu publikacji.
 
@@ -297,10 +299,11 @@ Przed kandydatem wydawniczym warto przyjąć zmiany S1–S8. Usuwają one luki u
 
 ## 2. Granica decyzji
 
-Po decyzji z 14 września 2026 r.:
+Po decyzjach z 14 września 2026 r.:
 
-- S1–S8 są zatwierdzone i zostały wdrożone w standardzie, kotwicach, schematach, szablonach, walidatorze i instrukcji skilla na gałęzi projektu 0.3;
-- S9–S10 oraz B1–B2 pozostają wyłącznie propozycjami i nie zostały wdrożone;
+- S1–S9 są zatwierdzone i zostały wdrożone w odpowiednich materiałach projektu 0.3;
+- S10 jest zatwierdzona po korekcie i oczekuje na osobne wdrożenie;
+- B1–B2 pozostają propozycjami i nie zostały rozpoczęte;
 - nie wolno przeliczać wstecz wyników polskiego pilota;
 - PR nr 8 pozostaje niescalonym projektem, bez znacznika i wydania 0.3.
 
@@ -318,7 +321,7 @@ Poniższa lista rozwija skróty „kopia skilla” i „wzory” użyte powyżej
 | S6 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | S7 | standard i kotwice 0.3 oraz ich kopie skilla; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `metodologia/0.3/wyciag-kalibracyjny.schema.json`; `skill/references/wyciag-kalibracyjny-0.3.schema.json`; `skill/scripts/validate_0_3.py`; `skill/SKILL.md`; oba pliki testów 0.3 |
 | S8 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
-| S9 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
+| S9 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | S10 | nowy `metodologia/0.3/metryka-0.3.schema.json`; nowy `skill/references/metryka-0.3.schema.json`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; `scripts/build_skill_draft.py`; oba pliki testów 0.3 |
 | B1 | nowy protokół w `kalibracja/0.3/`; bez zmian standardu, kotwic, schematów i skilla przed analizą wyników |
 | B2 | nowy protokół w `kalibracja/0.3/`; bez zmian standardu, kotwic, schematów i skilla przed analizą wyników |

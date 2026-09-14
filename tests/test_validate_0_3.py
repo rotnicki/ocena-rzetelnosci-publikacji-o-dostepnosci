@@ -56,7 +56,7 @@ def valid_result(run: str = "A") -> dict:
         },
         "materials": [{
             "material_id": "M-001", "role": "tresc_glowna", "url": "https://example.com/article",
-            "accessed_at": "2026-09-13", "version": "2026-01-01", "immutable": "nie", "scope": "całość",
+            "accessed_at": "2026-09-13", "version": "2026-01-01", "immutable": "tak", "scope": "całość",
         }],
         "evaluator": evaluator(),
         "publication_context": {
@@ -92,7 +92,7 @@ def valid_result(run: str = "A") -> dict:
         },
         "temporal_assessment": {
             "historical_accuracy": "zgodne", "historical_rationale": "Dostępna wersja pierwotna.",
-            "original_version_available": True, "assessed_historical_version": "original", "version_evidence_ids": ["M-001"],
+            "historical_version_reconstructable": True, "assessed_historical_version": "original", "version_evidence_ids": ["M-001"],
             "historical_confidence": "wysoka", "current_applicability": "zasadniczo_zgodne",
             "current_rationale": "Główny przekaz pozostaje aktualny.", "current_version_basis": "Treść pobrana w dniu dostępu.",
             "material_changes": ["nowsza wersja standardu"],
@@ -325,11 +325,44 @@ class ValidatorTests(unittest.TestCase):
         result["safe_recommendation_rationale"] = "Niepewność jednego źródła uzasadnia większą ostrożność."
         VALIDATOR.validate_result(result)
 
-    def test_updated_page_without_original_is_unresolved(self) -> None:
+    def test_nonreconstructable_history_requires_unresolved_result(self) -> None:
         result = valid_result()
         result["publication"]["updated_at"] = "2026-08-01"
         temporal = result["temporal_assessment"]
-        temporal["original_version_available"] = False
+        temporal["historical_version_reconstructable"] = False
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_nonreconstructable_history_is_valid_when_fields_are_consistent(self) -> None:
+        result = valid_result()
+        temporal = result["temporal_assessment"]
+        temporal["historical_version_reconstructable"] = False
+        temporal["assessed_historical_version"] = "not_reconstructable"
+        temporal["historical_accuracy"] = "nierozstrzygniete"
+        temporal["historical_confidence"] = "niska"
+        temporal["version_evidence_ids"] = []
+        VALIDATOR.validate_result(result)
+
+    def test_reconstructable_history_requires_evidence(self) -> None:
+        result = valid_result()
+        result["temporal_assessment"]["version_evidence_ids"] = []
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_reconstructable_history_requires_immutable_evidence(self) -> None:
+        result = valid_result()
+        result["materials"][0]["immutable"] = "nie"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_reconstructable_archived_update_is_valid(self) -> None:
+        result = valid_result()
+        result["temporal_assessment"]["assessed_historical_version"] = "archived_update"
+        VALIDATOR.validate_result(result)
+
+    def test_current_after_update_is_rejected(self) -> None:
+        result = valid_result()
+        result["temporal_assessment"]["assessed_historical_version"] = "current_after_update"
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
 

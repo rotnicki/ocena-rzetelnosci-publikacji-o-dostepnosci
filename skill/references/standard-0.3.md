@@ -448,13 +448,24 @@ Późniejsza zmiana prawa, standardu albo technologii nie może automatycznie ob
 
 Oba ustalenia trzeba opisać osobno wraz z uzasadnieniem.
 
-Jeżeli strona podaje datę publikacji i późniejszą datę aktualizacji, oceniający najpierw ustala, którą wersję treści rzeczywiście pozyskał.
+Bieżącą treścią jest treść rzeczywiście pozyskana w dniu dostępu. Można ją oceniać pod względem bieżącej użyteczności, lecz nie wolno przypisywać jej wcześniejszej dacie bez osobnego dowodu wersji.
 
-- Jeżeli istnieje wiarygodna migawka wersji pierwotnej, poprawność na dzień publikacji ocenia się na jej podstawie.
-- Jeżeli wersja pierwotna nie jest dostępna, nie wolno przypisywać obecnej treści dacie publikacji. Pole poprawności pierwotnej otrzymuje `nierozstrzygniete`, a raport wskazuje brak możliwości odtworzenia.
-- Aktualnie dostępny tekst ocenia się na dzień dostępu jako bieżącą użyteczność.
-- Data aktualizacji może być punktem odniesienia tylko dla stanu deklarowanego przez wydawcę; bez niezmiennej migawki nie dowodzi dokładnej treści strony w tym dniu. Pewność oceny tego stanu nie może być wysoka.
-- Późniejszej poprawki nie wolno użyć do podniesienia historycznej oceny wersji pierwotnej, a dawnego błędu nie wolno przypisać wersji obecnej bez dowodu, że pozostał.
+Wersję historyczną uznaje się za odtworzoną tylko wtedy, gdy co najmniej jeden wskazany dowód:
+
+1. zachowuje rzeczywistą treść ocenianej wersji, a nie wyłącznie jej metadane lub opis zmian;
+2. identyfikuje datę, wydanie albo wersję;
+3. obejmuje zakres treści potrzebny do ustalenia wyniku;
+4. ma stabilny i sprawdzalny identyfikator, na przykład adres migawki archiwalnej, commit, wersjonowane wydanie albo sumę SHA-256 zachowanej kopii.
+
+Sama data publikacji lub aktualizacji, bieżąca suma kontrolna, niezmieniony URL, wynik wyszukiwania, pamięć podręczna, opis zmiany albo brak widocznego oznaczenia aktualizacji nie dowodzą treści wcześniejszej wersji.
+
+Jeżeli warunki rekonstrukcji nie są spełnione, `historical_version_reconstructable` ma wartość `false`, `assessed_historical_version` ma wartość `not_reconstructable`, `historical_accuracy` ma wartość `nierozstrzygniete`, a `historical_confidence` ma wartość `niska`. Pewność historyczna oznacza pewność ustalenia poprawności zachowanej wersji, a nie pewność, że dawnego materiału nie odnaleziono.
+
+Jeżeli wersja historyczna została odtworzona, `assessed_historical_version` wskazuje `original` albo `archived_update`, a `version_evidence_ids` zawiera co najmniej jeden materiał zachowujący ocenianą treść i oznaczony `immutable: tak`.
+
+Przeskalowanie, zmiana kodowania lub techniczna rekompresja materiału nie tworzą odrębnej wersji znaczeniowej tylko wtedy, gdy zachowano całą treść, kolejność, znaczenie i czytelność. Transformację i podstawę uznania równoważności trzeba opisać w `material_changes`.
+
+Późniejszej poprawki nie wolno użyć do podniesienia historycznej oceny wersji pierwotnej, a dawnego błędu nie wolno przypisać wersji obecnej bez dowodu, że pozostał.
 
 ## 12. Wartość `nd`
 

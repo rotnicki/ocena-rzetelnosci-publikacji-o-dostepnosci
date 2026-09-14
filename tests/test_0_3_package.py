@@ -74,9 +74,14 @@ class PackageTests(unittest.TestCase):
         for phrase in ("A=3", "D=2", "D=3", "G=3", "H=4", "H=3", "H=2", "H=1", "najniższą oceną"):
             self.assertIn(phrase, anchors)
 
-    def test_deferred_s9_and_s10_are_not_implemented(self) -> None:
+    def test_approved_s9_is_implemented_and_s10_is_still_deferred(self) -> None:
         standard = (ROOT / "metodologia/0.3/standard.md").read_text(encoding="utf-8")
-        self.assertNotIn("original_version_reconstructable", standard)
+        schema = json.loads((ROOT / "metodologia/0.3/wynik.schema.json").read_text(encoding="utf-8"))
+        temporal = schema["$defs"]["temporalAssessment"]
+        self.assertIn("historical_version_reconstructable", standard)
+        self.assertIn("historical_version_reconstructable", temporal["required"])
+        self.assertNotIn("original_version_available", temporal["required"])
+        self.assertNotIn("current_after_update", temporal["properties"]["assessed_historical_version"]["enum"])
         self.assertFalse((ROOT / "metodologia/0.3/metryka-0.3.schema.json").exists())
 
 
