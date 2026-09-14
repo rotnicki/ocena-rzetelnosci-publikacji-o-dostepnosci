@@ -1,12 +1,12 @@
 # Propozycje zmian po polskim pilotażu 0.3
 
 **Data:** 14 września 2026 r.  
-**Status:** S1–S9 zatwierdzone 14 września 2026 r. i wdrożone na gałęzi projektu 0.3; S10 zatwierdzona do osobnego wdrożenia; B1–B2 pozostają propozycjami
+**Status:** S1–S10 zatwierdzone 14 września 2026 r. i wdrożone na gałęzi projektu 0.3; B1–B2 pozostają propozycjami
 **Podstawa:** pięć polskich publikacji, po dwa odizolowane przebiegi A/B
 
 ## 1. Najważniejsza rekomendacja
 
-Zmiany S1–S9 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 zatwierdzono jako osobny kontrakt techniczny do wdrożenia przed badaniami B1 i B2. Same badania B1–B2 pozostają propozycjami wymagającymi osobnej decyzji.
+Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 ustanawia osobny kontrakt techniczny obowiązujący przyszłe serie. Badania B1–B2 pozostają propozycjami wymagającymi osobnej decyzji.
 
 | ID | Rodzaj | Rekomendacja | Główny obszar |
 | --- | --- | --- | --- |
@@ -19,7 +19,7 @@ Zmiany S1–S9 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii
 | S7 | znaczeniowa i strukturalna | przyjąć | językowa bariera jako problem |
 | S8 | znaczeniowa | przyjąć | werdykt i bezpieczne polecenie |
 | S9 | znaczeniowa | przyjąć po korekcie — wdrożono | wersja historyczna publikacji |
-| S10 | strukturalna | przyjąć po korekcie — zatwierdzono | jednolita metryka przebiegu |
+| S10 | strukturalna | przyjąć po korekcie — wdrożono | jednolita metryka przebiegu |
 | B1 | badawcza | przyjąć | pokrycie nieprzetestowanych progów |
 | B2 | badawcza | przyjąć | przenośność między oceniającymi |
 
@@ -252,9 +252,13 @@ Zmiany S1–S9 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii
 
 ## S10. Kanoniczna metryka przebiegu
 
-**Proponowane brzmienie technicznego kontraktu:**
+**Zatwierdzone brzmienie technicznego kontraktu:**
 
-> Każdy przebieg kalibracyjny zawiera `metryka.json` zgodny z jednym schematem. Pola obejmują co najmniej: identyfikator analizy i publikacji, metodologię, datę przebiegu, środowisko oceniającego, publikację, autora lub wydawcę jako tekst albo `null`, zamrożone materiały wejściowe i ich sumy. YAML może być dodatkową kopią dla człowieka, ale nie jest źródłem kanonicznym.
+> Każdy nowy przebieg kalibracyjny zawiera kanoniczny `metryka.json` zgodny z `metryka-0.3.schema.json`. Metryka zapisuje identyfikatory analizy, serii, przypadku i przebiegu; metodologię wraz z SHA-256 użytej paczki; czas i język przebiegu; publikację; zamrożone materiały wraz z ich SHA-256 i podstawą haszowania; identyfikację oceniającego; środowisko, dostęp, izolację i ograniczenia.
+>
+> JSON jest jedynym źródłem kanonicznym. YAML może być wyłącznie automatycznie wygenerowaną kopią dla człowieka. Nieznane dane bibliograficzne zapisuje się jako `null`, niedostępne dane środowiskowe jako `not_available`, a niedotyczące jako `not_applicable`. Obowiązkowych pól nie wolno pomijać ani zastępować pustym tekstem.
+>
+> Walidator sprawdza metrykę oraz zgodność jej wspólnych pól z `wynik.json`. Starych przebiegów i historycznych plików YAML nie migruje się ani nie waliduje wstecz. Kontrakt obowiązuje przyszłe serie i musi być stosowany przed rozpoczęciem B1 lub B2.
 
 **Prosto:** jedna maszynowa metryka zastępuje kilka różnych układów YAML.
 
@@ -267,7 +271,7 @@ Zmiany S1–S9 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii
 
 **Ryzyko skutków ubocznych:** migracja narzędzi i dodatkowy plik. Nie należy zmieniać starych przebiegów; nowy kontrakt obowiązywałby dopiero przyszłe serie.
 
-**Pliki:** nowy `metodologia/0.3/metryka-0.3.schema.json` i kopia skilla; `skill/SKILL.md`; karta oceny; walidator; skrypt budowy pakietu; testy regresyjne.
+**Pliki:** nowy `metodologia/0.3/metryka-0.3.schema.json` i kopia skilla; standard i dokumentacja 0.3; schematy wyniku i wyciągu wraz z kopiami; `skill/SKILL.md`; karta oceny i wzór raportu wraz z kopiami; walidator i testy regresyjne. Skrypt budowy pakietu nie wymaga zmiany, ponieważ automatycznie kopiuje cały katalog `skill`.
 
 ## B1. Osobny pilotaż progów nieobecnych w pierwszej serii
 
@@ -301,8 +305,7 @@ Zmiany S1–S9 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii
 
 Po decyzjach z 14 września 2026 r.:
 
-- S1–S9 są zatwierdzone i zostały wdrożone w odpowiednich materiałach projektu 0.3;
-- S10 jest zatwierdzona po korekcie i oczekuje na osobne wdrożenie;
+- S1–S10 są zatwierdzone i zostały wdrożone w odpowiednich materiałach projektu 0.3;
 - B1–B2 pozostają propozycjami i nie zostały rozpoczęte;
 - nie wolno przeliczać wstecz wyników polskiego pilota;
 - PR nr 8 pozostaje niescalonym projektem, bez znacznika i wydania 0.3.
@@ -322,7 +325,7 @@ Poniższa lista rozwija skróty „kopia skilla” i „wzory” użyte powyżej
 | S7 | standard i kotwice 0.3 oraz ich kopie skilla; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `metodologia/0.3/wyciag-kalibracyjny.schema.json`; `skill/references/wyciag-kalibracyjny-0.3.schema.json`; `skill/scripts/validate_0_3.py`; `skill/SKILL.md`; oba pliki testów 0.3 |
 | S8 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | S9 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
-| S10 | nowy `metodologia/0.3/metryka-0.3.schema.json`; nowy `skill/references/metryka-0.3.schema.json`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; `scripts/build_skill_draft.py`; oba pliki testów 0.3 |
+| S10 | `README.md`; `metodologia/0.3/README.md`; `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; nowy `metodologia/0.3/metryka-0.3.schema.json`; nowy `skill/references/metryka-0.3.schema.json`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `metodologia/0.3/wyciag-kalibracyjny.schema.json`; `skill/references/wyciag-kalibracyjny-0.3.schema.json`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | B1 | nowy protokół w `kalibracja/0.3/`; bez zmian standardu, kotwic, schematów i skilla przed analizą wyników |
 | B2 | nowy protokół w `kalibracja/0.3/`; bez zmian standardu, kotwic, schematów i skilla przed analizą wyników |
 

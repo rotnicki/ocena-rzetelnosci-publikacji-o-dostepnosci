@@ -98,7 +98,7 @@ Przed przebiegiem krytycznym trzeba zapisać:
 - dostęp do pamięci rozmów, kontekstu projektu i prywatnych repozytoriów;
 - inne warunki wpływające na odtworzenie wyniku.
 
-Nie wolno zgadywać danych niewidocznych dla oceniającego. Należy zapisać `not_available`.
+Nie wolno zgadywać danych niewidocznych dla oceniającego. Nieznane dane bibliograficzne zapisuje się jako `null`, niedostępne informacje środowiskowe jako `not_available`, a informacje niedotyczące danego rodzaju oceniającego jako `not_applicable`. Obowiązkowego pola nie wolno pomijać ani zastępować pustym tekstem.
 
 Podczas jednej analizy i zamrożonej serii nie wolno zmieniać kryteriów, kotwic, słowników, reguł werdyktu ani schematu wyniku.
 
@@ -133,6 +133,16 @@ Każdy analizowany element otrzymuje jedną rolę:
 Dla treści głównej i materiału centralnego należy zapisać URL, datę dostępu, datę publikacji lub aktualizacji, wersję albo niezmienny identyfikator, informację o niezmienności oraz wykorzystany zakres.
 
 Jeżeli dwa przebiegi kalibracyjne użyły różnych wersji materiału centralnego, nie są ścisłym powtórzeniem tego samego przypadku.
+
+### 5.3. Zamrożone wejścia kalibracyjne
+
+Każdy materiał użyty w nowym przebiegu kalibracyjnym musi mieć zapisaną sumę SHA-256 oraz podstawę haszowania:
+
+- `raw_bytes` — dokładne pozyskane bajty;
+- `rendered_capture` — utrwalony wynik renderowania;
+- `canonical_text` — tekst uzyskany według jawnie ustalonej procedury normalizacji.
+
+Suma bez wskazania podstawy nie wystarcza do stwierdzenia tożsamości wejścia. Brak publicznej kopii materiału, na przykład ze względu na prawa autorskie, nie zwalnia z utrwalenia jego sumy w prywatnym laboratorium. Nieznaną wersję materiału zapisuje się jako `null`; suma kontrolna i data dostępu identyfikują wtedy faktycznie pozyskane wejście, ale nie dowodzą jego wcześniejszej treści.
 
 ## 6. Rodzaj, miejsce publikacji, odbiorcy i profil językowy
 
@@ -699,7 +709,13 @@ Raport musi zawierać w kolejności:
 14. pewność mapy, werdyktu i pokrycie źródłowe;
 15. wykaz źródeł.
 
-Pełny `wynik.json` musi być zgodny z `wynik.schema.json`. W kalibracji tworzy się także `wyciag-kalibracyjny.json`, a po zamknięciu pary — `porownanie-pary.json` i raport według wspólnego wzoru. Wartości maszynowe stosują `snake_case` bez polskich znaków, a raport używa naturalnego języka.
+Pełny `wynik.json` musi być zgodny z `wynik.schema.json`. Każdy nowy przebieg kalibracyjny tworzy także kanoniczny `metryka.json` zgodny z `metryka-0.3.schema.json`, a następnie `wyciag-kalibracyjny.json`. Po zamknięciu pary tworzy się `porownanie-pary.json` i raport według wspólnego wzoru. Wartości maszynowe stosują `snake_case` bez polskich znaków, a raport używa naturalnego języka.
+
+`metryka.json` jest jedynym kanonicznym źródłem metadanych przebiegu. Zawiera identyfikatory serii, przypadku i przebiegu; dokładny identyfikator i SHA-256 użytego artefaktu metodologii; czas i język przebiegu; pełną metrykę publikacji; zamrożone materiały wejściowe wraz z sumami i podstawą haszowania; identyfikację oceniającego; środowisko, dostęp, izolację i ograniczenia. Pola wspólne z `wynik.json` muszą być identyczne i są kontrolowane przez walidator.
+
+Metrykę tworzy się i zamraża przed przebiegiem krytycznym. Po jego zakończeniu wolno uzupełnić wyłącznie czas zakończenia oraz ograniczenia ujawnione podczas wykonania; pozostałych danych wejściowych i warunków przebiegu nie wolno przepisywać pod wpływem wyniku.
+
+Opcjonalny `metryka.yaml` może być wyłącznie automatycznie wygenerowaną kopią dla człowieka. Nie jest źródłem kanonicznym i nie wolno utrzymywać go ręcznie niezależnie od JSON. Kontrakt ten obowiązuje nowe serie rozpoczęte po jego wdrożeniu; istniejących przebiegów i ich historycznych plików YAML nie migruje się ani nie waliduje wstecz.
 
 ## 18. Kalibracja i porównanie niezależnych ocen
 

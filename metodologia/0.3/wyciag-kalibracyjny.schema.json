@@ -51,13 +51,13 @@
       "properties": {
         "type": {"enum": ["czlowiek", "ai", "zespol"]}, "name": {"type": "string", "minLength": 1},
         "model_snapshot": {"type": "string", "minLength": 1}, "reasoning_setting": {"type": "string", "minLength": 1},
-        "tools": {"type": "array", "items": {"type": "string", "minLength": 1}}, "memory_access": {"enum": ["tak", "nie", "not_available"]},
-        "project_access": {"enum": ["tak", "nie", "not_available"]}, "private_repository_access": {"enum": ["tak", "nie", "not_available"]}
+        "tools": {"type": "array", "items": {"type": "string", "minLength": 1}}, "memory_access": {"enum": ["tak", "nie", "not_available", "not_applicable"]},
+        "project_access": {"enum": ["tak", "nie", "not_available", "not_applicable"]}, "private_repository_access": {"enum": ["tak", "nie", "not_available", "not_applicable"]}
       }
     },
     "materialVersion": {
       "type": "object", "additionalProperties": false, "required": ["material_id", "role", "url", "version"],
-      "properties": {"material_id": {"type": "string", "minLength": 1}, "role": {"enum": ["tresc_glowna", "material_centralny_zewnetrzny"]}, "url": {"type": "string", "format": "uri"}, "version": {"type": "string", "minLength": 1}}
+      "properties": {"material_id": {"type": "string", "minLength": 1}, "role": {"enum": ["tresc_glowna", "material_centralny_zewnetrzny"]}, "url": {"type": "string", "format": "uri"}, "version": {"oneOf": [{"type": "string", "minLength": 1}, {"type": "null"}]}}
     },
     "contextSummary": {
       "type": "object", "additionalProperties": false,

@@ -28,16 +28,16 @@ For version 0.3 draft:
 
 - read the standalone [references/standard-0.3.md](references/standard-0.3.md) and [references/kotwice-0.3.md](references/kotwice-0.3.md) completely; do not load 0.1 or 0.2 as a base;
 - use [references/wzor-raportu-0.3.md](references/wzor-raportu-0.3.md) and [references/karta-oceny-0.3.md](references/karta-oceny-0.3.md);
-- validate data against [references/wynik-0.3.schema.json](references/wynik-0.3.schema.json), [references/wyciag-kalibracyjny-0.3.schema.json](references/wyciag-kalibracyjny-0.3.schema.json), and, for A/B comparisons, [references/porownanie-pary-0.3.schema.json](references/porownanie-pary-0.3.schema.json);
+- validate data against [references/metryka-0.3.schema.json](references/metryka-0.3.schema.json), [references/wynik-0.3.schema.json](references/wynik-0.3.schema.json), [references/wyciag-kalibracyjny-0.3.schema.json](references/wyciag-kalibracyjny-0.3.schema.json), and, for A/B comparisons, [references/porownanie-pary-0.3.schema.json](references/porownanie-pary-0.3.schema.json);
 - use [references/wzor-porownania-0.3.md](references/wzor-porownania-0.3.md) after both independent runs are closed and validated;
-- run `python3 scripts/validate_0_3.py result wynik.json` and, when applicable, cross-check the extract with `python3 scripts/validate_0_3.py extract wyciag-kalibracyjny.json --result wynik.json`.
+- for every new calibration run, run `python3 scripts/validate_0_3.py metric metryka.json`, then `python3 scripts/validate_0_3.py result wynik.json --metric metryka.json`, and cross-check the extract with `python3 scripts/validate_0_3.py extract wyciag-kalibracyjny.json --result wynik.json`.
 - validate a pair with `python3 scripts/validate_0_3.py comparison porownanie-pary.json --result-a A/wynik.json --result-b B/wynik.json`.
 
 Treat the selected standard as authoritative if this file differs from it. The 0.3 materials are a public working draft, not a frozen release.
 
 ## Freeze the method and environment
 
-Before the critical pass, record the selected methodology version and identifier. Also record the evaluator type, name or model, model snapshot, reasoning setting, tools, analysis date, and access to memory, project context, and private repositories. Use `not_available` instead of guessing.
+Before the critical pass, record the selected methodology version and identifier. For a new 0.3 calibration run, also record the methodology artifact SHA-256, series, case and run identifiers, start time, evaluator type and stable identifier, name or model, provider, model snapshot, reasoning setting, tools, access to memory, project context and private repositories, and isolation conditions. Use `null` for unknown bibliographic data, `not_available` for unavailable environment data, and `not_applicable` for inapplicable data; never guess, omit a required key, or use an empty string.
 
 Do not change criteria, anchors, verdict rules, or output vocabulary during an analysis or frozen calibration series. In a predefined series, fix the publication list and order first, keep cases separate, record suspected defects without applying them mid-series, and revise only after the series ends.
 
@@ -46,7 +46,7 @@ Do not change criteria, anchors, verdict rules, or output vocabulary during an a
 1. Obtain the complete available publication, including central tables, code, images, footnotes, attachments, and linked material on which the argument depends.
 2. Verify the title, authorship or editorial signature, publisher, outlet, dates, language, type, purpose, audience, and completeness. Do not infer authorship from the domain alone.
 3. Separate the main publication from advertisements, newsletters, event notices, and unrelated material.
-4. Classify each inspected item using the selected standard's material roles. Record exact URLs, access dates, versions, and immutable identifiers when available.
+4. Classify each inspected item using the selected standard's material roles. Record exact URLs, access dates, versions, and immutable identifiers when available. For every input to a new 0.3 calibration run, record SHA-256 and whether it covers `raw_bytes`, `rendered_capture`, or `canonical_text`.
 5. If full material is unavailable, mark the assessment partial and do not infer missing content.
 6. Do not reproduce a full copyrighted publication without a lawful basis and explicit request. Prefer metadata, short quotations, and faithful paraphrases.
 
@@ -112,13 +112,16 @@ Determine the descriptive verdict using the selected standard's decision sequenc
 
 When persistent comparison is requested, produce:
 
-- `metryka.yaml` — publication, method, environment, scope, and limitations;
+- `metryka.json` — the canonical validated publication, method, environment, frozen-input, isolation, scope, and limitations record for every new 0.3 calibration run;
+- optionally, `metryka.yaml` — an automatically generated human-readable copy that is never canonical or maintained separately;
 - `analiza.md` — the complete human-readable report;
 - `wynik.json` — the complete structured result;
 - `wyciag-kalibracyjny.json` — the compact comparison record for 0.2 or 0.3 calibration work.
 - `porownanie-pary.md` and `porownanie-pary.json` — the common semantic comparison of a 0.3 A/B pair.
 
 Use stable identifiers and the selected version's closed vocabulary. Run the matching validator before saving or returning structured files. A validator checks structure and internal consistency, not the truth of the assessment.
+
+Do not migrate or retroactively validate historical YAML metrics or completed calibration runs against the 0.3 metric contract. Apply it only to series started after S10 was adopted.
 
 When the user designates an analysis repository, save each case under a unique dated directory. Do not place article copies, full case analyses, or private working material in a public methodology repository.
 

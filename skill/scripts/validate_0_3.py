@@ -8,6 +8,7 @@ import json
 import re
 import sys
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -26,7 +27,10 @@ VERDICTS = {
     "rzetelny_z_istotnymi_zastrzezeniami", "nierzetelny",
     "nie_mozna_rozstrzygnac",
 }
-ACCESS = {"tak", "nie", "not_available"}
+ACCESS = {"tak", "nie", "not_available", "not_applicable"}
+IMMUTABILITY = {"tak", "nie", "not_available"}
+METRIC_ACCESS = ACCESS
+HASH_BASES = {"raw_bytes", "rendered_capture", "canonical_text"}
 CONTEXT_KINDS = {
     "homepage", "about_page", "blog_or_newsletter_description", "newsletter_signup_page",
     "category_or_series_description", "editorial_policy", "author_profile", "publication_promotion",
@@ -93,6 +97,24 @@ def text(value: object, path: str) -> str:
 def nullable_text(value: object, path: str) -> None:
     if value is not None:
         text(value, path)
+
+
+def sha256(value: object, path: str) -> str:
+    value = text(value, path)
+    if not re.fullmatch(r"[0-9a-f]{64}", value):
+        fail(path, "oczekiwano sumy SHA-256 zapisanej 64 małymi znakami szesnastkowymi")
+    return value
+
+
+def iso_datetime(value: object, path: str) -> datetime:
+    value = text(value, path)
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        fail(path, "oczekiwano daty i czasu ISO 8601")
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        fail(path, "data i czas muszą zawierać strefę albo przesunięcie UTC")
+    return parsed
 
 
 def enum(value: object, allowed: set[str], path: str) -> str:
@@ -175,6 +197,148 @@ def validate_evaluator(value: object, path: str = "evaluator") -> None:
     text_array(value["tools"], f"{path}.tools")
     for key in ("memory_access", "project_access", "private_repository_access"):
         enum(value[key], ACCESS, f"{path}.{key}")
+
+
+def validate_metric_evaluator(value: object, path: str = "evaluator") -> dict:
+    value = obj(value, path)
+    keys = {
+        "type", "evaluator_id", "name", "provider", "model_name", "model_snapshot",
+        "reasoning_setting", "tools", "memory_access", "project_access", "private_repository_access",
+    }
+    exact(value, keys, path)
+    evaluator_type = enum(value["type"], {"czlowiek", "ai", "zespol"}, f"{path}.type")
+    for key in ("evaluator_id", "name", "model_snapshot", "reasoning_setting"):
+        text(value[key], f"{path}.{key}")
+    nullable_text(value["provider"], f"{path}.provider")
+    nullable_text(value["model_name"], f"{path}.model_name")
+    text_array(value["tools"], f"{path}.tools")
+    for key in ("memory_access", "project_access", "private_repository_access"):
+        enum(value[key], METRIC_ACCESS, f"{path}.{key}")
+    if evaluator_type == "ai":
+        text(value["provider"], f"{path}.provider")
+        text(value["model_name"], f"{path}.model_name")
+        if value["model_snapshot"] == "not_applicable":
+            fail(f"{path}.model_snapshot", "migawka modelu AI jest wartością albo not_available")
+    elif evaluator_type == "czlowiek":
+        if value["provider"] is not None or value["model_name"] is not None:
+            fail(path, "oceniający będący człowiekiem wymaga null dla dostawcy i nazwy modelu")
+        if value["model_snapshot"] != "not_applicable" or value["reasoning_setting"] != "not_applicable":
+            fail(path, "oceniający będący człowiekiem wymaga not_applicable dla modelu i ustawienia rozumowania")
+    return value
+
+
+def validate_metric(data: object) -> dict:
+    root = obj(data, "root")
+    keys = {
+        "schema_version", "analysis_id", "series_id", "case_id", "run_label", "calibration_mode",
+        "methodology", "run", "publication", "materials", "evaluator", "independence", "limitations",
+    }
+    exact(root, keys, "root")
+    if root["schema_version"] != "0.3-draft":
+        fail("schema_version", "oczekiwano '0.3-draft'")
+    for key in ("analysis_id", "series_id", "case_id", "run_label"):
+        text(root[key], key)
+    if boolean(root["calibration_mode"], "calibration_mode") is not True:
+        fail("calibration_mode", "kanoniczna metryka dotyczy przebiegu kalibracyjnego")
+
+    method = obj(root["methodology"], "methodology")
+    exact(method, {"version", "identifier", "artifact_sha256", "frozen_before_critical_pass"}, "methodology")
+    if method["version"] != "0.3-draft" or method["frozen_before_critical_pass"] is not True:
+        fail("methodology", "wymagana zamrożona metodologia 0.3-draft")
+    text(method["identifier"], "methodology.identifier")
+    sha256(method["artifact_sha256"], "methodology.artifact_sha256")
+
+    run = obj(root["run"], "run")
+    exact(run, {"started_at", "completed_at", "language"}, "run")
+    started_at = iso_datetime(run["started_at"], "run.started_at")
+    completed_at = None
+    if run["completed_at"] is not None:
+        completed_at = iso_datetime(run["completed_at"], "run.completed_at")
+        if completed_at < started_at:
+            fail("run.completed_at", "zakończenie nie może poprzedzać rozpoczęcia")
+    language = text(run["language"], "run.language")
+    if len(language) < 2:
+        fail("run.language", "oczekiwano kodu albo nazwy języka")
+
+    publication = obj(root["publication"], "publication")
+    publication_keys = {
+        "publication_id", "title", "authors", "publisher", "outlet", "url", "published_at", "updated_at",
+        "accessed_at", "analyzed_at", "language", "publication_type", "full_text",
+    }
+    exact(publication, publication_keys, "publication")
+    for key in ("publication_id", "title", "outlet", "accessed_at", "analyzed_at", "language"):
+        text(publication[key], f"publication.{key}")
+    nullable_text(publication["publisher"], "publication.publisher")
+    nullable_text(publication["published_at"], "publication.published_at")
+    nullable_text(publication["updated_at"], "publication.updated_at")
+    text_array(publication["authors"], "publication.authors")
+    text_array(publication["publication_type"], "publication.publication_type", nonempty=True)
+    url(publication["url"], "publication.url")
+    enum(publication["full_text"], {"tak", "nie", "czesciowo"}, "publication.full_text")
+    same(root["case_id"], publication["publication_id"], "case_id")
+    same(language, publication["language"], "run.language")
+
+    material_keys = {"material_id", "role", "url", "accessed_at", "version", "immutable", "scope", "sha256", "hash_basis"}
+    materials = array(root["materials"], "materials")
+    if not materials:
+        fail("materials", "wymagany co najmniej jeden zamrożony materiał")
+    material_ids = set()
+    for index, material in enumerate(materials):
+        path = f"materials[{index}]"
+        material = obj(material, path)
+        exact(material, material_keys, path)
+        material_id = text(material["material_id"], f"{path}.material_id")
+        if material_id in material_ids:
+            fail(f"{path}.material_id", "powtórzony identyfikator")
+        material_ids.add(material_id)
+        enum(material["role"], {"tresc_glowna", "material_centralny_zewnetrzny", "material_dodatkowy", "material_wylaczony"}, f"{path}.role")
+        url(material["url"], f"{path}.url")
+        for key in ("accessed_at", "scope"):
+            text(material[key], f"{path}.{key}")
+        nullable_text(material["version"], f"{path}.version")
+        enum(material["immutable"], IMMUTABILITY, f"{path}.immutable")
+        sha256(material["sha256"], f"{path}.sha256")
+        enum(material["hash_basis"], HASH_BASES, f"{path}.hash_basis")
+    if not any(item["role"] == "tresc_glowna" for item in materials):
+        fail("materials", "brak treści głównej")
+
+    validate_metric_evaluator(root["evaluator"])
+    independence = obj(root["independence"], "independence")
+    exact(independence, {"isolated_context", "other_run_results_access", "prior_case_results_access", "rationale"}, "independence")
+    boolean(independence["isolated_context"], "independence.isolated_context")
+    for key in ("other_run_results_access", "prior_case_results_access"):
+        enum(independence[key], METRIC_ACCESS, f"independence.{key}")
+    text(independence["rationale"], "independence.rationale")
+    text_array(root["limitations"], "limitations")
+    return root
+
+
+def crosscheck_metric_result(metric_data: object, result: dict) -> None:
+    metric = validate_metric(metric_data)
+    same(metric["analysis_id"], result["analysis_id"], "metric.analysis_id")
+    same(metric["case_id"], result["publication"]["publication_id"], "metric.case_id")
+    same(metric["calibration_mode"], result["calibration_mode"], "metric.calibration_mode")
+    same(metric["publication"], result["publication"], "metric.publication")
+    same(metric["run"]["language"], result["publication"]["language"], "metric.run.language")
+    if metric["run"]["completed_at"] is None:
+        fail("metric.run.completed_at", "zamknięty wynik kalibracyjny wymaga daty zakończenia")
+    expected_method = {key: metric["methodology"][key] for key in ("version", "identifier", "frozen_before_critical_pass")}
+    same(expected_method, result["methodology"], "metric.methodology")
+    evaluator_keys = {
+        "type", "name", "model_snapshot", "reasoning_setting", "tools",
+        "memory_access", "project_access", "private_repository_access",
+    }
+    expected_evaluator = {key: metric["evaluator"][key] for key in evaluator_keys}
+    same(expected_evaluator, result["evaluator"], "metric.evaluator")
+    metric_materials = {item["material_id"]: item for item in metric["materials"]}
+    result_materials = {item["material_id"]: item for item in result["materials"]}
+    same(set(metric_materials), set(result_materials), "metric.materials")
+    shared_material_keys = {"material_id", "role", "url", "accessed_at", "version", "immutable", "scope"}
+    for material_id in sorted(metric_materials):
+        expected = {key: metric_materials[material_id][key] for key in shared_material_keys}
+        actual = {key: result_materials[material_id][key] for key in shared_material_keys}
+        same(expected, actual, f"metric.materials.{material_id}")
+    same(metric["limitations"], result["limitations"], "metric.limitations")
 
 
 def validate_counts(value: object, path: str, issues: list | None = None) -> None:
@@ -470,6 +634,8 @@ def validate_temporal(value: object, materials: dict[str, dict], path: str = "te
             fail(f"{path}.version_evidence_ids", "odtworzona wersja historyczna wymaga dowodu")
         if not any(materials[identifier]["immutable"] == "tak" for identifier in version_evidence_ids):
             fail(f"{path}.version_evidence_ids", "co najmniej jeden dowód wersji musi mieć immutable: tak")
+        if not any(materials[identifier]["immutable"] == "tak" and materials[identifier]["version"] is not None for identifier in version_evidence_ids):
+            fail(f"{path}.version_evidence_ids", "dowód rekonstrukcji musi identyfikować datę albo wersję")
     else:
         if assessed != "not_reconstructable":
             fail(f"{path}.assessed_historical_version", "brak rekonstrukcji wymaga not_reconstructable")
@@ -498,7 +664,7 @@ def validate_full_test(issue: dict, path: str) -> None:
     text(risk["rationale"], f"{path}.application_risk_test.rationale")
 
 
-def validate_result(data: object) -> None:
+def validate_result(data: object, metric: object | None = None, *, require_metric: bool = False) -> None:
     root = obj(data, "root")
     keys = {
         "schema_version", "analysis_id", "calibration_mode", "methodology", "publication", "materials",
@@ -549,9 +715,10 @@ def validate_result(data: object) -> None:
         material_by_id[material_id] = material
         enum(material["role"], {"tresc_glowna", "material_centralny_zewnetrzny", "material_dodatkowy", "material_wylaczony"}, f"{path}.role")
         url(material["url"], f"{path}.url")
-        for key in ("accessed_at", "version", "scope"):
+        for key in ("accessed_at", "scope"):
             text(material[key], f"{path}.{key}")
-        enum(material["immutable"], ACCESS, f"{path}.immutable")
+        nullable_text(material["version"], f"{path}.version")
+        enum(material["immutable"], IMMUTABILITY, f"{path}.immutable")
     if not any(item["role"] == "tresc_glowna" for item in materials):
         fail("materials", "brak treści głównej")
     validate_evaluator(root["evaluator"])
@@ -707,6 +874,10 @@ def validate_result(data: object) -> None:
     validate_safe_recommendation(verdict, root["safe_recommendation"], root["safe_recommendation_rationale"])
     text(root["verdict_rationale"], "verdict_rationale")
     text_array(root["limitations"], "limitations")
+    if metric is not None:
+        crosscheck_metric_result(metric, root)
+    elif require_metric and calibration:
+        fail("metric", "wynik kalibracyjny wymaga kanonicznego pliku metryka.json")
 
 
 def validate_extract(data: object, result: dict | None = None) -> None:
@@ -739,7 +910,7 @@ def validate_extract(data: object, result: dict | None = None) -> None:
         text(material["material_id"], f"{path}.material_id")
         enum(material["role"], {"tresc_glowna", "material_centralny_zewnetrzny"}, f"{path}.role")
         url(material["url"], f"{path}.url")
-        text(material["version"], f"{path}.version")
+        nullable_text(material["version"], f"{path}.version")
     context = obj(root["publication_context_summary"], "publication_context_summary")
     exact(context, {"outlet_type", "outlet_declared_purpose", "declared_audiences", "article_audiences", "actually_required_knowledge", "conflicts", "profile_status", "profile_confidence"}, "publication_context_summary")
     for key in ("outlet_type", "outlet_declared_purpose"):
@@ -1199,23 +1370,32 @@ def load_json(path: Path) -> object:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("kind", choices=("result", "extract", "comparison"))
+    parser.add_argument("kind", choices=("metric", "result", "extract", "comparison"))
     parser.add_argument("path", type=Path)
     parser.add_argument("--result-a", type=Path)
     parser.add_argument("--result-b", type=Path)
     parser.add_argument("--result", type=Path, help="pełny wynik odpowiadający wyciągowi")
+    parser.add_argument("--metric", type=Path, help="kanoniczna metryka odpowiadająca wynikowi kalibracyjnemu")
     args = parser.parse_args(argv)
     try:
         data = load_json(args.path)
-        if args.kind == "result":
+        if args.kind == "metric":
+            if args.metric is not None or args.result is not None or args.result_a is not None or args.result_b is not None:
+                fail("metric", "ten tryb nie przyjmuje dodatkowych plików")
+            validate_metric(data)
+        elif args.kind == "result":
             if args.result is not None or args.result_a is not None or args.result_b is not None:
                 fail("result", "ten tryb nie przyjmuje dodatkowych plików wynikowych")
-            validate_result(data)
+            validate_result(data, load_json(args.metric) if args.metric is not None else None, require_metric=True)
         elif args.kind == "extract":
+            if args.metric is not None:
+                fail("extract", "metrykę sprawdź razem z pełnym wynikiem")
             if args.result_a is not None or args.result_b is not None:
                 fail("extract", "użyj --result zamiast --result-a/--result-b")
             validate_extract(data, load_json(args.result) if args.result is not None else None)
         else:
+            if args.metric is not None:
+                fail("comparison", "metryki sprawdź razem z pełnymi wynikami A i B")
             if args.result is not None:
                 fail("comparison", "użyj --result-a i --result-b")
             if args.result_a is None or args.result_b is None:

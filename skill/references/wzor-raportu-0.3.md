@@ -3,6 +3,7 @@
 ## 1. Metryka publikacji i przebiegu
 
 - Identyfikator analizy:
+- Identyfikator serii, przypadku i etykieta przebiegu:
 - Tytuł:
 - Autor, autorzy lub redakcja:
 - Wydawca i miejsce publikacji:
@@ -15,22 +16,27 @@
 - Rodzaj publikacji:
 - Pełna treść dostępna: tak / nie / częściowo
 - Wersja i identyfikator metodologii:
+- SHA-256 użytej paczki metodologii:
 - Metodologia zamrożona przed krytyką: tak / nie
+- Czas rozpoczęcia i zakończenia przebiegu:
 - Tryb kalibracyjny: tak / nie
 - Rodzaj oceniającego: człowiek / AI / zespół
+- Stabilny identyfikator oceniającego:
 - Nazwa oceniającego lub modelu:
+- Dostawca i dokładna nazwa modelu albo `null`:
 - Wersja lub migawka modelu:
 - Ustawienie rozumowania:
 - Dostępne narzędzia:
 - Dostęp do pamięci, projektu i prywatnego laboratorium:
+- Izolacja, dostęp do drugiego przebiegu i wcześniejszych przypadków:
 
-Nieznane dane środowiska zapisać jako `not_available`.
+Nieznane dane bibliograficzne zapisać jako `null`, niedostępne dane środowiska jako `not_available`, a niedotyczące jako `not_applicable`. Nie pomijać pól obowiązkowych i nie używać pustego tekstu.
 
 ## 2. Zakres, materiały i ograniczenia
 
-| Materiał | Rola | URL | Data dostępu | Wersja lub niezmienny identyfikator | Niezmienny | Zakres użyty w analizie |
-| --- | --- | --- | --- | --- | --- | --- |
-| Publikacja | tresc_glowna |  |  |  |  |  |
+| Materiał | Rola | URL | Data dostępu | Wersja lub `null` | Niezmienny | Zakres | SHA-256 | Podstawa haszowania |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Publikacja | tresc_glowna |  |  |  |  |  |  | raw_bytes / rendered_capture / canonical_text |
 
 Opisać materiały wyłączone, braki dostępu oraz ograniczenia odtworzenia wersji historycznej.
 
@@ -220,4 +226,4 @@ Podać bezpośrednie odsyłacze, tytuły, wersje lub daty dokumentów i daty dos
 
 ## Oddzielny rezultat kalibracyjny
 
-Jeżeli analiza należy do serii kalibracyjnej, utworzyć także `wyciag-kalibracyjny.json` zgodny ze schematem 0.3. Po zamknięciu i walidacji obu przebiegów utworzyć `porownanie-pary.md` i `porownanie-pary.json` według wspólnego wzoru i schematu. Wyciąg i porównanie nie są kolejnymi częściami raportu oceny.
+Jeżeli analiza należy do nowej serii kalibracyjnej, utworzyć kanoniczny `metryka.json` zgodny ze schematem 0.3, a wynik walidować z opcją `--metric`. Utworzyć także `wyciag-kalibracyjny.json`. Po zamknięciu i walidacji obu przebiegów utworzyć `porownanie-pary.md` i `porownanie-pary.json` według wspólnego wzoru i schematu. Metryka, wyciąg i porównanie nie są kolejnymi częściami raportu oceny. Opcjonalny `metryka.yaml` może być tylko automatycznie wygenerowaną kopią niekanoniczną.

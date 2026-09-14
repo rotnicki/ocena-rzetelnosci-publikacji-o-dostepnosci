@@ -74,7 +74,7 @@
       "type": "object", "additionalProperties": false, "required": ["material_id", "role", "url", "accessed_at", "version", "immutable", "scope"],
       "properties": {
         "material_id": {"$ref": "#/$defs/nonempty"}, "role": {"enum": ["tresc_glowna", "material_centralny_zewnetrzny", "material_dodatkowy", "material_wylaczony"]},
-        "url": {"type": "string", "format": "uri"}, "accessed_at": {"$ref": "#/$defs/nonempty"}, "version": {"$ref": "#/$defs/nonempty"},
+        "url": {"type": "string", "format": "uri"}, "accessed_at": {"$ref": "#/$defs/nonempty"}, "version": {"$ref": "#/$defs/nullableText"},
         "immutable": {"enum": ["tak", "nie", "not_available"]}, "scope": {"$ref": "#/$defs/nonempty"}
       }
     },
@@ -83,8 +83,8 @@
       "required": ["type", "name", "model_snapshot", "reasoning_setting", "tools", "memory_access", "project_access", "private_repository_access"],
       "properties": {
         "type": {"enum": ["czlowiek", "ai", "zespol"]}, "name": {"$ref": "#/$defs/nonempty"}, "model_snapshot": {"$ref": "#/$defs/nonempty"},
-        "reasoning_setting": {"$ref": "#/$defs/nonempty"}, "tools": {"$ref": "#/$defs/textArray"}, "memory_access": {"enum": ["tak", "nie", "not_available"]},
-        "project_access": {"enum": ["tak", "nie", "not_available"]}, "private_repository_access": {"enum": ["tak", "nie", "not_available"]}
+        "reasoning_setting": {"$ref": "#/$defs/nonempty"}, "tools": {"$ref": "#/$defs/textArray"}, "memory_access": {"enum": ["tak", "nie", "not_available", "not_applicable"]},
+        "project_access": {"enum": ["tak", "nie", "not_available", "not_applicable"]}, "private_repository_access": {"enum": ["tak", "nie", "not_available", "not_applicable"]}
       }
     },
     "contextEvidence": {

@@ -3,6 +3,9 @@
 ## Informacje wstępne
 
 - Identyfikator analizy:
+- Identyfikator serii:
+- Identyfikator przypadku:
+- Etykieta przebiegu:
 - Tytuł i URL:
 - Autor, redakcja i wydawca:
 - Data i wersja publikacji:
@@ -14,10 +17,18 @@
 - Pełna treść dostępna: tak / nie / częściowo
 - Centralne materiały i ich wersje:
 - Wersja i identyfikator metodologii:
+- SHA-256 użytej paczki metodologii:
 - Tryb kalibracyjny: tak / nie
+- Czas rozpoczęcia i zakończenia przebiegu:
 - Oceniający lub model:
+- Stabilny identyfikator oceniającego:
+- Dostawca i dokładna nazwa modelu albo `null`:
 - Wersja modelu, ustawienie rozumowania i narzędzia:
 - Dostęp do pamięci, projektu i prywatnego laboratorium:
+- Odizolowany kontekst: true / false
+- Dostęp do wyniku drugiego przebiegu: tak / nie / not_available / not_applicable
+- Dostęp do wcześniejszych przypadków: tak / nie / not_available / not_applicable
+- Zamrożone materiały mają SHA-256 i podstawę haszowania: tak / nie
 
 ## Rdzeń i mapa
 

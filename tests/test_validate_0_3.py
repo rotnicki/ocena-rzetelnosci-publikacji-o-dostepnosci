@@ -5,9 +5,11 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import io
 import json
 import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
 
@@ -144,6 +146,54 @@ def valid_extract() -> dict:
     }
 
 
+def valid_metric(run: str = "A") -> dict:
+    result = valid_result(run)
+    metric_evaluator = {
+        "type": result["evaluator"]["type"],
+        "evaluator_id": f"EVAL-{run}",
+        "name": result["evaluator"]["name"],
+        "provider": "OpenAI",
+        "model_name": "model testowy",
+        "model_snapshot": result["evaluator"]["model_snapshot"],
+        "reasoning_setting": result["evaluator"]["reasoning_setting"],
+        "tools": result["evaluator"]["tools"],
+        "memory_access": result["evaluator"]["memory_access"],
+        "project_access": result["evaluator"]["project_access"],
+        "private_repository_access": result["evaluator"]["private_repository_access"],
+    }
+    materials = [
+        {**material, "sha256": "b" * 64, "hash_basis": "raw_bytes"}
+        for material in result["materials"]
+    ]
+    return {
+        "schema_version": "0.3-draft",
+        "analysis_id": result["analysis_id"],
+        "series_id": "SERIA-TESTOWA",
+        "case_id": result["publication"]["publication_id"],
+        "run_label": run,
+        "calibration_mode": True,
+        "methodology": {
+            **result["methodology"],
+            "artifact_sha256": "a" * 64,
+        },
+        "run": {
+            "started_at": "2026-09-13T10:00:00+02:00",
+            "completed_at": "2026-09-13T10:30:00+02:00",
+            "language": result["publication"]["language"],
+        },
+        "publication": copy.deepcopy(result["publication"]),
+        "materials": materials,
+        "evaluator": metric_evaluator,
+        "independence": {
+            "isolated_context": True,
+            "other_run_results_access": "nie",
+            "prior_case_results_access": "nie",
+            "rationale": "Pusty odizolowany kontekst.",
+        },
+        "limitations": copy.deepcopy(result["limitations"]),
+    }
+
+
 def valid_comparison() -> dict:
     score_rows = [{"dimension": letter, "a_score": 3, "b_score": 3, "exact_agreement": True, "difference": 0, "rationale": "Zgodność."} for letter in "ABCDEFGHIJKL"]
     return {
@@ -165,9 +215,181 @@ class ValidatorTests(unittest.TestCase):
     def test_valid_result_extract_and_comparison(self) -> None:
         result_a = valid_result("A")
         result_b = valid_result("B")
-        VALIDATOR.validate_result(result_a)
+        VALIDATOR.validate_result(result_a, valid_metric("A"), require_metric=True)
         VALIDATOR.validate_extract(valid_extract(), result_a)
         VALIDATOR.validate_comparison(valid_comparison(), result_a, result_b)
+
+    def test_valid_metric(self) -> None:
+        VALIDATOR.validate_metric(valid_metric())
+
+    def test_metric_requires_every_top_level_field(self) -> None:
+        for key in valid_metric():
+            with self.subTest(key=key):
+                metric = valid_metric()
+                del metric[key]
+                with self.assertRaises(VALIDATOR.ValidationError):
+                    VALIDATOR.validate_metric(metric)
+
+    def test_metric_rejects_extra_and_empty_fields(self) -> None:
+        metric = valid_metric()
+        metric["extra"] = True
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+
+    def test_metric_requires_nested_fields(self) -> None:
+        removals = (
+            ("methodology", "artifact_sha256"),
+            ("run", "completed_at"),
+            ("publication", "publisher"),
+            ("evaluator", "model_snapshot"),
+            ("independence", "rationale"),
+        )
+        for section, key in removals:
+            with self.subTest(section=section, key=key):
+                metric = valid_metric()
+                del metric[section][key]
+                with self.assertRaises(VALIDATOR.ValidationError):
+                    VALIDATOR.validate_metric(metric)
+        metric = valid_metric()
+        metric["analysis_id"] = ""
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+
+    def test_metric_allows_null_for_unknown_bibliographic_data(self) -> None:
+        metric = valid_metric()
+        metric["publication"]["publisher"] = None
+        metric["publication"]["published_at"] = None
+        metric["publication"]["updated_at"] = None
+        metric["materials"][0]["version"] = None
+        VALIDATOR.validate_metric(metric)
+        metric["publication"]["publisher"] = ""
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+
+    def test_metric_rejects_invalid_hashes_and_hash_basis(self) -> None:
+        for path in ("methodology", "material"):
+            with self.subTest(path=path):
+                metric = valid_metric()
+                if path == "methodology":
+                    metric["methodology"]["artifact_sha256"] = "ABC"
+                else:
+                    metric["materials"][0]["sha256"] = "ABC"
+                with self.assertRaises(VALIDATOR.ValidationError):
+                    VALIDATOR.validate_metric(metric)
+        metric = valid_metric()
+        metric["materials"][0]["hash_basis"] = "unspecified"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+
+    def test_metric_identifies_ai_and_human_evaluators(self) -> None:
+        metric = valid_metric()
+        metric["evaluator"]["provider"] = None
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+        metric = valid_metric()
+        metric["evaluator"]["model_snapshot"] = "not_available"
+        VALIDATOR.validate_metric(metric)
+        metric = valid_metric()
+        metric["evaluator"].update({
+            "type": "czlowiek",
+            "evaluator_id": "HUMAN-001",
+            "name": "Oceniający 001",
+            "provider": None,
+            "model_name": None,
+            "model_snapshot": "not_applicable",
+            "reasoning_setting": "not_applicable",
+        })
+        VALIDATOR.validate_metric(metric)
+
+    def test_human_metric_crosschecks_not_applicable_result_fields(self) -> None:
+        result = valid_result()
+        result["evaluator"].update({
+            "type": "czlowiek",
+            "name": "Oceniający 001",
+            "model_snapshot": "not_applicable",
+            "reasoning_setting": "not_applicable",
+            "memory_access": "not_applicable",
+            "project_access": "not_applicable",
+            "private_repository_access": "not_applicable",
+        })
+        metric = valid_metric()
+        metric["evaluator"].update({
+            "type": "czlowiek",
+            "evaluator_id": "HUMAN-001",
+            "name": "Oceniający 001",
+            "provider": None,
+            "model_name": None,
+            "model_snapshot": "not_applicable",
+            "reasoning_setting": "not_applicable",
+            "memory_access": "not_applicable",
+            "project_access": "not_applicable",
+            "private_repository_access": "not_applicable",
+        })
+        VALIDATOR.validate_result(result, metric, require_metric=True)
+
+    def test_metric_validates_isolation(self) -> None:
+        metric = valid_metric()
+        metric["independence"]["isolated_context"] = "tak"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+        metric = valid_metric()
+        metric["independence"]["other_run_results_access"] = "unknown"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+        metric = valid_metric()
+        metric["materials"][0]["immutable"] = "not_applicable"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+
+    def test_metric_rejects_naive_or_reversed_run_times(self) -> None:
+        metric = valid_metric()
+        metric["run"]["started_at"] = "2026-09-13T10:00:00"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+        metric = valid_metric()
+        metric["run"]["completed_at"] = "2026-09-13T09:00:00+02:00"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_metric(metric)
+
+    def test_calibration_result_requires_and_crosschecks_metric(self) -> None:
+        result = valid_result()
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result, require_metric=True)
+        VALIDATOR.validate_result(result, valid_metric(), require_metric=True)
+        metric = valid_metric()
+        metric["methodology"]["identifier"] = "different-commit"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result, metric, require_metric=True)
+
+    def test_metric_crosscheck_rejects_evaluator_material_and_limit_mismatches(self) -> None:
+        changes = (
+            lambda metric: metric["evaluator"].update({"name": "inny model"}),
+            lambda metric: metric["materials"][0].update({"scope": "fragment"}),
+            lambda metric: metric.update({"limitations": ["Inne ograniczenie."]}),
+        )
+        for change in changes:
+            metric = valid_metric()
+            change(metric)
+            with self.assertRaises(VALIDATOR.ValidationError):
+                VALIDATOR.validate_result(valid_result(), metric, require_metric=True)
+
+    def test_completed_metric_is_required_for_closed_result(self) -> None:
+        metric = valid_metric()
+        metric["run"]["completed_at"] = None
+        VALIDATOR.validate_metric(metric)
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(valid_result(), metric, require_metric=True)
+
+    def test_cli_requires_metric_for_calibration_result(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            result_path = Path(directory) / "wynik.json"
+            metric_path = Path(directory) / "metryka.json"
+            result_path.write_text(json.dumps(valid_result()), encoding="utf-8")
+            metric_path.write_text(json.dumps(valid_metric()), encoding="utf-8")
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                self.assertEqual(1, VALIDATOR.main(["result", str(result_path)]))
+                self.assertEqual(0, VALIDATOR.main(["metric", str(metric_path)]))
+                self.assertEqual(0, VALIDATOR.main(["result", str(result_path), "--metric", str(metric_path)]))
 
     def test_rejects_duplicate_json_keys(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -355,6 +577,12 @@ class ValidatorTests(unittest.TestCase):
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
 
+    def test_reconstructable_history_requires_dated_or_versioned_evidence(self) -> None:
+        result = valid_result()
+        result["materials"][0]["version"] = None
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
     def test_reconstructable_archived_update_is_valid(self) -> None:
         result = valid_result()
         result["temporal_assessment"]["assessed_historical_version"] = "archived_update"
@@ -486,7 +714,7 @@ class ValidatorTests(unittest.TestCase):
             VALIDATOR.validate_comparison(comparison, valid_result("A"), valid_result("B"))
 
     def test_schema_files_are_json(self) -> None:
-        for name in ("wynik.schema.json", "wyciag-kalibracyjny.schema.json", "porownanie-pary-0.3.schema.json"):
+        for name in ("wynik.schema.json", "wyciag-kalibracyjny.schema.json", "porownanie-pary-0.3.schema.json", "metryka-0.3.schema.json"):
             with (ROOT / "metodologia" / "0.3" / name).open(encoding="utf-8") as source:
                 self.assertIsInstance(json.load(source), dict)
 

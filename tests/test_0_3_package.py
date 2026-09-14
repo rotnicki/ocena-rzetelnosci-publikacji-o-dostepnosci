@@ -20,6 +20,7 @@ class PackageTests(unittest.TestCase):
             ROOT / "metodologia/0.3/wynik.schema.json": ROOT / "skill/references/wynik-0.3.schema.json",
             ROOT / "metodologia/0.3/wyciag-kalibracyjny.schema.json": ROOT / "skill/references/wyciag-kalibracyjny-0.3.schema.json",
             ROOT / "metodologia/0.3/porownanie-pary-0.3.schema.json": ROOT / "skill/references/porownanie-pary-0.3.schema.json",
+            ROOT / "metodologia/0.3/metryka-0.3.schema.json": ROOT / "skill/references/metryka-0.3.schema.json",
             ROOT / "szablony/0.3/wzor-raportu.md": ROOT / "skill/references/wzor-raportu-0.3.md",
             ROOT / "szablony/0.3/karta-oceny.md": ROOT / "skill/references/karta-oceny-0.3.md",
             ROOT / "szablony/0.3/wzor-porownania.md": ROOT / "skill/references/wzor-porownania-0.3.md",
@@ -35,7 +36,7 @@ class PackageTests(unittest.TestCase):
         self.assertEqual([], missing)
 
     def test_local_schema_refs_resolve(self) -> None:
-        for name in ("wynik.schema.json", "wyciag-kalibracyjny.schema.json", "porownanie-pary-0.3.schema.json"):
+        for name in ("wynik.schema.json", "wyciag-kalibracyjny.schema.json", "porownanie-pary-0.3.schema.json", "metryka-0.3.schema.json"):
             schema = json.loads((ROOT / "metodologia/0.3" / name).read_text(encoding="utf-8"))
             definitions = schema.get("$defs", {})
 
@@ -74,7 +75,7 @@ class PackageTests(unittest.TestCase):
         for phrase in ("A=3", "D=2", "D=3", "G=3", "H=4", "H=3", "H=2", "H=1", "najniższą oceną"):
             self.assertIn(phrase, anchors)
 
-    def test_approved_s9_is_implemented_and_s10_is_still_deferred(self) -> None:
+    def test_approved_s9_and_s10_are_implemented(self) -> None:
         standard = (ROOT / "metodologia/0.3/standard.md").read_text(encoding="utf-8")
         schema = json.loads((ROOT / "metodologia/0.3/wynik.schema.json").read_text(encoding="utf-8"))
         temporal = schema["$defs"]["temporalAssessment"]
@@ -82,7 +83,9 @@ class PackageTests(unittest.TestCase):
         self.assertIn("historical_version_reconstructable", temporal["required"])
         self.assertNotIn("original_version_available", temporal["required"])
         self.assertNotIn("current_after_update", temporal["properties"]["assessed_historical_version"]["enum"])
-        self.assertFalse((ROOT / "metodologia/0.3/metryka-0.3.schema.json").exists())
+        metric_schema = ROOT / "metodologia/0.3/metryka-0.3.schema.json"
+        self.assertTrue(metric_schema.is_file())
+        self.assertIn("Kanoniczna metryka przebiegu", metric_schema.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
