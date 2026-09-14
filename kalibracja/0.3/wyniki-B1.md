@@ -1,7 +1,9 @@
 # Wyniki badania B1 — publiczne podsumowanie
 
-**Data zakończenia:** 14 września 2026 r.  
-**Metodologia:** zamrożony projekt 0.3 z wdrożonymi S1–S10  
+**Data zakończenia:** 14 września 2026 r.
+
+**Metodologia:** zamrożony projekt 0.3 z wdrożonymi S1–S10
+
 **Stan:** B1 zakończone proceduralnie; projekt 0.3 pozostaje roboczy i niezamrożony; B2 nie zostało rozpoczęte
 
 ## Zakres i bezpieczeństwo publikacji wyników

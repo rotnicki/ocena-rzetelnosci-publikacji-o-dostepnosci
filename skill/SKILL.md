@@ -88,23 +88,31 @@ Never infer a specialist audience from difficult specialist language alone. If t
 
 Establish the language profile only after this context profile. Separate knowledge necessary to recover the main thesis, an important condition, or promised action from knowledge that merely helps. For every necessary item, identify the publication location and the effect of lacking it. Identify terms necessary to understand the core, their first use, whether they are explained or clear in context, and their effect on comprehension. Score H and L separately for every significant audience group included in the publication's promise; overall H and overall L are the respective lowest group scores. Lower L for a comprehension defect only when it also prevents the publication from fulfilling its declared purpose for that group.
 
+Combine professional roles into one audience group only when the publication makes the same promise to them, requires the same knowledge, and leads to the same task. Split roles only when the promise, required knowledge, comprehension barrier, or possible H or L result differs. Every required-knowledge item must identify the exact passage, condition, or action the audience cannot reconstruct without it. Put merely helpful knowledge in `facilitating_knowledge`; it does not lower H.
+
 Keep the dimensions separate:
 
 - G concerns correctness, precision, and consistency of terminology;
 - H concerns whether the intended audience can follow the argument;
 - L concerns whether the publication fulfils the promise of its format and outlet.
 
+For C, record a numeric score only when the publication itself makes a claim about how a technology, mechanism, tool, test, or solution works. A legal mention of WCAG alone is not enough, and reported participant wishes do not become the author's technical claim without the author's own assessment. For J, use a numeric score when the publication presents, uses, or generalizes user experience or makes a promise that requires that perspective. Merely naming disabled people as regulatory beneficiaries is not enough; a narrow legal or technical text can use `nd`, while a broad or complete-guide promise can make J applicable.
+
+Before closing A–L, confirm that each rationale concerns the right subject: terminology G, structure and traceability H, action safety I, user experience J, epistemic status K, and fulfilment of the promise L. When one observation affects several dimensions, state a distinct effect for each. Do not attempt to infer this reliably from prose alone; complete the structured scope check.
+
 Do not penalize specialist vocabulary merely for being specialist. Apply the 0.3 score caps when unexplained core terminology blocks a substantial nonspecialist audience or defeats a declared popularizing purpose. State that this is an expert assessment unless user testing was performed.
 
 ## Group issues and determine the verdict
 
-Do not turn every claim defect into a separate problem. Under 0.3, group defects only when they share one underlying cause, one essential correction, the same centrality, and the same application risk; otherwise keep them separate. Do not automatically merge missing evidence, a substantive error, unclear normative status, and a comprehension barrier merely because they occur in one paragraph. Explain each grouping and propose a correction.
+Do not turn every claim defect into a separate problem. Under 0.3, group defects only when they share one underlying cause, one essential correction, the same centrality, and the same application risk; otherwise keep them separate. Repeated occurrences may be grouped only when one correction repairs all of them and they have the same audience effect. Do not automatically merge missing evidence, a substantive error, unclear normative status, and a comprehension barrier merely because they occur in one paragraph. Explain each grouping and propose a correction.
 
 If a language, terminology, or structural barrier lowers H or L, activates a language score cap, or affects the verdict, record it as an issue with `language_barrier`. Identify its locations, affected audience groups, relevant terms or structural elements, and affected dimensions. A local difficulty that changes none of H, L, or the verdict may remain only in the language profile. Do not count one phenomenon twice.
 
-Assign severity and confidence separately. For every large or critical issue under 0.2 or 0.3, assign centrality and application risk. Under 0.3, begin the centrality test with the minimal honest repair, not automatic deletion of a section, and explicitly perform the full centrality and application-risk tests for every large or critical issue. In calibration mode, record centrality, application risk, and short rationales for every issue; full component tests remain optional for small and medium issues unless they affect the verdict, grouping, or disagreement.
+Assign severity and confidence separately. For every large or critical issue under 0.2 or 0.3, assign centrality and application risk. Under 0.3, begin the centrality test with the minimal honest repair, not automatic deletion of a section, and explicitly perform the full centrality and application-risk tests for every large or critical issue. For every medium or large issue, complete the boundary test with the significant group, minimal correction, action or conclusion before and after correction, and whether an important scope or action changes. A large issue requires such a change; otherwise it remains medium. For every large or critical issue, complete the four-prong criticality test. A critical issue must satisfy all four; a large issue must name at least one failed prerequisite. In calibration mode, record centrality, application risk, and short rationales for every issue.
 
 Score A–L from 0 to 4 or `nd` only where the selected version permits it. Compare each score with adjacent anchors. For 0, 1, or 4, identify the boundary-crossing evidence. Do not calculate a total or infer the verdict from an average or raw issue count.
+
+Before the verdict, distinguish missing main content or a core artifact from missing external supporting evidence and missing auxiliary data. Missing support for a visible claim does not by itself make the whole publication undecidable. Use `nie_mozna_rozstrzygnac` only when missing main content or a core artifact prevents responsible assessment of the core as a whole. Record the structured decidability test.
 
 Determine the descriptive verdict using the selected standard's decision sequence and counterfactual-correction test. Apply its default `safe_recommendation`. A stricter recommendation is allowed only with a separate rationale; a more permissive one is forbidden.
 

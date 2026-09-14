@@ -57,6 +57,12 @@ DEFAULT_SAFE_RECOMMENDATION = {
     "nierzetelny": "nie_do_praktycznego_uzycia",
     "nie_mozna_rozstrzygnac": "nie_mozna_ocenic",
 }
+DIMENSION_SUBJECTS = {
+    "A": "facts", "B": "law_and_norms", "C": "technology", "D": "evidence",
+    "E": "completeness", "F": "reasoning", "G": "terminology",
+    "H": "structure_and_comprehension", "I": "action_safety", "J": "user_experience",
+    "K": "epistemic_status", "L": "promise_and_fit",
+}
 
 
 class ValidationError(Exception):
@@ -688,11 +694,144 @@ def validate_full_test(issue: dict, path: str) -> None:
     text(risk["rationale"], f"{path}.application_risk_test.rationale")
 
 
+def validate_dimension_applicability(value: object, scores: dict, path: str = "dimension_applicability") -> dict:
+    value = obj(value, path)
+    exact(value, {"C", "J"}, path)
+    c = obj(value["C"], f"{path}.C")
+    exact(c, {"applicable", "basis", "rationale"}, f"{path}.C")
+    c_applicable = boolean(c["applicable"], f"{path}.C.applicable")
+    c_basis = enum(c["basis"], {"author_technical_claim", "none"}, f"{path}.C.basis")
+    text(c["rationale"], f"{path}.C.rationale")
+    if c_applicable != (c_basis == "author_technical_claim"):
+        fail(f"{path}.C", "stosowalność i podstawa C są niespójne")
+    if c_applicable != (scores["C"] != "nd"):
+        fail("scores.C", "wartość musi odpowiadać ustrukturyzowanej stosowalności C")
+
+    j = obj(value["J"], f"{path}.J")
+    exact(j, {"applicable", "basis", "broad_promise_requires_user_perspective", "rationale"}, f"{path}.J")
+    j_applicable = boolean(j["applicable"], f"{path}.J.applicable")
+    j_basis = enum(j["basis"], {
+        "user_experience_presented", "user_experience_used", "user_experience_generalized",
+        "promise_requires_user_perspective", "none",
+    }, f"{path}.J.basis")
+    broad_promise = boolean(j["broad_promise_requires_user_perspective"], f"{path}.J.broad_promise_requires_user_perspective")
+    text(j["rationale"], f"{path}.J.rationale")
+    if j_applicable != (j_basis != "none"):
+        fail(f"{path}.J", "stosowalność i podstawa J są niespójne")
+    if broad_promise != (j_basis == "promise_requires_user_perspective"):
+        fail(f"{path}.J", "szeroka obietnica musi odpowiadać właściwej podstawie J")
+    if j_applicable != (scores["J"] != "nd"):
+        fail("scores.J", "wartość musi odpowiadać ustrukturyzowanej stosowalności J")
+    return value
+
+
+def validate_dimension_scope_checks(value: object, path: str = "dimension_scope_checks") -> dict:
+    value = obj(value, path)
+    exact(value, set(DIMENSIONS), path)
+    shared_by_dimension: dict[str, set[str]] = {}
+    keys = {"subject", "confirmed_correct_subject", "shared_with_dimensions", "distinct_effect"}
+    for dimension in DIMENSIONS:
+        item_path = f"{path}.{dimension}"
+        item = obj(value[dimension], item_path)
+        exact(item, keys, item_path)
+        same(item["subject"], DIMENSION_SUBJECTS[dimension], f"{item_path}.subject")
+        if item["confirmed_correct_subject"] is not True:
+            fail(f"{item_path}.confirmed_correct_subject", "kontrola musi być jawnie potwierdzona")
+        shared = set(text_array(item["shared_with_dimensions"], f"{item_path}.shared_with_dimensions", unique=True))
+        unknown = sorted(shared - set(DIMENSIONS))
+        if unknown or dimension in shared:
+            fail(f"{item_path}.shared_with_dimensions", "wymagane inne prawidłowe kody wymiarów")
+        shared_by_dimension[dimension] = shared
+        if shared:
+            text(item["distinct_effect"], f"{item_path}.distinct_effect")
+        elif item["distinct_effect"] is not None:
+            fail(f"{item_path}.distinct_effect", "bez współdzielenia pole ma być null")
+    for dimension, shared in shared_by_dimension.items():
+        for other in shared:
+            if dimension not in shared_by_dimension[other]:
+                fail(f"{path}.{dimension}.shared_with_dimensions", f"współdzielenie z {other} musi być wzajemne")
+    return value
+
+
+def validate_decidability(value: object, verdict: str, path: str = "decidability_test") -> dict:
+    value = obj(value, path)
+    keys = {
+        "main_content_or_core_artifact_missing", "external_supporting_evidence_missing",
+        "auxiliary_data_missing", "core_assessment_possible", "rationale",
+    }
+    exact(value, keys, path)
+    for key in keys - {"rationale"}:
+        boolean(value[key], f"{path}.{key}")
+    text(value["rationale"], f"{path}.rationale")
+    possible = value["core_assessment_possible"]
+    if not possible and not value["main_content_or_core_artifact_missing"]:
+        fail(path, "brak zewnętrznych dowodów lub danych pomocniczych sam nie blokuje oceny rdzenia")
+    if (verdict == "nie_mozna_rozstrzygnac") != (not possible):
+        fail(path, "możliwość oceny rdzenia musi odpowiadać werdyktowi")
+    return value
+
+
+def validate_medium_large_boundary_test(issue: dict, path: str) -> None:
+    value = issue["medium_large_boundary_test"]
+    severity = issue["severity"]
+    if severity not in {"srednie", "duze"}:
+        if value is not None:
+            fail(f"{path}.medium_large_boundary_test", "test dotyczy wyłącznie problemów średnich i dużych")
+        return
+    value = obj(value, f"{path}.medium_large_boundary_test")
+    keys = {
+        "significant_audience_group", "minimal_honest_correction", "action_or_conclusion_before",
+        "action_or_conclusion_after", "changes_important_scope_or_action", "groups_repeated_occurrences",
+        "single_correction_repairs_all_occurrences", "same_audience_effect", "rationale",
+    }
+    exact(value, keys, f"{path}.medium_large_boundary_test")
+    for key in ("significant_audience_group", "minimal_honest_correction", "action_or_conclusion_before", "action_or_conclusion_after", "rationale"):
+        text(value[key], f"{path}.medium_large_boundary_test.{key}")
+    changes = boolean(value["changes_important_scope_or_action"], f"{path}.medium_large_boundary_test.changes_important_scope_or_action")
+    if changes != (severity == "duze"):
+        fail(f"{path}.medium_large_boundary_test.changes_important_scope_or_action", "problem duży wymaga zmiany ważnego zakresu lub działania, a średni jej braku")
+    grouped = boolean(value["groups_repeated_occurrences"], f"{path}.medium_large_boundary_test.groups_repeated_occurrences")
+    if grouped:
+        if value["single_correction_repairs_all_occurrences"] is not True or value["same_audience_effect"] is not True:
+            fail(f"{path}.medium_large_boundary_test", "grupowanie powtórzeń wymaga jednej poprawki i tego samego skutku")
+    elif value["single_correction_repairs_all_occurrences"] is not None or value["same_audience_effect"] is not None:
+        fail(f"{path}.medium_large_boundary_test", "pola grupowania mają być null, gdy problem nie grupuje powtórzeń")
+
+
+def validate_criticality_test(issue: dict, path: str) -> None:
+    value = issue["criticality_test"]
+    severity = issue["severity"]
+    if severity not in {"duze", "krytyczne"}:
+        if value is not None:
+            fail(f"{path}.criticality_test", "test dotyczy wyłącznie problemów dużych i krytycznych")
+        return
+    value = obj(value, f"{path}.criticality_test")
+    prongs = (
+        "confirmed_error_or_very_high_confidence", "likely_application",
+        "serious_harm_possible", "no_simple_safeguard",
+    )
+    keys = set(prongs) | {"directly_actionable_instruction_with_possible_serious_effects", "failed_prerequisite", "rationale"}
+    exact(value, keys, f"{path}.criticality_test")
+    for key in prongs + ("directly_actionable_instruction_with_possible_serious_effects",):
+        boolean(value[key], f"{path}.criticality_test.{key}")
+    text(value["rationale"], f"{path}.criticality_test.rationale")
+    failed = value["failed_prerequisite"]
+    if failed is not None:
+        enum(failed, set(prongs), f"{path}.criticality_test.failed_prerequisite")
+    failed_prongs = [key for key in prongs if not value[key]]
+    if severity == "krytyczne":
+        if failed_prongs or failed is not None:
+            fail(f"{path}.criticality_test", "problem krytyczny musi spełniać wszystkie cztery przesłanki")
+    elif not failed_prongs or failed not in failed_prongs:
+        fail(f"{path}.criticality_test.failed_prerequisite", "problem duży musi wskazywać co najmniej jedną niespełnioną przesłankę")
+
+
 def validate_result(data: object, metric: object | None = None, *, require_metric: bool = False) -> None:
     root = obj(data, "root")
     keys = {
         "schema_version", "analysis_id", "calibration_mode", "methodology", "publication", "materials",
-        "evaluator", "publication_context", "audience_profile", "temporal_assessment", "claim_map_confidence",
+        "evaluator", "publication_context", "audience_profile", "temporal_assessment", "dimension_applicability",
+        "dimension_scope_checks", "decidability_test", "claim_map_confidence",
         "claim_map_confidence_rationale", "claim_count", "claims", "issues", "issue_counts", "scores",
         "score_rationales", "verdict", "verdict_basis_issue_ids", "counterfactual_correction",
         "verdict_confidence", "source_coverage", "safe_recommendation", "safe_recommendation_rationale",
@@ -809,7 +948,8 @@ def validate_result(data: object, metric: object | None = None, *, require_metri
     issue_keys = {
         "issue_id", "claim_ids", "summary", "proposed_correction", "grouping_rationale", "severity",
         "centrality", "centrality_rationale", "application_risk", "application_risk_rationale",
-        "centrality_test", "application_risk_test", "language_barrier", "confidence", "rationale",
+        "centrality_test", "application_risk_test", "medium_large_boundary_test", "criticality_test",
+        "language_barrier", "confidence", "rationale",
     }
     issues = array(root["issues"], "issues")
     issue_ids = set()
@@ -854,6 +994,8 @@ def validate_result(data: object, metric: object | None = None, *, require_metri
                 fail(path, "pełne testy centralności i ryzyka podaje się razem")
             if issue["centrality_test"] is not None:
                 validate_full_test(issue, path)
+        validate_medium_large_boundary_test(issue, path)
+        validate_criticality_test(issue, path)
         if severity == "krytyczne":
             risk = issue["application_risk_test"]
             if issue["application_risk"] != "wysokie" or issue["confidence"] != "wysoka":
@@ -867,6 +1009,8 @@ def validate_result(data: object, metric: object | None = None, *, require_metri
     validate_counts(root["issue_counts"], "issue_counts", issues)
     scores = validate_scores(root["scores"])
     validate_language_caps(profile, scores)
+    validate_dimension_applicability(root["dimension_applicability"], scores)
+    validate_dimension_scope_checks(root["dimension_scope_checks"])
     rationales = obj(root["score_rationales"], "score_rationales")
     exact(rationales, set(DIMENSIONS), "score_rationales")
     for key in DIMENSIONS:
@@ -878,6 +1022,7 @@ def validate_result(data: object, metric: object | None = None, *, require_metri
     if any(claim["category"] == "Z" for claim in claims) and scores["I"] == "nd":
         fail("scores.I", "zalecenie wyklucza 'nd'")
     verdict = enum(root["verdict"], VERDICTS, "verdict")
+    validate_decidability(root["decidability_test"], verdict)
     basis = text_array(root["verdict_basis_issue_ids"], "verdict_basis_issue_ids", unique=True)
     unknown = sorted(set(basis) - issue_ids)
     if unknown:
@@ -908,7 +1053,8 @@ def validate_extract(data: object, result: dict | None = None) -> None:
     root = obj(data, "root")
     keys = {
         "schema_version", "analysis_id", "publication_id", "methodology", "evaluator", "material_versions",
-        "publication_context_summary", "audience_language", "temporal_assessment", "claim_count", "claim_map_confidence", "scores",
+        "publication_context_summary", "audience_language", "temporal_assessment", "dimension_applicability",
+        "dimension_scope_checks", "decidability_test", "claim_count", "claim_map_confidence", "scores",
         "issue_counts", "issues", "central_findings", "verdict", "verdict_confidence", "source_coverage",
         "counterfactual_correction",
     }
@@ -1002,6 +1148,8 @@ def validate_extract(data: object, result: dict | None = None) -> None:
     integer(root["claim_count"], "claim_count")
     enum(root["claim_map_confidence"], CONFIDENCE, "claim_map_confidence")
     scores = validate_scores(root["scores"])
+    validate_dimension_applicability(root["dimension_applicability"], scores)
+    validate_dimension_scope_checks(root["dimension_scope_checks"])
     if scores["H"] != min(included_h_scores):
         fail("scores.H", "musi równać się minimum H grup istotnych i objętych obietnicą")
     if scores["L"] != min(included_l_scores):
@@ -1012,7 +1160,11 @@ def validate_extract(data: object, result: dict | None = None) -> None:
         fail("scores.H", "rdzeń nieodtwarzalny bez eksperta ogranicza H do 1")
     if audience["popularizing_purpose"] and audience["core_requires_undisclosed_specialist_knowledge"] and scores["L"] > 2:
         fail("scores.L", "niespełniona funkcja popularyzatorska ogranicza L do 2")
-    issue_keys = {"issue_id", "severity", "centrality", "centrality_rationale", "application_risk", "application_risk_rationale", "language_barrier", "confidence"}
+    issue_keys = {
+        "issue_id", "severity", "centrality", "centrality_rationale", "application_risk",
+        "application_risk_rationale", "medium_large_boundary_test", "criticality_test",
+        "language_barrier", "confidence",
+    }
     issues = array(root["issues"], "issues")
     issue_ids = set()
     for index, issue in enumerate(issues):
@@ -1030,11 +1182,14 @@ def validate_extract(data: object, result: dict | None = None) -> None:
         text(issue["application_risk_rationale"], f"{path}.application_risk_rationale")
         validate_language_barrier(issue["language_barrier"], f"{path}.language_barrier")
         enum(issue["confidence"], CONFIDENCE, f"{path}.confidence")
+        validate_medium_large_boundary_test(issue, path)
+        validate_criticality_test(issue, path)
     if language_cap_active(audience) and not any(issue["language_barrier"] is not None for issue in issues):
         fail("issues", "aktywne ograniczenie językowe wymaga jawnego problemu z language_barrier")
     validate_counts(root["issue_counts"], "issue_counts", issues)
     text_array(root["central_findings"], "central_findings", nonempty=True)
-    enum(root["verdict"], VERDICTS, "verdict")
+    verdict = enum(root["verdict"], VERDICTS, "verdict")
+    validate_decidability(root["decidability_test"], verdict)
     enum(root["verdict_confidence"], CONFIDENCE, "verdict_confidence")
     enum(root["source_coverage"], {"pelne", "wystarczajace", "czesciowe", "niewystarczajace"}, "source_coverage")
     enum(root["counterfactual_correction"], {"ograniczona", "strukturalna", "nie_dotyczy"}, "counterfactual_correction")
@@ -1062,6 +1217,9 @@ def validate_extract(data: object, result: dict | None = None) -> None:
             )
         }
         same(temporal, expected_temporal, "temporal_assessment")
+        same(root["dimension_applicability"], result["dimension_applicability"], "dimension_applicability")
+        same(root["dimension_scope_checks"], result["dimension_scope_checks"], "dimension_scope_checks")
+        same(root["decidability_test"], result["decidability_test"], "decidability_test")
         result_context = result["publication_context"]
         # Pola opisowe wyciągu są z założenia skrótem i mogą być parafrazą.
         # Mechanicznie porównujemy tylko wartości kategoryczne, które nie tracą
@@ -1090,7 +1248,10 @@ def validate_extract(data: object, result: dict | None = None) -> None:
         for index, (summary_issue, result_issue) in enumerate(zip(issues, result["issues"])):
             # Uzasadnienia w wyciągu mogą być skrócone. Identyfikator i pola
             # kategoryczne muszą pozostać dokładnie takie jak w pełnym wyniku.
-            for key in ("issue_id", "severity", "centrality", "application_risk", "language_barrier", "confidence"):
+            for key in (
+                "issue_id", "severity", "centrality", "application_risk",
+                "medium_large_boundary_test", "criticality_test", "language_barrier", "confidence",
+            ):
                 same(summary_issue[key], result_issue[key], f"issues[{index}].{key}")
 
 
@@ -1142,7 +1303,8 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
     root = obj(data, "root")
     keys = {
         "schema_version", "comparison_id", "publication_id", "run_a_id", "run_b_id", "methodology",
-        "same_material_version", "material_version_rationale", "temporal_comparison", "audience_profile_comparison", "score_comparison",
+        "same_material_version", "material_version_rationale", "temporal_comparison", "audience_profile_comparison",
+        "applicability_comparison", "decidability_comparison", "score_comparison",
         "verdict_comparison", "claim_matches", "issue_matches", "coverage_metrics", "aggregate_metrics",
         "disagreements", "conclusions",
     }
@@ -1176,7 +1338,11 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
         fail("temporal_comparison.historical_evidence_agreement", "dwie nieodtworzone wersje wymagają not_comparable")
     text(temporal["rationale"], "temporal_comparison.rationale")
     audience = obj(root["audience_profile_comparison"], "audience_profile_comparison")
-    audience_keys = {"outlet_type_agreement", "purpose_agreement", "declared_audience_agreement", "article_audience_agreement", "required_knowledge_agreement", "confidence_agreement", "group_scores", "rationale"}
+    audience_keys = {
+        "outlet_type_agreement", "purpose_agreement", "declared_audience_agreement",
+        "article_audience_agreement", "required_knowledge_agreement", "group_definition_agreement",
+        "confidence_agreement", "group_scores", "rationale",
+    }
     exact(audience, audience_keys, "audience_profile_comparison")
     for key in audience_keys - {"group_scores", "rationale"}:
         boolean(audience[key], f"audience_profile_comparison.{key}")
@@ -1191,6 +1357,39 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
             if group[key] is not None:
                 integer(group[key], f"{path}.{key}", 0, 4)
         text(group["rationale"], f"{path}.rationale")
+    applicability_rows = array(root["applicability_comparison"], "applicability_comparison")
+    if len(applicability_rows) != 2:
+        fail("applicability_comparison", "wymagane dokładnie C i J")
+    applicability_by_dimension = {}
+    for index, row in enumerate(applicability_rows):
+        path = f"applicability_comparison[{index}]"
+        row = obj(row, path)
+        exact(row, {"dimension", "a_applicable", "b_applicable", "agreement", "rationale"}, path)
+        dimension = enum(row["dimension"], {"C", "J"}, f"{path}.dimension")
+        if dimension in applicability_by_dimension:
+            fail(f"{path}.dimension", "wymiar występuje więcej niż raz")
+        applicability_by_dimension[dimension] = row
+        a_applicable = boolean(row["a_applicable"], f"{path}.a_applicable")
+        b_applicable = boolean(row["b_applicable"], f"{path}.b_applicable")
+        agreement = boolean(row["agreement"], f"{path}.agreement")
+        if agreement != (a_applicable == b_applicable):
+            fail(f"{path}.agreement", "wartość nie odpowiada stosowalności A/B")
+        text(row["rationale"], f"{path}.rationale")
+    if set(applicability_by_dimension) != {"C", "J"}:
+        fail("applicability_comparison", "wymagane dokładnie C i J")
+    decidability = obj(root["decidability_comparison"], "decidability_comparison")
+    decidability_keys = {
+        "a_core_assessment_possible", "b_core_assessment_possible", "agreement",
+        "missing_material_type_agreement", "rationale",
+    }
+    exact(decidability, decidability_keys, "decidability_comparison")
+    a_core_possible = boolean(decidability["a_core_assessment_possible"], "decidability_comparison.a_core_assessment_possible")
+    b_core_possible = boolean(decidability["b_core_assessment_possible"], "decidability_comparison.b_core_assessment_possible")
+    decision_agreement = boolean(decidability["agreement"], "decidability_comparison.agreement")
+    if decision_agreement != (a_core_possible == b_core_possible):
+        fail("decidability_comparison.agreement", "wartość nie odpowiada testom A/B")
+    boolean(decidability["missing_material_type_agreement"], "decidability_comparison.missing_material_type_agreement")
+    text(decidability["rationale"], "decidability_comparison.rationale")
     score_rows = array(root["score_comparison"], "score_comparison")
     if len(score_rows) != 12:
         fail("score_comparison", "wymagane dokładnie 12 wymiarów")
@@ -1230,7 +1429,10 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
         a_all: list[str] = []
         b_all: list[str] = []
         required = {"relation", "a_ids", "b_ids", "semantic_summary", "rationale"}
-        required |= ({"severity_agreement", "centrality_agreement", "risk_agreement", "grouping_difference"} if issues else {"result_agreement", "component_agreement_counts", "atomization_difference"})
+        required |= ({
+            "severity_agreement", "centrality_agreement", "risk_agreement",
+            "medium_large_boundary_agreement", "criticality_agreement", "grouping_difference",
+        } if issues else {"result_agreement", "component_agreement_counts", "atomization_difference"})
         for index, item in enumerate(array(items, path)):
             item_path = f"{path}[{index}]"
             item = obj(item, item_path)
@@ -1244,7 +1446,10 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
             text(item["semantic_summary"], f"{item_path}.semantic_summary")
             text(item["rationale"], f"{item_path}.rationale")
             if issues:
-                for key in ("severity_agreement", "centrality_agreement", "risk_agreement"):
+                for key in (
+                    "severity_agreement", "centrality_agreement", "risk_agreement",
+                    "medium_large_boundary_agreement", "criticality_agreement",
+                ):
                     enum(item[key], {"yes", "no", "not_comparable"}, f"{item_path}.{key}")
                 text(item["grouping_difference"], f"{item_path}.grouping_difference")
             else:
@@ -1326,7 +1531,11 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
         path = f"disagreements[{index}]"
         item = obj(item, path)
         exact(item, disagreement_keys, path)
-        enum(item["area"], {"audience_profile", "score", "verdict", "nd", "atomization", "claim_result", "issue_grouping", "severity", "centrality", "risk", "language", "outlet_fit", "other"}, f"{path}.area")
+        enum(item["area"], {
+            "audience_profile", "score", "verdict", "nd", "dimension_scope", "decidability",
+            "historical_evidence", "atomization", "claim_result", "issue_grouping", "severity",
+            "centrality", "risk", "criticality", "language", "outlet_fit", "other",
+        }, f"{path}.area")
         for key in ("summary", "likely_source", "effect"):
             text(item[key], f"{path}.{key}")
     text_array(root["conclusions"], "conclusions", nonempty=True)
@@ -1359,6 +1568,19 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
                 "yes" if temporal_a["historical_version_evidence"] == temporal_b["historical_version_evidence"] else "no"
             )
         same(evidence_agreement, expected_evidence_agreement, "temporal_comparison.historical_evidence_agreement")
+        for dimension in ("C", "J"):
+            row = applicability_by_dimension[dimension]
+            same(row["a_applicable"], result_a["dimension_applicability"][dimension]["applicable"], f"applicability_comparison.{dimension}.a_applicable")
+            same(row["b_applicable"], result_b["dimension_applicability"][dimension]["applicable"], f"applicability_comparison.{dimension}.b_applicable")
+        decision_a = result_a["decidability_test"]
+        decision_b = result_b["decidability_test"]
+        same(a_core_possible, decision_a["core_assessment_possible"], "decidability_comparison.a_core_assessment_possible")
+        same(b_core_possible, decision_b["core_assessment_possible"], "decidability_comparison.b_core_assessment_possible")
+        missing_fields = (
+            "main_content_or_core_artifact_missing", "external_supporting_evidence_missing", "auxiliary_data_missing",
+        )
+        expected_missing_agreement = all(decision_a[key] == decision_b[key] for key in missing_fields)
+        same(decidability["missing_material_type_agreement"], expected_missing_agreement, "decidability_comparison.missing_material_type_agreement")
         same(verdict["a_verdict"], result_a["verdict"], "verdict_comparison.a_verdict")
         same(verdict["b_verdict"], result_b["verdict"], "verdict_comparison.b_verdict")
         same(verdict["a_counterfactual_correction"], result_a["counterfactual_correction"], "verdict_comparison.a_counterfactual_correction")
@@ -1402,7 +1624,10 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
         for index, match in enumerate(root["issue_matches"]):
             path = f"issue_matches[{index}]"
             if match["relation"] in {"a_only", "b_only"}:
-                for field in ("severity_agreement", "centrality_agreement", "risk_agreement"):
+                for field in (
+                    "severity_agreement", "centrality_agreement", "risk_agreement",
+                    "medium_large_boundary_agreement", "criticality_agreement",
+                ):
                     same(match[field], "not_comparable", f"{path}.{field}")
             elif match["relation"] == "one_to_one":
                 issue_a = issues_a[match["a_ids"][0]]
@@ -1414,6 +1639,28 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
                 }
                 for agreement_field, result_field in fields.items():
                     expected_agreement = "yes" if issue_a[result_field] == issue_b[result_field] else "no"
+                    same(match[agreement_field], expected_agreement, f"{path}.{agreement_field}")
+                boundary_fields = (
+                    "changes_important_scope_or_action", "groups_repeated_occurrences",
+                    "single_correction_repairs_all_occurrences", "same_audience_effect",
+                )
+                criticality_fields = (
+                    "confirmed_error_or_very_high_confidence", "likely_application",
+                    "serious_harm_possible", "no_simple_safeguard",
+                    "directly_actionable_instruction_with_possible_serious_effects", "failed_prerequisite",
+                )
+                for agreement_field, result_field, compared_fields in (
+                    ("medium_large_boundary_agreement", "medium_large_boundary_test", boundary_fields),
+                    ("criticality_agreement", "criticality_test", criticality_fields),
+                ):
+                    value_a = issue_a[result_field]
+                    value_b = issue_b[result_field]
+                    if value_a is None and value_b is None:
+                        expected_agreement = "yes"
+                    elif value_a is None or value_b is None:
+                        expected_agreement = "no"
+                    else:
+                        expected_agreement = "yes" if all(value_a[key] == value_b[key] for key in compared_fields) else "no"
                     same(match[agreement_field], expected_agreement, f"{path}.{agreement_field}")
 
         expected_claim_rate = None

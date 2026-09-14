@@ -82,6 +82,10 @@ Przedstawić cel, tok wywodu i wnioski autora bez oceny poprawności. Streszczen
 | --- | --- | --- | --- |
 |  |  |  |  |
 
+- Uzasadnienie połączenia ról — ta sama obietnica, wiedza i zadanie:
+- Uzasadnienie podziału ról — różna obietnica, wiedza, bariera albo możliwy H/L:
+- Przykład kontrolny: podobne stanowiska wykonujące tę samą procedurę można połączyć; koordynatora podejmującego decyzję i wykonawcę realizującego krok techniczny należy rozdzielić, jeżeli wymaga tego różnica zadania, wiedzy lub H/L.
+
 - Sprzeczności między opisem miejsca a artykułem — opis i dowody:
 - Stan profilu: ustalony / czesciowo_ustalony / nieustalony_wiarygodnie
 - Pewność profilu: wysoka / srednia / niska
@@ -166,6 +170,17 @@ Przedstawić cel, tok wywodu i wnioski autora bez oceny poprawności. Streszczen
 
 Uzasadnić każde `nd`. Przy 0, 1 i 4 wskazać dowód przekraczający granicę poziomu. Sprawdzić ograniczenia H i L wynikające z profilu językowego.
 
+### Stosowalność C i J
+
+- C — `applicable`, `basis` i uzasadnienie:
+- J — `applicable`, `basis`, `broad_promise_requires_user_perspective` i uzasadnienie:
+
+### Kontrola właściwego przedmiotu wymiaru
+
+| Wymiar | Przedmiot głównego uzasadnienia | Właściwy przedmiot potwierdzony | Współdzielone wymiary | Odrębny skutek dla tego wymiaru |
+| --- | --- | --- | --- | --- |
+| A–L osobno |  | tak | kody albo brak | wymagany przy współdzieleniu |
+
 ## 9. Mocne strony
 
 Wymienić mocne strony poparte konkretnymi elementami publikacji.
@@ -187,6 +202,25 @@ Dla każdego problemu dużego i krytycznego dodatkowo zapisać:
 - Odwracalność skutku:
 - Uzasadnienie ryzyka:
 
+Dla każdego problemu średniego i dużego zapisać test granicy:
+
+- Istotna grupa odbiorców:
+- Minimalna uczciwa poprawka:
+- Działanie lub wniosek przed poprawką:
+- Działanie lub wniosek po poprawce:
+- Czy zmienia się ważny zakres albo sposób działania:
+- Czy zgrupowano powtarzające się wystąpienia:
+- Jeżeli tak — czy jedna poprawka naprawia wszystkie i czy skutek dla odbiorców jest ten sam:
+
+Dla każdego problemu dużego i krytycznego zapisać kontrolę krytyczności:
+
+- Potwierdzony błąd albo bardzo wysoka pewność: true / false
+- Prawdopodobne zastosowanie: true / false
+- Możliwa poważna szkoda: true / false
+- Brak prostego zabezpieczenia: true / false
+- Bezpośrednio wykonalna instrukcja o możliwych poważnych skutkach: true / false
+- Niespełniona przesłanka albo `null` przy problemie krytycznym:
+
 W kalibracji centralność, ryzyko zastosowania i krótkie uzasadnienia są obowiązkowe dla każdego problemu, również średniego i małego. Pełny test składowy pozostaje obowiązkowy dla problemów dużych i krytycznych.
 
 Następnie pogrupować problemy pod nagłówkami: krytyczne, duże, średnie i małe.
@@ -205,6 +239,12 @@ Uporządkować poprawki według wpływu na rdzeń i bezpieczeństwo zastosowania
 
 ## 13. Profil ocen i werdykt
 
+- Test rozstrzygalności:
+  - brak treści publikacji lub centralnego artefaktu:
+  - brak zewnętrznych dowodów wspierających widoczne twierdzenia:
+  - brak danych pomocniczych:
+  - odpowiedzialna ocena rdzenia możliwa:
+  - uzasadnienie:
 - Główna teza:
 - Podstawowe zastosowanie:
 - Problemy rdzenia:

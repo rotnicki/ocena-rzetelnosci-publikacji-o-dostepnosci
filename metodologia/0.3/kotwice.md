@@ -20,7 +20,15 @@ Wartość `nd` stosować wyłącznie według reguły ze standardu 0.3. Profil od
 
 Problem jest `duze`, gdy minimalna uczciwa naprawa zmienia ważne zalecenie, zakres ważnego wniosku albo sposób działania istotnej grupy. Jest `srednie`, gdy naprawa pozostawia ten sam ważny wniosek i sposób działania, ale usuwa materialną nieścisłość lub lokalne ryzyko.
 
+Dla każdego problemu `srednie` albo `duze` zapisać grupę, minimalną poprawkę, działanie lub wniosek przed i po poprawce oraz to, czy zmienia się ważny zakres albo sposób działania. `duze` wymaga takiej zmiany; bez niej problem pozostaje `srednie`. Powtarzające się wystąpienia można grupować tylko wtedy, gdy jedna poprawka naprawia wszystkie i daje ten sam skutek odbiorcom.
+
 Twierdzenia można połączyć tylko wtedy, gdy mają wspólną przyczynę, jedną zasadniczą korektę, tę samą centralność i to samo ryzyko. Sama liczba drobnych wystąpień nie podnosi problemu do `duze`; wspólny wzorzec może to zrobić, jeżeli łącznie zmienia odbiór albo działanie.
+
+## Kontrola grup i przedmiotu wymiaru
+
+Role zawodowe tworzą jedną grupę tylko przy tej samej obietnicy, wiedzy i zadaniu. Różna obietnica, wiedza, bariera albo możliwy wynik H lub L wymaga podziału. Wiedza konieczna wskazuje dokładny fragment, warunek albo działanie; wiedza tylko pomocna nie obniża H.
+
+Przed zamknięciem wyniku sprawdzić jego właściwy przedmiot: terminy — G; struktura i możliwość prześledzenia — H; bezpieczeństwo działania — I; doświadczenia użytkowników — J; status wiedzy — K; spełnienie obietnicy — L. Wspólna obserwacja wymaga odmiennego skutku opisanego osobno dla każdego wymiaru.
 
 ## A. Poprawność faktograficzna
 
@@ -63,7 +71,7 @@ Twierdzenia można połączyć tylko wtedy, gdy mają wspólną przyczynę, jedn
 - **Granica 1/2:** wadliwy przykład, który działa po lokalnej zmianie składni lub atrybutu, wskazuje zwykle na 2; potrzeba zastąpienia głównego mechanizmu wskazuje na 1.
 - **Granica 2/3:** ograniczenie zgodności z jedną konfiguracją, wyraźnie ujawnione i poboczne, wskazuje na 3; nieujawniony warunek zmieniający wynik typowego zastosowania wskazuje na 2.
 
-`nd` jest możliwe tylko przy całkowitym braku twierdzeń, przykładów, zaleceń i implikacji technicznych. C musi być ocenione liczbowo, gdy publikacja opisuje działanie technologii, podaje technikę wdrożeniową, zaleca narzędzie, test lub audyt albo obiecuje zgodność lub usunięcie bariery. Krótka albo handlowa forma nie uzasadnia `nd`.
+`nd` jest możliwe tylko przy całkowitym braku własnych twierdzeń autora o działaniu technologii, mechanizmu, narzędzia, testu albo rozwiązania. Samo wymienienie WCAG lub normy jako podstawy prawnej nie uruchamia C. Funkcje oczekiwane przez uczestników badania uruchamiają C dopiero wtedy, gdy autor sam ocenia ich działanie. C jest liczbowe przy technice wdrożeniowej, zaleceniu narzędzia, testu lub audytu albo obietnicy zgodności czy usunięcia bariery.
 
 ## D. Udokumentowanie i jakość źródeł
 
@@ -174,6 +182,8 @@ Pojedynczy krok wymagający CMS, inspektora, kodu albo wiedzy prawnej obniża H 
 
 - **Granica 1/2:** mała próba z jawnym ograniczeniem wskazuje na 2; uogólnienie jednostkowego doświadczenia na całą grupę jako rdzeń porady wskazuje na 1.
 - **Granica 2/3:** perspektywa jednej grupy odpowiednia do jawnie wąskiego celu wskazuje na 3; ta sama perspektywa użyta do szerszego wniosku bez zastrzeżenia wskazuje na 2.
+
+J jest liczbowe, gdy tekst przedstawia, wykorzystuje lub uogólnia doświadczenia, potrzeby albo badania użytkowników lub składa obietnicę wymagającą takiej perspektywy. Samo nazwanie osób z niepełnosprawnościami beneficjentami regulacji nie wystarcza. Wąski tekst prawny albo techniczny bez takiej obietnicy otrzymuje `nd`; szeroki albo „kompletny” poradnik może uruchomić J przez własną obietnicę.
 
 ## K. Przejrzystość epistemiczna
 

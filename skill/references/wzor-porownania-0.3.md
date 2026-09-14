@@ -26,26 +26,40 @@ Porównanie przygotować dopiero po zamknięciu i walidacji obu ocen. Dopasowywa
 - Zgodność deklarowanych odbiorców:
 - Zgodność odbiorców artykułu:
 - Zgodność wiedzy wymaganej:
+- Zgodność sposobu łączenia i dzielenia grup:
 - Zgodność sprzeczności i pewności profilu:
 
 | Grupa odbiorców | H w A | H w B | L w A | L w B | Wyjaśnienie różnicy |
 | --- | ---: | ---: | ---: | ---: | --- |
 |  |  |  |  |  |  |
 
-## 3. Oceny A–L i `nd`
+## 3. Stosowalność C/J i rozstrzygalność
+
+| Wymiar | Stosowalne w A | Stosowalne w B | Zgodność | Uzasadnienie |
+| --- | --- | --- | --- | --- |
+| C |  |  |  |  |
+| J |  |  |  |  |
+
+- A — odpowiedzialna ocena rdzenia możliwa:
+- B — odpowiedzialna ocena rdzenia możliwa:
+- Zgodność rozstrzygalności:
+- Zgodność rodzaju brakującego materiału:
+- Uzasadnienie:
+
+## 4. Oceny A–L i `nd`
 
 | Wymiar | A | B | Zgodność dokładna | Różnica | Wyjaśnienie |
 | --- | ---: | ---: | --- | ---: | --- |
 | A |  |  | tak / nie |  |  |
 
-## 4. Werdykt
+## 5. Werdykt
 
 - Werdykt A / B:
 - Korekta kontrfaktyczna A / B:
 - Zgodność:
 - Wyjaśnienie:
 
-## 5. Dopasowanie twierdzeń
+## 6. Dopasowanie twierdzeń
 
 Każdy identyfikator z A i B musi wystąpić dokładnie raz. Relacje: `one_to_one`, `one_to_many`, `many_to_one`, `many_to_many`, `a_only`, `b_only`.
 
@@ -55,13 +69,13 @@ Każdy identyfikator z A i B musi wystąpić dokładnie raz. Relacje: `one_to_on
 
 Dla relacji 1:1 stosować zamkniętą listę par sąsiednich ze standardu. W relacjach złożonych najpierw porównać najmniejsze wspólne składowe i zapisać liczbę składowych każdego rodzaju.
 
-## 6. Dopasowanie problemów
+## 7. Dopasowanie problemów
 
-| Relacja | ID A | ID B | Wspólne znaczenie | Znaczenie zgodne | Centralność zgodna | Ryzyko zgodne | Różnica grupowania | Uzasadnienie |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  | tak / nie / nieporównywalne |  |  |  |  |
+| Relacja | ID A | ID B | Wspólne znaczenie | Znaczenie zgodne | Centralność zgodna | Ryzyko zgodne | Test średnie–duże zgodny | Test krytyczności zgodny | Różnica grupowania | Uzasadnienie |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  | yes / no / not_comparable |  |  |  |  |  |  |
 
-## 7. Wpisy jednostronne i pokrycie
+## 8. Wpisy jednostronne i pokrycie
 
 - Twierdzenia tylko w A / tylko w B:
 - Problemy tylko w A / tylko w B:
@@ -69,7 +83,7 @@ Dla relacji 1:1 stosować zamkniętą listę par sąsiednich ze standardu. W rel
 - Pokrycie problemów A i B:
 - Zgodność par 1:1:
 
-## 8. Miary zbiorcze
+## 9. Miary zbiorcze
 
 - Dokładna zgodność A–L:
 - Zgodność w granicy jednego punktu:
@@ -80,9 +94,13 @@ Dla relacji 1:1 stosować zamkniętą listę par sąsiednich ze standardu. W rel
 - Zgodność centralności i ryzyka dla problemów dużych i krytycznych:
 - Rozbieżności `nd`:
 
-## 9. Źródła rozbieżności i wnioski
+## 10. Źródła rozbieżności i wnioski
 
 - Profil odbiorców:
+- Stosowalność C/J:
+- Przedmiot wymiarów:
+- Rozstrzygalność:
+- Dowód historyczny:
 - Atomizacja:
 - Wyniki twierdzeń:
 - Grupowanie problemów:

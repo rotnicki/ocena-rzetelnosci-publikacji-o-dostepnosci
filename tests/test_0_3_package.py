@@ -97,6 +97,32 @@ class PackageTests(unittest.TestCase):
         self.assertIn("R3 nie uruchomiono", summary)
         self.assertIn("B2 nie zostało rozpoczęte", summary)
 
+    def test_s11_through_s15_are_implemented(self) -> None:
+        standard = (ROOT / "metodologia/0.3/standard.md").read_text(encoding="utf-8")
+        result_schema = json.loads((ROOT / "metodologia/0.3/wynik.schema.json").read_text(encoding="utf-8"))
+        comparison_schema = json.loads((ROOT / "metodologia/0.3/porownanie-pary-0.3.schema.json").read_text(encoding="utf-8"))
+
+        for phrase in (
+            "Wymiar C otrzymuje ocenę liczbową tylko wtedy",
+            "Wymiar J otrzymuje ocenę liczbową",
+            "Każdy problem `srednie` albo `duze` przechodzi ustrukturyzowany test granicy",
+            "Kontrola właściwego przedmiotu wymiaru",
+            "Przed werdyktem należy rozdzielić",
+            "Role zawodowe łączy się w jedną grupę",
+        ):
+            self.assertIn(phrase, standard)
+
+        for field in (
+            "dimension_applicability",
+            "dimension_scope_checks",
+            "decidability_test",
+        ):
+            self.assertIn(field, result_schema["required"])
+        for field in ("medium_large_boundary_test", "criticality_test"):
+            self.assertIn(field, result_schema["$defs"]["issue"]["required"])
+        for field in ("applicability_comparison", "decidability_comparison"):
+            self.assertIn(field, comparison_schema["required"])
+
     def test_technical_control_documents_distinguish_historical_and_current_state(self) -> None:
         calibration = ROOT / "kalibracja/0.3"
         for name in (
@@ -117,6 +143,12 @@ class PackageTests(unittest.TestCase):
 
         pilot = (calibration / "wyniki-pilota.md").read_text(encoding="utf-8")
         self.assertIn("S1–S10 zostały następnie osobno zatwierdzone i wdrożone", pilot)
+
+        latest = (calibration / "kontrola-techniczna-S1-S15.md").read_text(encoding="utf-8")
+        self.assertIn("85/85 poprawnych", latest)
+        self.assertIn("T1–T2 oraz S1–S15 są wdrożone", latest)
+        self.assertIn("B1 zostało zakończone proceduralnie", latest)
+        self.assertIn("B2 nie zostało rozpoczęte", latest)
 
 
 if __name__ == "__main__":

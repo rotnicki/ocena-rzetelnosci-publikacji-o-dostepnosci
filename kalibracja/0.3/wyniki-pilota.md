@@ -5,9 +5,9 @@
 **Zakres wykonanych prac:** wcześniejszy przypadek diagnostyczny i 2 pomocnicze testy angielskie oraz nowy podstawowy pilotaż 5 polskich publikacji; łącznie 16 odizolowanych przebiegów, przy czym oba zestawy są raportowane osobno
 
 > Dokument zachowuje wyniki i wnioski w stanie z zakończenia pilota. Późniejsze
-> decyzje S1–S10 i ich wdrożenie opisano w
+> decyzje S1–S15 i ich wdrożenie opisano w
 > [propozycjach zmian po polskim pilotażu](propozycje-zmian-po-polskim-pilocie.md)
-> oraz [kontroli technicznej S1–S10](kontrola-techniczna-S1-S10.md).
+> oraz [kontroli technicznej S1–S15](kontrola-techniczna-S1-S15.md).
 
 Pełne analizy przypadków są przechowywane poza repozytorium publicznym. Ten dokument zawiera wyłącznie zagregowane informacje potrzebne do oceny działania metodologii.
 
@@ -112,4 +112,4 @@ Nowy pilotaż objął pięć polskojęzycznych publikacji z pięciu różnych mi
 - przygotować osobny korpus sprawdzający pozostałe werdykty, `nd`, problem krytyczny i brak rozstrzygnięcia;
 - sprawdzić przenośność metodologii na innych oceniających i systemach.
 
-Powyższe punkty były wnioskami z pilota, a na etapie jego zakończenia nie stanowiły jeszcze wdrożonych zmian zasad. S1–S10 zostały następnie osobno zatwierdzone i wdrożone w projekcie 0.3. Wersje 0.1 i 0.2 pozostały nietknięte. PR nr 8 nie został scalony i nie utworzono znacznika ani wydania 0.3.
+Powyższe punkty były wnioskami z pilota, a na etapie jego zakończenia nie stanowiły jeszcze wdrożonych zmian zasad. S1–S10 zostały następnie osobno zatwierdzone i wdrożone, B1 zakończono proceduralnie, a wynikające z niego S11–S15 także zatwierdzono i wdrożono prospektywnie w projekcie 0.3. Wersje 0.1 i 0.2 pozostały nietknięte. PR nr 8 nie został scalony i nie utworzono znacznika ani wydania 0.3. B2 nie zostało rozpoczęte.

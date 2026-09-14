@@ -12,7 +12,8 @@
 > opisuje kontrolę wykonaną przed B1 i zachowuje liczby właściwe tamtemu
 > stanowi. B1 zostało następnie wykonane i zakończone proceduralnie; jego
 > bezpieczne wyniki zbiorcze zawiera [`wyniki-B1.md`](wyniki-B1.md). Po B1
-> zatwierdzono T1–T2 i S11–S15. B2 nie zostało rozpoczęte.
+> wdrożono T1–T2 i S11–S15. Aktualny stan dokumentuje
+> [kontrola techniczna S1–S15](kontrola-techniczna-S1-S15.md). B2 nie zostało rozpoczęte.
 
 ## Stan wdrożenia
 

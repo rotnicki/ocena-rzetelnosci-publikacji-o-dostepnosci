@@ -228,9 +228,15 @@ Pewność `wysoka` wymaga bezpośredniego dowodu odpowiedniej rangi dla grup i z
 
 „Wiedza rzeczywiście potrzebna” obejmuje tylko wiedzę konieczną do odtworzenia głównej tezy, ważnego warunku albo obiecanego działania. Wiedzę pomocną, lecz niekonieczną, zapisuje się osobno jako ułatwiającą. Każdy element wiedzy koniecznej wskazuje fragment publikacji, który bez niej staje się nieodtwarzalny lub ryzykowny.
 
+Każdy element wiedzy koniecznej musi wskazywać dokładny fragment, warunek albo działanie, którego odbiorca bez tej wiedzy nie odtworzy. Wiedza jedynie pomocna trafia do osobnego pola `facilitating_knowledge` i nie obniża H.
+
 Jeżeli odbiorcy nie mogą zostać wiarygodnie ustaleni, nie wolno bez odpowiednich dowodów uznać ich za specjalistów. Należy zapisać warianty profilu i wrażliwość H oraz L na te warianty. Wynik H pozostaje liczbowy, ale przy równorzędnych wariantach przyjmuje ostrożniejszy wynik i niską pewność.
 
 ### 6.5. Publikacje dla grup mieszanych
+
+Role zawodowe łączy się w jedną grupę, jeżeli publikacja składa wobec nich tę samą obietnicę, wymaga tej samej wiedzy i prowadzi do tego samego zadania. Grupę dzieli się tylko wtedy, gdy różni się obietnica, potrzebna wiedza, bariera zrozumienia albo możliwy wynik H lub L.
+
+Przykładowo programistów front-end i back-end można połączyć, jeżeli tekst kieruje do obu tę samą procedurę, wymaga tych samych wiadomości i prowadzi do tego samego rezultatu. Koordynatora i wykonawcę należy rozdzielić, gdy pierwszy ma podjąć decyzję organizacyjną, a drugi wykonać kroki techniczne, lub gdy bez dodatkowej wiedzy ich H albo L może być inne. Samo występowanie dwóch nazw stanowisk nie uzasadnia ani połączenia, ani podziału.
 
 Dla każdej istotnej grupy odbiorców należy osobno ocenić możliwość zrozumienia rdzenia i zapisać `group_h_score` od 0 do 4, wymagane założenia oraz bariery. Dla każdej istotnej grupy objętej obietnicą publikacji zapisuje się także `group_l_score` od 0 do 4. Ocena odpowiada na pytanie, czy publikacja realizuje wobec tej grupy deklarowany cel i obiecany sposób użycia; nie jest kopią ogólnego L.
 
@@ -494,7 +500,11 @@ Domyślnie każdy wymiar A–L otrzymuje ocenę liczbową. `nd` oznacza „nie d
 
 `nd` nie wolno zastosować, gdy materiał składa twierdzenie, lecz brakuje dowodów, źródło jest niedostępne, pominięto warunek, zalecenie jest niepełne albo oceniającemu brakuje kompetencji.
 
-Wymiar C zawsze jest liczbowy, jeżeli publikacja opisuje działanie technologii, podaje technikę wdrożeniową, zaleca narzędzie, test lub audyt albo twierdzi, że rozwiązanie zapewnia zgodność lub usuwa barierę. Krótka lub handlowa forma nie uzasadnia `nd`.
+Wymiar C otrzymuje ocenę liczbową tylko wtedy, gdy publikacja sama przedstawia twierdzenie o działaniu technologii, mechanizmu, narzędzia, testu albo rozwiązania. Samo wymienienie WCAG lub normy jako podstawy prawnej nie jest jeszcze twierdzeniem technicznym. Przytoczenie funkcji oczekiwanych przez uczestników badania nie staje się twierdzeniem technicznym autora bez jego własnej oceny działania tych funkcji. Krótka lub handlowa forma nie uzasadnia `nd`, jeżeli takie twierdzenie występuje.
+
+Wymiar J otrzymuje ocenę liczbową, gdy publikacja przedstawia, wykorzystuje albo uogólnia doświadczenia, potrzeby lub wyniki badań użytkowników albo składa obietnicę, której realizacja wymaga takiej perspektywy. Samo wymienienie osób z niepełnosprawnościami jako beneficjentów regulacji nie wystarcza. Brak badań użytkowników w wąskim tekście prawnym lub technicznym nie obniża J i prowadzi do `nd`. Szeroki cel albo obietnica kompletnego poradnika może jednak powodować, że perspektywa użytkowników staje się wymagana; wtedy J pozostaje liczbowe także wtedy, gdy publikacja tej perspektywy nie dostarczyła.
+
+W `dimension_applicability` zapisuje się osobno podstawę stosowalności C i J. Walidator sprawdza zgodność tej decyzji z wartością liczbową albo `nd`; nie rozstrzyga automatycznie znaczenia naturalnego języka publikacji.
 
 ## 13. Problemy
 
@@ -506,6 +516,8 @@ Wymiar C zawsze jest liczbowy, jeżeli publikacja opisuje działanie technologii
 - `male` — lokalna nieścisłość, brak albo problem redakcyjny o ograniczonych konsekwencjach.
 
 Problem krytyczny wymaga łącznie: potwierdzonego błędu lub bardzo wysokiej pewności, prawdopodobnego zastosowania, możliwej poważnej szkody oraz braku prostego zabezpieczenia. W przeciwnym razie domyślnym maksimum jest problem duży.
+
+Jeżeli problem duży ma wysokie ryzyko albo dotyczy bezpośrednio wykonalnej instrukcji o możliwych poważnych skutkach, należy wskazać osobno cztery przesłanki krytyczności i zapisać, której nie spełniono. Problem jest krytyczny tylko wtedy, gdy spełnia wszystkie cztery. Ustrukturyzowany `criticality_test` zapisuje także, czy problem dotyczy takiej bezpośrednio wykonalnej instrukcji. Dla problemu krytycznego wszystkie cztery przesłanki mają wartość `true`, a `failed_prerequisite` ma wartość `null`; dla problemu dużego co najmniej jedna przesłanka ma wartość `false` i zostaje wskazana w `failed_prerequisite`.
 
 ### 13.2. Centralność
 
@@ -559,7 +571,11 @@ Twierdzenia wolno połączyć w jeden problem tylko wtedy, gdy łącznie spełni
 
 Brak źródła, błąd merytoryczny, niejasny status normatywny i bariera zrozumienia nie są automatycznie jednym problemem, nawet gdy dotyczą tego samego akapitu. Można je połączyć tylko wtedy, gdy jedna korekta rzeczywiście usuwa wszystkie skutki.
 
-Problem jest `duze`, gdy minimalna uczciwa naprawa zmienia ważne zalecenie, zakres ważnego wniosku albo sposób działania istotnej grupy. Jest `srednie`, gdy naprawa pozostawia ten sam ważny wniosek i sposób działania, ale usuwa materialną nieścisłość lub lokalne ryzyko. Duża liczba drobnych wystąpień sama nie tworzy problemu dużego; może go tworzyć wspólny wzorzec, jeżeli łącznie zmienia odbiór lub działanie.
+Każdy problem `srednie` albo `duze` przechodzi ustrukturyzowany test granicy. Należy zapisać: istotną grupę odbiorców, minimalną uczciwą poprawkę, działanie lub wniosek przed poprawką, działanie lub wniosek po poprawce oraz informację, czy zmiana dotyczy ważnego zakresu albo sposobu działania.
+
+Problem jest `duze`, gdy po poprawce co najmniej jedna istotna grupa powinna zmienić ważną decyzję, zakres działania albo sposób wykonania. Jeżeli poprawka usuwa materialną nieścisłość, ale nie zmienia ważnej decyzji ani działania, problem pozostaje `srednie`.
+
+Powtarzające się wystąpienia można grupować tylko wtedy, gdy jedna wspólna poprawka rzeczywiście naprawia wszystkie i prowadzi do tego samego skutku dla odbiorców. Test zapisuje, czy problem grupuje powtarzające się wystąpienia; jeżeli tak, obie przesłanki grupowania muszą być potwierdzone.
 
 Każdy problem zawiera opis wzorca, powiązane twierdzenia, główną poprawkę i uzasadnienie sposobu grupowania.
 
@@ -609,11 +625,19 @@ Lokalna trudność, która nie zmienia H, L ani werdyktu, może pozostać wyłą
 
 Tego samego zjawiska nie liczy się podwójnie. Jeżeli niepoprawny termin jest już problemem merytorycznym, opis problemu wskazuje osobno skutek dla G oraz skutek dla H lub L.
 
+### 14.2. Kontrola właściwego przedmiotu wymiaru
+
+Przed zamknięciem A–L należy sprawdzić, czy główne uzasadnienie każdego wyniku dotyczy właściwego przedmiotu. Struktura i możliwość prześledzenia tekstu należą do H; poprawność terminów do G; bezpieczeństwo działania do I; doświadczenia i potrzeby użytkowników do J; jawność statusu wiedzy do K; realizacja obietnicy publikacji do L.
+
+Uzasadnienie nie jest wystarczające, jeżeli opiera wynik głównie na cesze należącej do innego wymiaru. Jedna obserwacja może wpływać na kilka wymiarów tylko wtedy, gdy dla każdego zostanie opisany odmienny skutek. Karta oceny i raport wymagają jawnego potwierdzenia tej kontroli dla wszystkich A–L. Walidator sprawdza obecność ustrukturyzowanej kontroli i odmienny skutek przy współdzielonej obserwacji, lecz nie próbuje automatycznie interpretować naturalnego uzasadnienia.
+
 ## 15. Sekwencja werdyktu
 
 ### Krok 1. Możliwość rozstrzygnięcia
 
-`nie_mozna_rozstrzygnac` stosuje się, gdy brak pełnej treści, centralnego materiału albo wystarczających dowodów uniemożliwia ocenę rdzenia. Nie stosuje się go tylko dlatego, że część twierdzeń jest nierozstrzygnięta.
+Przed werdyktem należy rozdzielić: brak treści publikacji lub centralnego artefaktu potrzebnego do poznania głównej tezy; brak zewnętrznych dowodów wspierających widoczne twierdzenie; oraz brak części danych pomocniczych. Ustalenie zapisuje się w `decidability_test`.
+
+Brak źródła albo danych wspierających widoczne twierdzenie nie prowadzi automatycznie do `nie_mozna_rozstrzygnac`. Twierdzenie może pozostać nierozstrzygnięte, a D i pokrycie źródłowe mogą zostać obniżone. Werdykt `nie_mozna_rozstrzygnac` stosuje się dopiero wtedy, gdy brak treści publikacji albo centralnego artefaktu uniemożliwia odpowiedzialną ocenę rdzenia jako całości. Brak części danych pomocniczych zapisuje się jako ograniczenie, ale sam nie blokuje werdyktu.
 
 ### Krok 2. Wskazanie rdzenia
 
@@ -781,18 +805,22 @@ Przed zamknięciem analizy należy potwierdzić:
 9. każde twierdzenie ma kompletny ślad od fragmentu publikacji do wyniku;
 10. każde źródło faktycznie odczytano;
 11. wynik każdego twierdzenia ma uzasadnienie granicy;
-12. poprawność historyczną oddzielono od bieżącej użyteczności i ustalono podstawę wersji;
-13. każde `nd` ma prawidłowe uzasadnienie;
-14. każdą ocenę porównano z kotwicami sąsiednimi;
-15. każdy problem duży i krytyczny ma pełny test centralności i ryzyka;
-16. w kalibracji każdy problem ma centralność, ryzyko i krótkie uzasadnienie;
-17. sposób grupowania problemów został uzasadniony;
-18. werdykt przeszedł test korekty;
-19. pewność mapy, werdyktu i pokrycie źródłowe zapisano osobno;
-20. dane strukturalne przeszły walidację;
-21. w kalibracji para ma kompletne mapowanie semantyczne twierdzeń i problemów;
-22. raport nie przechowuje pełnej kopii chronionej publikacji bez podstawy;
-23. wynik nie został dostrojony do wcześniejszych przypadków.
+12. poprawność historyczną oddzielono od bieżącej użyteczności i ustalono osobny dowód wersji;
+13. każda grupa odbiorców przeszła test połączenia albo podziału, a wiedzę konieczną oddzielono od pomocnej;
+14. każde `nd` ma prawidłowe uzasadnienie, a stosowalność C i J odpowiada danym ustrukturyzowanym;
+15. każdą ocenę porównano z kotwicami sąsiednimi;
+16. kontrola przedmiotu potwierdza, że uzasadnienia A–L dotyczą właściwych wymiarów;
+17. każdy problem duży i krytyczny ma pełny test centralności i ryzyka;
+18. każdy problem średni i duży ma test granicy znaczenia;
+19. wymagane problemy mają kontrolę czterech przesłanek krytyczności;
+20. w kalibracji każdy problem ma centralność, ryzyko i krótkie uzasadnienie;
+21. sposób grupowania problemów został uzasadniony;
+22. test rozstrzygalności poprzedził werdykt, a werdykt przeszedł test korekty;
+23. pewność mapy, werdyktu i pokrycie źródłowe zapisano osobno;
+24. dane strukturalne przeszły walidację;
+25. w kalibracji para ma kompletne mapowanie semantyczne twierdzeń i problemów;
+26. raport nie przechowuje pełnej kopii chronionej publikacji bez podstawy;
+27. wynik nie został dostrojony do wcześniejszych przypadków.
 
 ## 20. Role AI i człowieka
 

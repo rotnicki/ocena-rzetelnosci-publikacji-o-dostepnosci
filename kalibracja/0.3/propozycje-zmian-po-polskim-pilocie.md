@@ -1,19 +1,20 @@
 # Propozycje zmian po polskim pilotażu 0.3
 
 **Data:** 14 września 2026 r.  
-**Status:** dokument historyczny po polskim pilotażu; S1–S10 wdrożone, B1 zakończone, T1–T2 wdrożone; B2 nie rozpoczęte
+**Status:** dokument historyczny po polskim pilotażu i B1; T1–T2 oraz S1–S15 wdrożone; B1 zakończone; B2 nie rozpoczęte
 **Podstawa:** pięć polskich publikacji, po dwa odizolowane przebiegi A/B
 
-> **Dokument historyczny — aktualny stan 14 września 2026 r.:** S1–S10
-> zostały zatwierdzone i wdrożone, a B1 następnie wykonano i zakończono
+> **Dokument historyczny — aktualny stan 14 września 2026 r.:** S1–S15
+> zostały zatwierdzone i wdrożone, a B1 wykonano i zakończono
 > proceduralnie. Publiczne wyniki zbiorcze znajdują się w
 > [`wyniki-B1.md`](wyniki-B1.md). T1 formalizuje to zamknięcie, a T2 wzmacnia
-> techniczny dowód wersji historycznej. Wyników pilotażu ani B1 nie przeliczono
+> techniczny dowód wersji historycznej. S11–S15 są prospektywnymi
+> doprecyzowaniami wynikającymi z B1. Wyników pilotażu ani B1 nie przeliczono
 > wstecz. B2 nie zostało rozpoczęte.
 
 ## 1. Najważniejsza rekomendacja
 
-Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 ustanowiło osobny kontrakt techniczny dla nowych serii. B1 zostało wykonane według osobno zatwierdzonego protokołu i zakończone proceduralnie. T1–T2 wdrażają bezpieczne zamknięcie dokumentacji B1 i techniczne uszczelnienie dowodu historycznego. B2 pozostaje niewykonanym badaniem wymagającym osobnego protokołu i decyzji.
+Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 ustanowiło osobny kontrakt techniczny dla nowych serii. B1 zostało wykonane według osobno zatwierdzonego protokołu i zakończone proceduralnie. T1–T2 wdrażają bezpieczne zamknięcie dokumentacji B1 i techniczne uszczelnienie dowodu historycznego. S11–S15 doprecyzowują ujawnione w B1 granice decyzji bez zmiany pięciu werdyktów, obniżenia progu krytyczności ani wprowadzenia sumy A–L. B2 pozostaje niewykonanym badaniem wymagającym osobnego protokołu i decyzji.
 
 | ID | Rodzaj | Rekomendacja | Główny obszar |
 | --- | --- | --- | --- |
@@ -30,6 +31,11 @@ Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologi
 | B1 | badawcza | wykonano i zakończono | pokrycie nieprzetestowanych progów |
 | T1 | techniczna | wdrożono po B1 | bezpieczne zamknięcie dokumentacji B1 |
 | T2 | techniczna | wdrożono po B1 | dowód rekonstrukcji wersji historycznej |
+| S11 | znaczeniowa i strukturalna | wdrożono po B1 | granice C, J i `nd` |
+| S12 | znaczeniowa i strukturalna | wdrożono po B1 | granica problemu średniego i dużego |
+| S13 | znaczeniowa i strukturalna | wdrożono po B1 | właściwy przedmiot wymiarów A–L |
+| S14 | znaczeniowa i strukturalna | wdrożono po B1 | rozstrzygalność i przesłanki krytyczności |
+| S15 | znaczeniowa i strukturalna | wdrożono po B1 | jednolite grupy odbiorców |
 | B2 | badawcza | nie rozpoczęto | przenośność między oceniającymi |
 
 ## S1. Operacyjne przykłady atomizacji
@@ -282,6 +288,44 @@ Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologi
 
 **Pliki:** nowy `metodologia/0.3/metryka-0.3.schema.json` i kopia skilla; standard i dokumentacja 0.3; schematy wyniku i wyciągu wraz z kopiami; `skill/SKILL.md`; karta oceny i wzór raportu wraz z kopiami; walidator i testy regresyjne. Skrypt budowy pakietu nie wymaga zmiany, ponieważ automatycznie kopiuje cały katalog `skill`.
 
+## S11–S15. Doprecyzowania zatwierdzone po B1
+
+Poniższe decyzje obowiązują prospektywnie. Nie przeliczają wyników polskiego
+pilotażu ani B1.
+
+- **S11 — granice C, J i `nd`:** C jest liczbowe tylko dla własnego twierdzenia
+  autora o działaniu technologii, mechanizmu, narzędzia, testu lub rozwiązania.
+  J jest liczbowe, gdy tekst przedstawia, wykorzystuje lub uogólnia perspektywę
+  użytkowników albo składa obietnicę, która jej wymaga. Sama podstawa prawna,
+  beneficjenci regulacji lub cudza lista oczekiwań nie wystarczają. Szeroka
+  obietnica kompletnego poradnika może jednak uczynić perspektywę użytkowników
+  wymaganą.
+- **S12 — granica `srednie`–`duze`:** zapisuje się istotną grupę odbiorców,
+  minimalną uczciwą poprawkę oraz działanie lub wniosek przed i po poprawce.
+  Problem jest `duze` tylko wtedy, gdy poprawka zmienia ważną decyzję, zakres
+  lub sposób działania co najmniej jednej istotnej grupy. Grupowanie powtórzeń
+  wymaga jednej wspólnej poprawki i tego samego skutku.
+- **S13 — właściwy przedmiot wymiaru:** przed zamknięciem A–L sprawdza się, czy
+  główne uzasadnienie dotyczy właściwego przedmiotu. Wspólna obserwacja może
+  wpływać na kilka wymiarów tylko po opisaniu odrębnego skutku dla każdego.
+  Walidator kontroluje strukturę tego zapisu, lecz nie udaje wiarygodnej
+  interpretacji całego uzasadnienia naturalnego.
+- **S14 — rozstrzygalność i krytyczność:** oddziela się brak rdzenia publikacji,
+  brak zewnętrznego dowodu widocznego twierdzenia i brak danych pomocniczych.
+  `nie_mozna_rozstrzygnac` wymaga braku uniemożliwiającego ocenę rdzenia jako
+  całości. Problem duży o wysokim ryzyku lub bezpośrednio wykonalna instrukcja
+  o możliwych poważnych skutkach uruchamia jawny test czterech przesłanek;
+  krytyczność nadal wymaga spełnienia wszystkich czterech.
+- **S15 — grupy odbiorców:** role łączy się, gdy tekst składa tę samą obietnicę,
+  wymaga tej samej wiedzy i prowadzi do tego samego zadania. Rozdzielenie wymaga
+  różnicy mogącej zmienić H lub L. Każdy element wiedzy koniecznej wskazuje
+  konkretny fragment, warunek lub działanie, którego bez niej nie da się
+  odtworzyć; wiedza jedynie pomocna nie obniża H.
+
+Zmiany objęły standard, kotwice, schematy wyniku, wyciągu i porównania pary,
+wszystkie szablony 0.3, instrukcję i kopie pakietu skill, walidator oraz testy
+regresyjne.
+
 ## B1. Osobny pilotaż progów nieobecnych w pierwszej serii
 
 > **Stan po wykonaniu:** B1 zakończono proceduralnie 14 września 2026 r.
@@ -319,9 +363,10 @@ Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologi
 
 Po decyzjach z 14 września 2026 r.:
 
-- S1–S10 są zatwierdzone i zostały wdrożone w odpowiednich materiałach projektu 0.3;
+- S1–S15 są zatwierdzone i zostały wdrożone w odpowiednich materiałach projektu 0.3;
 - B1 zostało zakończone proceduralnie, a R3 nie uruchomiono;
 - T1–T2 zostały zatwierdzone i wdrożone po analizie B1;
+- S11–S15 obowiązują prospektywnie i nie zmieniają historycznych wyników B1;
 - B2 nie zostało rozpoczęte;
 - nie wolno przeliczać wstecz wyników polskiego pilota;
 - PR nr 8 pozostaje niescalonym projektem, bez znacznika i wydania 0.3.
@@ -342,6 +387,7 @@ Poniższa lista rozwija skróty „kopia skilla” i „wzory” użyte powyżej
 | S8 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | S9 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | S10 | `README.md`; `metodologia/0.3/README.md`; `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; nowy `metodologia/0.3/metryka-0.3.schema.json`; nowy `skill/references/metryka-0.3.schema.json`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `metodologia/0.3/wyciag-kalibracyjny.schema.json`; `skill/references/wyciag-kalibracyjny-0.3.schema.json`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
+| S11–S15 | standard i kotwice 0.3 wraz z kopiami; wszystkie trzy szablony 0.3 i ich kopie; schematy wyniku, wyciągu i porównania pary wraz z kopiami; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | B1 | wykonany protokół i rejestry w `kalibracja/0.3/`; po zakończeniu bezpieczne podsumowanie `kalibracja/0.3/wyniki-B1.md` |
 | B2 | nowy protokół w `kalibracja/0.3/`; bez zmian standardu, kotwic, schematów i skilla przed analizą wyników |
 

@@ -2,7 +2,7 @@
 
 > **Dokument historyczny.** Opisuje stan gałęzi po S1–S8, na commicie
 > `02d9ca80133351518ec2528d1006c8d7600586f1`, przed wdrożeniem S9 i S10.
-> Aktualny stan dokumentuje [kontrola techniczna S1–S10](kontrola-techniczna-S1-S10.md).
+> Aktualny stan dokumentuje [kontrola techniczna S1–S15](kontrola-techniczna-S1-S15.md).
 
 **Data:** 14 września 2026 r.
 

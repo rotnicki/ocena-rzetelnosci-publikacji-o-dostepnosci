@@ -33,6 +33,22 @@ def scores() -> dict:
     return {letter: 3 for letter in "ABCDEFGHIJKL"}
 
 
+def dimension_scope_checks() -> dict:
+    subjects = {
+        "A": "facts", "B": "law_and_norms", "C": "technology", "D": "evidence",
+        "E": "completeness", "F": "reasoning", "G": "terminology",
+        "H": "structure_and_comprehension", "I": "action_safety", "J": "user_experience",
+        "K": "epistemic_status", "L": "promise_and_fit",
+    }
+    return {
+        dimension: {
+            "subject": subject, "confirmed_correct_subject": True,
+            "shared_with_dimensions": [], "distinct_effect": None,
+        }
+        for dimension, subject in subjects.items()
+    }
+
+
 def checked_context() -> list[dict]:
     kinds = [
         "homepage", "about_page", "blog_or_newsletter_description", "newsletter_signup_page",
@@ -104,6 +120,16 @@ def valid_result(run: str = "A") -> dict:
             "current_rationale": "Główny przekaz pozostaje aktualny.", "current_version_basis": "Treść pobrana w dniu dostępu.",
             "material_changes": ["nowsza wersja standardu"],
         },
+        "dimension_applicability": {
+            "C": {"applicable": True, "basis": "author_technical_claim", "rationale": "Autor opisuje działanie rozwiązania."},
+            "J": {"applicable": True, "basis": "user_experience_presented", "broad_promise_requires_user_perspective": False, "rationale": "Tekst przedstawia doświadczenie użytkowników."},
+        },
+        "dimension_scope_checks": dimension_scope_checks(),
+        "decidability_test": {
+            "main_content_or_core_artifact_missing": False, "external_supporting_evidence_missing": False,
+            "auxiliary_data_missing": False, "core_assessment_possible": True,
+            "rationale": "Pełna treść i centralny materiał pozwalają ocenić rdzeń.",
+        },
         "claim_map_confidence": "wysoka", "claim_map_confidence_rationale": "Pełna treść była dostępna.",
         "claim_count": 1,
         "claims": [{
@@ -119,7 +145,8 @@ def valid_result(run: str = "A") -> dict:
             "proposed_correction": "Dodać warunek.", "grouping_rationale": "Jeden błąd i jedna poprawka.", "severity": "male",
             "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.",
             "application_risk": "niskie", "application_risk_rationale": "Skutek jest lokalny.",
-            "centrality_test": None, "application_risk_test": None, "language_barrier": None,
+            "centrality_test": None, "application_risk_test": None,
+            "medium_large_boundary_test": None, "criticality_test": None, "language_barrier": None,
             "confidence": "wysoka", "rationale": "Problem nie zmienia rdzenia.",
         }],
         "issue_counts": {"krytyczne": 0, "duze": 0, "srednie": 0, "male": 1},
@@ -151,9 +178,19 @@ def valid_extract() -> dict:
                 "evidence_type": "archived_snapshot", "scope": "całość publikacji",
             }],
         },
+        "dimension_applicability": {
+            "C": {"applicable": True, "basis": "author_technical_claim", "rationale": "Autor opisuje działanie rozwiązania."},
+            "J": {"applicable": True, "basis": "user_experience_presented", "broad_promise_requires_user_perspective": False, "rationale": "Tekst przedstawia doświadczenie użytkowników."},
+        },
+        "dimension_scope_checks": dimension_scope_checks(),
+        "decidability_test": {
+            "main_content_or_core_artifact_missing": False, "external_supporting_evidence_missing": False,
+            "auxiliary_data_missing": False, "core_assessment_possible": True,
+            "rationale": "Pełna treść i centralny materiał pozwalają ocenić rdzeń.",
+        },
         "claim_count": 1, "claim_map_confidence": "wysoka", "scores": scores(),
         "issue_counts": {"krytyczne": 0, "duze": 0, "srednie": 0, "male": 1},
-        "issues": [{"issue_id": "P-001", "severity": "male", "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.", "application_risk": "niskie", "application_risk_rationale": "Skutek jest lokalny.", "language_barrier": None, "confidence": "wysoka"}],
+        "issues": [{"issue_id": "P-001", "severity": "male", "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.", "application_risk": "niskie", "application_risk_rationale": "Skutek jest lokalny.", "medium_large_boundary_test": None, "criticality_test": None, "language_barrier": None, "confidence": "wysoka"}],
         "central_findings": ["Rdzeń jest poprawny."], "verdict": "rzetelny_z_niewielkimi_zastrzezeniami",
         "verdict_confidence": "wysoka", "source_coverage": "pelne", "counterfactual_correction": "ograniczona",
     }
@@ -219,11 +256,16 @@ def valid_comparison() -> dict:
             "b_assessed_historical_version": "original", "historical_evidence_agreement": "yes",
             "rationale": "Oba przebiegi wykorzystały ten sam osobny dowód historyczny.",
         },
-        "audience_profile_comparison": {"outlet_type_agreement": True, "purpose_agreement": True, "declared_audience_agreement": True, "article_audience_agreement": True, "required_knowledge_agreement": True, "confidence_agreement": True, "group_scores": [{"audience": "osoby początkujące", "a_h": 3, "b_h": 3, "a_l": 3, "b_l": 3, "rationale": "Zgodność."}], "rationale": "Profile zgodne."},
+        "audience_profile_comparison": {"outlet_type_agreement": True, "purpose_agreement": True, "declared_audience_agreement": True, "article_audience_agreement": True, "required_knowledge_agreement": True, "group_definition_agreement": True, "confidence_agreement": True, "group_scores": [{"audience": "osoby początkujące", "a_h": 3, "b_h": 3, "a_l": 3, "b_l": 3, "rationale": "Zgodność."}], "rationale": "Profile zgodne."},
+        "applicability_comparison": [
+            {"dimension": "C", "a_applicable": True, "b_applicable": True, "agreement": True, "rationale": "Zgodność."},
+            {"dimension": "J", "a_applicable": True, "b_applicable": True, "agreement": True, "rationale": "Zgodność."},
+        ],
+        "decidability_comparison": {"a_core_assessment_possible": True, "b_core_assessment_possible": True, "agreement": True, "missing_material_type_agreement": True, "rationale": "Zgodność."},
         "score_comparison": score_rows,
         "verdict_comparison": {"a_verdict": "rzetelny_z_niewielkimi_zastrzezeniami", "b_verdict": "rzetelny_z_niewielkimi_zastrzezeniami", "agreement": True, "a_counterfactual_correction": "ograniczona", "b_counterfactual_correction": "ograniczona", "rationale": "Zgodność."},
         "claim_matches": [{"relation": "one_to_one", "a_ids": ["T-001"], "b_ids": ["T-001"], "semantic_summary": "To samo twierdzenie.", "result_agreement": "exact", "component_agreement_counts": None, "atomization_difference": "Brak.", "rationale": "Znaczenie zgodne."}],
-        "issue_matches": [{"relation": "one_to_one", "a_ids": ["P-001"], "b_ids": ["P-001"], "semantic_summary": "Ten sam problem.", "severity_agreement": "yes", "centrality_agreement": "yes", "risk_agreement": "yes", "grouping_difference": "Brak.", "rationale": "Znaczenie zgodne."}],
+        "issue_matches": [{"relation": "one_to_one", "a_ids": ["P-001"], "b_ids": ["P-001"], "semantic_summary": "Ten sam problem.", "severity_agreement": "yes", "centrality_agreement": "yes", "risk_agreement": "yes", "medium_large_boundary_agreement": "yes", "criticality_agreement": "yes", "grouping_difference": "Brak.", "rationale": "Znaczenie zgodne."}],
         "coverage_metrics": {"a_claims_total": 1, "b_claims_total": 1, "a_issues_total": 1, "b_issues_total": 1, "a_claims_mapped": 1, "b_claims_mapped": 1, "a_issues_mapped": 1, "b_issues_mapped": 1},
         "aggregate_metrics": {"exact_score_agreement": 1.0, "within_one_score_agreement": 1.0, "mean_absolute_score_difference": 0.0, "score_difference_direction": "balanced", "verdict_agreement": True, "one_to_one_claim_result_agreement": 1.0, "all_issue_centrality_agreement": 1.0, "all_issue_risk_agreement": 1.0, "major_critical_centrality_agreement": None, "major_critical_risk_agreement": None, "nd_disagreements": []},
         "disagreements": [], "conclusions": ["Przebiegi są zgodne."],
@@ -539,6 +581,38 @@ class ValidatorTests(unittest.TestCase):
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
 
+    def test_c_nd_requires_absence_of_author_technical_claim(self) -> None:
+        result = valid_result()
+        result["claims"][0]["category"] = "P"
+        result["scores"]["C"] = "nd"
+        result["dimension_applicability"]["C"] = {
+            "applicable": False, "basis": "none",
+            "rationale": "Tekst wymienia WCAG wyłącznie jako podstawę prawną.",
+        }
+        VALIDATOR.validate_result(result)
+        result["scores"]["C"] = 3
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_j_nd_and_broad_promise_applicability(self) -> None:
+        result = valid_result()
+        result["scores"]["J"] = "nd"
+        result["dimension_applicability"]["J"] = {
+            "applicable": False, "basis": "none",
+            "broad_promise_requires_user_perspective": False,
+            "rationale": "Wąski tekst prawny nie składa obietnicy wymagającej perspektywy użytkowników.",
+        }
+        VALIDATOR.validate_result(result)
+        result["dimension_applicability"]["J"] = {
+            "applicable": True, "basis": "promise_requires_user_perspective",
+            "broad_promise_requires_user_perspective": True,
+            "rationale": "Obietnica kompletnego poradnika wymaga perspektywy użytkowników.",
+        }
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+        result["scores"]["J"] = 2
+        VALIDATOR.validate_result(result)
+
     def test_recommendation_excludes_nd_for_i(self) -> None:
         result = valid_result()
         result["claims"][0]["category"] = "Z"
@@ -674,6 +748,95 @@ class ValidatorTests(unittest.TestCase):
         result["verdict"] = "rzetelny_z_istotnymi_zastrzezeniami"
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
+
+    def test_medium_large_boundary_test_enforces_decision_change(self) -> None:
+        result = valid_result()
+        issue = result["issues"][0]
+        issue["severity"] = "srednie"
+        issue["medium_large_boundary_test"] = {
+            "significant_audience_group": "praktycy", "minimal_honest_correction": "Dodać warunek.",
+            "action_or_conclusion_before": "Wykonać procedurę.", "action_or_conclusion_after": "Wykonać tę samą procedurę z warunkiem.",
+            "changes_important_scope_or_action": False, "groups_repeated_occurrences": False,
+            "single_correction_repairs_all_occurrences": None, "same_audience_effect": None,
+            "rationale": "Materialna nieścisłość nie zmienia ważnego działania.",
+        }
+        result["issue_counts"] = {"krytyczne": 0, "duze": 0, "srednie": 1, "male": 0}
+        VALIDATOR.validate_result(result)
+        issue["medium_large_boundary_test"]["changes_important_scope_or_action"] = True
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_grouped_repetitions_require_one_repair_and_same_effect(self) -> None:
+        result = valid_result()
+        issue = result["issues"][0]
+        issue["severity"] = "srednie"
+        issue["medium_large_boundary_test"] = {
+            "significant_audience_group": "praktycy", "minimal_honest_correction": "Poprawić wspólną regułę.",
+            "action_or_conclusion_before": "Stosować błędną regułę.", "action_or_conclusion_after": "Stosować poprawioną regułę.",
+            "changes_important_scope_or_action": False, "groups_repeated_occurrences": True,
+            "single_correction_repairs_all_occurrences": True, "same_audience_effect": False,
+            "rationale": "Test grupowania.",
+        }
+        result["issue_counts"] = {"krytyczne": 0, "duze": 0, "srednie": 1, "male": 0}
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_large_and_critical_issues_enforce_four_prongs(self) -> None:
+        result = valid_result()
+        issue = result["issues"][0]
+        issue.update({
+            "severity": "duze", "centrality": "rdzen", "application_risk": "wysokie",
+            "centrality_test": {"minimal_honest_repair": "Dodać warunek.", "repair_changes_main_thesis_or_use": True, "publication_fulfils_purpose_after_repair": True, "content_removal_required": False, "rationale": "Zmienia działanie."},
+            "application_risk_test": {"reader_action_likelihood": "wysokie", "impact_severity": "powazna", "reversibility": "trudna", "rationale": "Możliwa poważna bariera."},
+            "medium_large_boundary_test": {"significant_audience_group": "praktycy", "minimal_honest_correction": "Dodać warunek.", "action_or_conclusion_before": "Wykonać niebezpieczny krok.", "action_or_conclusion_after": "Zmienić sposób wykonania.", "changes_important_scope_or_action": True, "groups_repeated_occurrences": False, "single_correction_repairs_all_occurrences": None, "same_audience_effect": None, "rationale": "Zmienia ważne działanie."},
+            "criticality_test": {"confirmed_error_or_very_high_confidence": True, "likely_application": True, "serious_harm_possible": True, "no_simple_safeguard": False, "directly_actionable_instruction_with_possible_serious_effects": True, "failed_prerequisite": "no_simple_safeguard", "rationale": "Publikacja zawiera proste zabezpieczenie."},
+        })
+        result["issue_counts"] = {"krytyczne": 0, "duze": 1, "srednie": 0, "male": 0}
+        result["verdict"] = "rzetelny_z_istotnymi_zastrzezeniami"
+        result["safe_recommendation"] = "z_nazwanymi_korektami_lub_zrodlami"
+        VALIDATOR.validate_result(result)
+        issue["criticality_test"]["no_simple_safeguard"] = True
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_dimension_scope_check_requires_right_subject_and_distinct_effect(self) -> None:
+        result = valid_result()
+        result["dimension_scope_checks"]["G"]["subject"] = "structure_and_comprehension"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+        result = valid_result()
+        result["dimension_scope_checks"]["G"]["shared_with_dimensions"] = ["H"]
+        result["dimension_scope_checks"]["H"]["shared_with_dimensions"] = ["G"]
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+        result["dimension_scope_checks"]["G"]["distinct_effect"] = "Termin jest nieprecyzyjny."
+        result["dimension_scope_checks"]["H"]["distinct_effect"] = "Nieprecyzyjność blokuje prześledzenie wywodu."
+        VALIDATOR.validate_result(result)
+
+    def test_missing_support_does_not_make_core_undecidable(self) -> None:
+        result = valid_result()
+        result["decidability_test"].update({
+            "external_supporting_evidence_missing": True,
+            "core_assessment_possible": False,
+            "rationale": "Brakuje tylko zewnętrznego dowodu widocznego twierdzenia.",
+        })
+        result["verdict"] = "nie_mozna_rozstrzygnac"
+        result["counterfactual_correction"] = "nie_dotyczy"
+        result["safe_recommendation"] = "nie_mozna_ocenic"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_missing_core_artifact_can_make_result_undecidable(self) -> None:
+        result = valid_result()
+        result["decidability_test"].update({
+            "main_content_or_core_artifact_missing": True,
+            "core_assessment_possible": False,
+            "rationale": "Brak centralnego artefaktu uniemożliwia ocenę rdzenia.",
+        })
+        result["verdict"] = "nie_mozna_rozstrzygnac"
+        result["counterfactual_correction"] = "nie_dotyczy"
+        result["safe_recommendation"] = "nie_mozna_ocenic"
+        VALIDATOR.validate_result(result)
 
     def test_comparison_rejects_duplicate_mapping(self) -> None:
         comparison = valid_comparison()

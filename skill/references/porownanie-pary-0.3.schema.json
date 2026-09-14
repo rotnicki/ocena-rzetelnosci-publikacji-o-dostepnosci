@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "comparison_id", "publication_id", "run_a_id", "run_b_id", "methodology",
-    "same_material_version", "material_version_rationale", "temporal_comparison", "audience_profile_comparison", "score_comparison",
+    "same_material_version", "material_version_rationale", "temporal_comparison", "audience_profile_comparison", "applicability_comparison", "decidability_comparison", "score_comparison",
     "verdict_comparison", "claim_matches", "issue_matches", "coverage_metrics", "aggregate_metrics",
     "disagreements", "conclusions"
   ],
@@ -22,14 +22,16 @@
     "temporal_comparison": {"$ref": "#/$defs/temporalComparison"},
     "audience_profile_comparison": {
       "type": "object", "additionalProperties": false,
-      "required": ["outlet_type_agreement", "purpose_agreement", "declared_audience_agreement", "article_audience_agreement", "required_knowledge_agreement", "confidence_agreement", "group_scores", "rationale"],
+      "required": ["outlet_type_agreement", "purpose_agreement", "declared_audience_agreement", "article_audience_agreement", "required_knowledge_agreement", "group_definition_agreement", "confidence_agreement", "group_scores", "rationale"],
       "properties": {
         "outlet_type_agreement": {"type": "boolean"}, "purpose_agreement": {"type": "boolean"},
         "declared_audience_agreement": {"type": "boolean"}, "article_audience_agreement": {"type": "boolean"},
-        "required_knowledge_agreement": {"type": "boolean"}, "confidence_agreement": {"type": "boolean"},
+        "required_knowledge_agreement": {"type": "boolean"}, "group_definition_agreement": {"type": "boolean"}, "confidence_agreement": {"type": "boolean"},
         "group_scores": {"type": "array", "items": {"$ref": "#/$defs/groupComparison"}}, "rationale": {"$ref": "#/$defs/nonempty"}
       }
     },
+    "applicability_comparison": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/applicabilityComparison"}},
+    "decidability_comparison": {"$ref": "#/$defs/decidabilityComparison"},
     "score_comparison": {"type": "array", "minItems": 12, "maxItems": 12, "items": {"$ref": "#/$defs/scoreComparison"}},
     "verdict_comparison": {
       "type": "object", "additionalProperties": false,
@@ -92,6 +94,24 @@
         "rationale": {"$ref": "#/$defs/nonempty"}
       }
     },
+    "applicabilityComparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dimension", "a_applicable", "b_applicable", "agreement", "rationale"],
+      "properties": {
+        "dimension": {"enum": ["C", "J"]}, "a_applicable": {"type": "boolean"},
+        "b_applicable": {"type": "boolean"}, "agreement": {"type": "boolean"},
+        "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "decidabilityComparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["a_core_assessment_possible", "b_core_assessment_possible", "agreement", "missing_material_type_agreement", "rationale"],
+      "properties": {
+        "a_core_assessment_possible": {"type": "boolean"}, "b_core_assessment_possible": {"type": "boolean"},
+        "agreement": {"type": "boolean"}, "missing_material_type_agreement": {"type": "boolean"},
+        "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
     "groupComparison": {
       "type": "object", "additionalProperties": false,
       "required": ["audience", "a_h", "b_h", "a_l", "b_l", "rationale"],
@@ -143,18 +163,19 @@
     },
     "issueMatch": {
       "type": "object", "additionalProperties": false,
-      "required": ["relation", "a_ids", "b_ids", "semantic_summary", "severity_agreement", "centrality_agreement", "risk_agreement", "grouping_difference", "rationale"],
+      "required": ["relation", "a_ids", "b_ids", "semantic_summary", "severity_agreement", "centrality_agreement", "risk_agreement", "medium_large_boundary_agreement", "criticality_agreement", "grouping_difference", "rationale"],
       "properties": {
         "relation": {"$ref": "#/$defs/relation"}, "a_ids": {"$ref": "#/$defs/idArray"}, "b_ids": {"$ref": "#/$defs/idArray"},
         "semantic_summary": {"$ref": "#/$defs/nonempty"}, "severity_agreement": {"$ref": "#/$defs/triState"},
         "centrality_agreement": {"$ref": "#/$defs/triState"}, "risk_agreement": {"$ref": "#/$defs/triState"},
+        "medium_large_boundary_agreement": {"$ref": "#/$defs/triState"}, "criticality_agreement": {"$ref": "#/$defs/triState"},
         "grouping_difference": {"$ref": "#/$defs/nonempty"}, "rationale": {"$ref": "#/$defs/nonempty"}
       }
     },
     "disagreement": {
       "type": "object", "additionalProperties": false, "required": ["area", "summary", "likely_source", "effect"],
       "properties": {
-        "area": {"enum": ["audience_profile", "score", "verdict", "nd", "atomization", "claim_result", "issue_grouping", "severity", "centrality", "risk", "language", "outlet_fit", "other"]},
+        "area": {"enum": ["audience_profile", "score", "verdict", "nd", "dimension_scope", "decidability", "historical_evidence", "atomization", "claim_result", "issue_grouping", "severity", "centrality", "risk", "criticality", "language", "outlet_fit", "other"]},
         "summary": {"$ref": "#/$defs/nonempty"}, "likely_source": {"$ref": "#/$defs/nonempty"}, "effect": {"$ref": "#/$defs/nonempty"}
       }
     }

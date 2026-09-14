@@ -2,8 +2,8 @@
 
 > **Dokument historyczny.** Opisuje stan walidatora na commicie
 > `af5f556fa49c5a383e487a591a896a3292ccfe84`, przed decyzjami i wdrożeniem
-> S1–S10. Aktualny stan dokumentuje
-> [kontrola techniczna S1–S10](kontrola-techniczna-S1-S10.md).
+> S1–S15. Aktualny stan dokumentuje
+> [kontrola techniczna S1–S15](kontrola-techniczna-S1-S15.md).
 
 **Data:** 14 września 2026 r.  
 **Status:** poprawki techniczne projektu; bez zmiany znaczenia metodologii  

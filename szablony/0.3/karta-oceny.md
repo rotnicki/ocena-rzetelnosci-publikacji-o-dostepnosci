@@ -50,6 +50,8 @@
 - Wiedza deklarowana / rzeczywiście potrzebna:
 - Wiedza jedynie ułatwiająca:
 - Każdy element wiedzy koniecznej wskazuje fragment i skutek jej braku: tak / nie
+- Role połączono tylko przy tej samej obietnicy, wiedzy i zadaniu: tak / nie
+- Role rozdzielono tylko z powodu różnicy obietnicy, wiedzy, bariery albo możliwego H/L: tak / nie / nie dotyczy
 - Sprzeczności:
 - Stan profilu: ustalony / czesciowo_ustalony / nieustalony_wiarygodnie
 - Pewność profilu: wysoka / srednia / niska
@@ -91,11 +93,22 @@
 
 Każde `nd` wymaga uzasadnienia. Sprawdzić ograniczenia H i L dla niewyjaśnionych terminów.
 
+### Stosowalność C i J
+
+- C — stosowalne: true / false; podstawa: author_technical_claim / none; uzasadnienie:
+- J — stosowalne: true / false; podstawa: user_experience_presented / user_experience_used / user_experience_generalized / promise_requires_user_perspective / none; szeroka obietnica wymaga perspektywy użytkowników: true / false; uzasadnienie:
+
+### Kontrola przedmiotu A–L
+
+| Wymiar | Właściwy przedmiot potwierdzony | Inne wymiary współdzielące obserwację | Odrębny skutek |
+| --- | --- | --- | --- |
+| A–L osobno | tak | kody albo brak | wymagany przy współdzieleniu |
+
 ## Problemy
 
-| ID | Znaczenie | Centralność | Ryzyko | Bariera językowa | Pewność | Wynik testu centralności | Wynik testu ryzyka | Główna poprawka |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  | lokalizacje, grupy, elementy, G/H/L albo nie dotyczy |  |  |  |  |
+| ID | Znaczenie | Centralność | Ryzyko | Test średnie–duże | Test krytyczności | Bariera językowa | Pewność | Wynik testu centralności | Wynik testu ryzyka | Główna poprawka |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  | grupa, poprawka, przed/po, zmiana ważnego działania, grupowanie powtórzeń albo nie dotyczy | cztery przesłanki, instrukcja bezpośrednia, niespełniona przesłanka albo nie dotyczy | lokalizacje, grupy, elementy, G/H/L albo nie dotyczy |  |  |  |  |
 
 W kalibracji centralność, ryzyko i krótkie uzasadnienia są obowiązkowe dla każdego problemu. Pełne testy są zawsze obowiązkowe dla problemów dużych i krytycznych.
 
@@ -110,6 +123,7 @@ W kalibracji centralność, ryzyko i krótkie uzasadnienia są obowiązkowe dla 
 
 ## Werdykt
 
+- Test rozstrzygalności — brak treści lub centralnego artefaktu / brak zewnętrznych dowodów / brak danych pomocniczych / możliwość oceny rdzenia / uzasadnienie:
 - Test korekty: ograniczona / strukturalna / nie dotyczy
 - Werdykt:
 - Problemy przesądzające:
