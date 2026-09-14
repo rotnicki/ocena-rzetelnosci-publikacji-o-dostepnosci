@@ -87,6 +87,16 @@ class PackageTests(unittest.TestCase):
         self.assertTrue(metric_schema.is_file())
         self.assertIn("Kanoniczna metryka przebiegu", metric_schema.read_text(encoding="utf-8"))
 
+    def test_t1_and_t2_are_implemented(self) -> None:
+        standard = (ROOT / "metodologia/0.3/standard.md").read_text(encoding="utf-8")
+        result_schema = json.loads((ROOT / "metodologia/0.3/wynik.schema.json").read_text(encoding="utf-8"))
+        summary = (ROOT / "kalibracja/0.3/wyniki-B1.md").read_text(encoding="utf-8")
+        self.assertIn("Bieżąca suma SHA-256", standard)
+        self.assertIn("historical_version_evidence", result_schema["$defs"]["temporalAssessment"]["required"])
+        self.assertIn("32 niezależne oceny", summary)
+        self.assertIn("R3 nie uruchomiono", summary)
+        self.assertIn("B2 nie zostało rozpoczęte", summary)
+
     def test_technical_control_documents_distinguish_historical_and_current_state(self) -> None:
         calibration = ROOT / "kalibracja/0.3"
         for name in (
@@ -101,8 +111,9 @@ class PackageTests(unittest.TestCase):
         current = (calibration / "kontrola-techniczna-S1-S10.md").read_text(encoding="utf-8")
         self.assertIn("Kontrola techniczna wdrożenia S1–S10", current)
         self.assertIn("S9 i S10 są wdrożone", current)
-        self.assertIn("B1 i B2 nie zostały rozpoczęte", current)
-        self.assertIn("Ocen B1 nie rozpoczęto", current)
+        self.assertIn("Dokument historyczny", current)
+        self.assertIn("B1 zostało następnie wykonane i zakończone proceduralnie", current)
+        self.assertIn("B2 nie zostało rozpoczęte", current)
 
         pilot = (calibration / "wyniki-pilota.md").read_text(encoding="utf-8")
         self.assertIn("S1–S10 zostały następnie osobno zatwierdzone i wdrożone", pilot)

@@ -184,24 +184,37 @@
         "expert_assessment_not_user_tested": {"const": true}, "rationale": {"$ref": "#/$defs/nonempty"}
       }
     },
+    "historicalVersionEvidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["material_id", "preserved_content_date_or_version", "stable_identifier", "evidence_type", "scope"],
+      "properties": {
+        "material_id": {"$ref": "#/$defs/nonempty"},
+        "preserved_content_date_or_version": {"$ref": "#/$defs/nonempty"},
+        "stable_identifier": {"$ref": "#/$defs/nonempty"},
+        "evidence_type": {"enum": ["archived_snapshot", "versioned_repository_state", "versioned_release", "dated_preserved_copy", "other_historical_record"]},
+        "scope": {"$ref": "#/$defs/nonempty"}
+      }
+    },
     "temporalAssessment": {
       "type": "object", "additionalProperties": false,
-      "required": ["historical_accuracy", "historical_rationale", "historical_version_reconstructable", "assessed_historical_version", "version_evidence_ids", "historical_confidence", "current_applicability", "current_rationale", "current_version_basis", "material_changes"],
+      "required": ["historical_accuracy", "historical_rationale", "historical_version_reconstructable", "assessed_historical_version", "version_evidence_ids", "historical_version_evidence", "historical_confidence", "current_applicability", "current_rationale", "current_version_basis", "material_changes"],
       "properties": {
         "historical_accuracy": {"$ref": "#/$defs/claimResult"}, "historical_rationale": {"$ref": "#/$defs/nonempty"},
         "historical_version_reconstructable": {"type": "boolean"}, "assessed_historical_version": {"enum": ["original", "archived_update", "not_reconstructable"]},
-        "version_evidence_ids": {"$ref": "#/$defs/uniqueTextArray"}, "historical_confidence": {"$ref": "#/$defs/confidence"},
+        "version_evidence_ids": {"$ref": "#/$defs/uniqueTextArray"},
+        "historical_version_evidence": {"type": "array", "items": {"$ref": "#/$defs/historicalVersionEvidence"}},
+        "historical_confidence": {"$ref": "#/$defs/confidence"},
         "current_applicability": {"$ref": "#/$defs/claimResult"}, "current_rationale": {"$ref": "#/$defs/nonempty"},
         "current_version_basis": {"$ref": "#/$defs/nonempty"}, "material_changes": {"$ref": "#/$defs/textArray"}
       },
       "allOf": [
         {
           "if": {"properties": {"historical_version_reconstructable": {"const": false}}, "required": ["historical_version_reconstructable"]},
-          "then": {"properties": {"assessed_historical_version": {"const": "not_reconstructable"}, "historical_accuracy": {"const": "nierozstrzygniete"}, "historical_confidence": {"const": "niska"}}}
+          "then": {"properties": {"assessed_historical_version": {"const": "not_reconstructable"}, "historical_accuracy": {"const": "nierozstrzygniete"}, "historical_confidence": {"const": "niska"}, "version_evidence_ids": {"maxItems": 0}, "historical_version_evidence": {"maxItems": 0}}}
         },
         {
           "if": {"properties": {"historical_version_reconstructable": {"const": true}}, "required": ["historical_version_reconstructable"]},
-          "then": {"properties": {"assessed_historical_version": {"enum": ["original", "archived_update"]}, "version_evidence_ids": {"minItems": 1}}}
+          "then": {"properties": {"assessed_historical_version": {"enum": ["original", "archived_update"]}, "version_evidence_ids": {"minItems": 1}, "historical_version_evidence": {"minItems": 1}}}
         }
       ]
     },

@@ -3,8 +3,12 @@
 **Data ustalenia:** 14 września 2026 r.
 **Korpus główny:** 12 publikacji, po dwa niezależne przebiegi A/B
 **Rezerwa:** 6 publikacji, po jednej na profil
-**Stan ocen:** 0 z 24 przebiegów głównych; oceny nie zostały rozpoczęte
-**Status:** korpus zamrożony algorytmicznie, oczekuje na zatwierdzenie właściciela i prywatną kontrolę kolizji P01–P05
+**Stan zapisany w tym dokumencie:** 0 z 24 przebiegów głównych; oceny nie były jeszcze rozpoczęte
+**Status zapisany przed ocenami:** korpus zamrożony algorytmicznie, oczekujący na zatwierdzenie właściciela i prywatną kontrolę kolizji P01–P05
+**Stan późniejszy:** B1 zakończone proceduralnie po 32 ocenach; zob. [`wyniki-B1.md`](wyniki-B1.md)
+
+> Rejestr zachowuje pierwotny korpus i bramki sprzed ocen. Nie przypisuje
+> publikacjom wyników i nie jest bieżącym raportem postępu B1.
 
 ## 1. Zasada wyboru
 

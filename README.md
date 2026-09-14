@@ -91,7 +91,7 @@ Wersja 0.2-draft nie jest jeszcze stabilnym standardem. Umiejętność używa je
 
 To publiczna wersja robocza przygotowana na podstawie wniosków z serii 0.2. Jest pełnym, samodzielnym dokumentem i nie wymaga łączenia zasad 0.1 z poprawkami 0.2.
 
-Projekt doprecyzowuje między innymi podział twierdzeń, granice wyników, grupowanie problemów, stosowanie `nd`, ocenę zmian zachodzących po publikacji oraz wpływ niewyjaśnionego żargonu na zrozumiałość i dopasowanie tekstu do jego celu. Przed oceną G, H i L wymaga udokumentowanego sprawdzenia miejsca publikacji, celu i istotnych grup odbiorców. Dodaje też jeden format porównania niezależnych przebiegów A i B oraz kanoniczną metrykę JSON dla nowych przebiegów kalibracyjnych.
+Projekt doprecyzowuje między innymi podział twierdzeń, granice wyników, grupowanie problemów, stosowanie `nd`, ocenę zmian zachodzących po publikacji oraz wpływ niewyjaśnionego żargonu na zrozumiałość i dopasowanie tekstu do jego celu. Przed oceną G, H i L wymaga udokumentowanego sprawdzenia miejsca publikacji, celu i istotnych grup odbiorców. Dodaje też jeden format porównania niezależnych przebiegów A i B, kanoniczną metrykę JSON dla nowych przebiegów kalibracyjnych oraz osobny ustrukturyzowany dowód każdej rekonstruowanej wersji historycznej.
 
 Projekt 0.3 nie jest wydaniem `v0.3.0`. Może służyć do przeglądu i testów dopiero po świadomym wybraniu tej wersji. Jego reguły mogą się zmienić przed zamrożeniem.
 
@@ -119,8 +119,9 @@ Ocena powinna:
 - `kalibracja/0.2/rejestr-korpusu.md` — osiem wybranych publikacji i kolejność ocen;
 - `kalibracja/0.2/wyniki-serii.md` — ogólne wyniki zakończonej serii.
 - `kalibracja/0.3/wyniki-pilota.md` — zagregowane wyniki pilota projektu 0.3, bez pełnych analiz przypadków.
-- `kalibracja/0.3/propozycje-zmian-po-polskim-pilocie.md` — decyzje S1–S10 oraz niewykonane propozycje badawcze B1–B2;
-- `kalibracja/0.3/kontrola-techniczna-S1-S10.md` — aktualna kontrola techniczna projektu po wdrożeniu S1–S10.
+- `kalibracja/0.3/propozycje-zmian-po-polskim-pilocie.md` — historyczne decyzje S1–S10, stan zakończenia B1 i dalsze decyzje rozwojowe;
+- `kalibracja/0.3/wyniki-B1.md` — bezpieczne, zagregowane wyniki zakończonego B1, bez powiązania nazwanych publikacji z negatywnymi wynikami;
+- `kalibracja/0.3/kontrola-techniczna-S1-S10.md` — historyczna kontrola techniczna stanu sprzed wykonania B1.
 
 ### Metodologia
 
@@ -178,7 +179,9 @@ Wynik pokazuje powtarzalność w badanym środowisku. Nie jest jeszcze dowodem p
 
 ## Następny etap
 
-Publiczny projekt 0.3 podlega teraz przeglądowi spójności i testom na nowych przypadkach. Dopiero po zatwierdzeniu, zamrożeniu i końcowej kontroli może powstać wydanie `v0.3.0`.
+Badanie B1 zakończono proceduralnie. Jego wyniki doprowadziły do zatwierdzenia technicznych poprawek T1–T2 oraz doprecyzowań S11–S15, stosowanych wyłącznie do przyszłych ocen. B2 nie zostało rozpoczęte i wymaga osobnego protokołu oraz decyzji.
+
+Publiczny projekt 0.3 nadal podlega przeglądowi spójności. Dopiero po dalszych testach, zatwierdzeniu, zamrożeniu i końcowej kontroli może powstać wydanie `v0.3.0`.
 
 Metodologia 0.1 pozostaje wersją domyślną źródłowej umiejętności. Wersję 0.2 lub projekt 0.3 należy wybierać jawnie. Osobna paczka robocza 0.3 ustawia projekt 0.3 jako aktywny i zawiera wszystkie potrzebne pliki bez konieczności pobierania metodologii z repozytorium.
 

@@ -12,6 +12,14 @@ Porównanie przygotować dopiero po zamknięciu i walidacji obu ocen. Dopasowywa
 - Ta sama wersja materiału: tak / nie
 - Uzasadnienie zgodności wersji:
 
+### Dowód wersji historycznej
+
+- A — wersja historyczna odtwarzalna i rodzaj ocenianej wersji:
+- B — wersja historyczna odtwarzalna i rodzaj ocenianej wersji:
+- Zgodność rozstrzygnięcia o odtwarzalności: tak / nie
+- Zgodność ustrukturyzowanych dowodów historycznych: yes / no / not_comparable
+- Uzasadnienie różnicy albo zgodności:
+
 ## 2. Profil miejsca i odbiorców
 
 - Zgodność rodzaju i celu miejsca:

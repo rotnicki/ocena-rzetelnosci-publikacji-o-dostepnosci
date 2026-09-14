@@ -3,7 +3,11 @@
 **Data zamknięcia:** 14 września 2026 r., 11:59 UTC
 **Liczebność:** 24 publikacje — po 4 dla P1–P6
 **Protokół:** `kalibracja/0.3/protokol-B1.md`
-**Stan:** wybór wykonany; ocen rzetelności nie rozpoczęto
+**Stan zapisany w tym dokumencie:** wybór wykonany; ocen rzetelności jeszcze nie rozpoczęto
+**Stan późniejszy:** B1 zakończone proceduralnie; zob. [`wyniki-B1.md`](wyniki-B1.md)
+
+> Rejestr zachowuje zamkniętą pulę i stan sprzed ocen. Nie jest bieżącym
+> raportem postępu B1.
 
 ## Zasada
 

@@ -95,6 +95,11 @@ def valid_result(run: str = "A") -> dict:
         "temporal_assessment": {
             "historical_accuracy": "zgodne", "historical_rationale": "Dostępna wersja pierwotna.",
             "historical_version_reconstructable": True, "assessed_historical_version": "original", "version_evidence_ids": ["M-001"],
+            "historical_version_evidence": [{
+                "material_id": "M-001", "preserved_content_date_or_version": "2026-01-01",
+                "stable_identifier": "https://example.com/archive/2026-01-01/article",
+                "evidence_type": "archived_snapshot", "scope": "całość publikacji",
+            }],
             "historical_confidence": "wysoka", "current_applicability": "zasadniczo_zgodne",
             "current_rationale": "Główny przekaz pozostaje aktualny.", "current_version_basis": "Treść pobrana w dniu dostępu.",
             "material_changes": ["nowsza wersja standardu"],
@@ -138,6 +143,14 @@ def valid_extract() -> dict:
             {"audience": "osoby początkujące", "significant": True, "included_in_article_promise": True, "group_h_score": 3, "group_l_score": 3},
             {"audience": "praktycy", "significant": True, "included_in_article_promise": True, "group_h_score": 4, "group_l_score": 4},
         ]},
+        "temporal_assessment": {
+            "historical_version_reconstructable": True, "assessed_historical_version": "original",
+            "version_evidence_ids": ["M-001"], "historical_version_evidence": [{
+                "material_id": "M-001", "preserved_content_date_or_version": "2026-01-01",
+                "stable_identifier": "https://example.com/archive/2026-01-01/article",
+                "evidence_type": "archived_snapshot", "scope": "całość publikacji",
+            }],
+        },
         "claim_count": 1, "claim_map_confidence": "wysoka", "scores": scores(),
         "issue_counts": {"krytyczne": 0, "duze": 0, "srednie": 0, "male": 1},
         "issues": [{"issue_id": "P-001", "severity": "male", "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.", "application_risk": "niskie", "application_risk_rationale": "Skutek jest lokalny.", "language_barrier": None, "confidence": "wysoka"}],
@@ -200,6 +213,12 @@ def valid_comparison() -> dict:
         "schema_version": "0.3-draft", "comparison_id": "TEST-001-AB", "publication_id": "TEST-001",
         "run_a_id": "TEST-001-A", "run_b_id": "TEST-001-B", "methodology": {"version": "0.3-draft", "identifier": "test-commit"},
         "same_material_version": True, "material_version_rationale": "Ta sama migawka.",
+        "temporal_comparison": {
+            "a_historical_version_reconstructable": True, "b_historical_version_reconstructable": True,
+            "reconstructability_agreement": True, "a_assessed_historical_version": "original",
+            "b_assessed_historical_version": "original", "historical_evidence_agreement": "yes",
+            "rationale": "Oba przebiegi wykorzystały ten sam osobny dowód historyczny.",
+        },
         "audience_profile_comparison": {"outlet_type_agreement": True, "purpose_agreement": True, "declared_audience_agreement": True, "article_audience_agreement": True, "required_knowledge_agreement": True, "confidence_agreement": True, "group_scores": [{"audience": "osoby początkujące", "a_h": 3, "b_h": 3, "a_l": 3, "b_l": 3, "rationale": "Zgodność."}], "rationale": "Profile zgodne."},
         "score_comparison": score_rows,
         "verdict_comparison": {"a_verdict": "rzetelny_z_niewielkimi_zastrzezeniami", "b_verdict": "rzetelny_z_niewielkimi_zastrzezeniami", "agreement": True, "a_counterfactual_correction": "ograniczona", "b_counterfactual_correction": "ograniczona", "rationale": "Zgodność."},
@@ -563,6 +582,7 @@ class ValidatorTests(unittest.TestCase):
         temporal["historical_accuracy"] = "nierozstrzygniete"
         temporal["historical_confidence"] = "niska"
         temporal["version_evidence_ids"] = []
+        temporal["historical_version_evidence"] = []
         VALIDATOR.validate_result(result)
 
     def test_reconstructable_history_requires_evidence(self) -> None:
@@ -570,6 +590,23 @@ class ValidatorTests(unittest.TestCase):
         result["temporal_assessment"]["version_evidence_ids"] = []
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
+
+    def test_current_capture_alone_cannot_reconstruct_history(self) -> None:
+        result = valid_result()
+        result["temporal_assessment"]["historical_version_evidence"] = []
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_historical_evidence_requires_complete_separate_record(self) -> None:
+        for key in (
+            "material_id", "preserved_content_date_or_version", "stable_identifier",
+            "evidence_type", "scope",
+        ):
+            with self.subTest(key=key):
+                result = valid_result()
+                del result["temporal_assessment"]["historical_version_evidence"][0][key]
+                with self.assertRaises(VALIDATOR.ValidationError):
+                    VALIDATOR.validate_result(result)
 
     def test_reconstructable_history_requires_immutable_evidence(self) -> None:
         result = valid_result()
@@ -579,7 +616,7 @@ class ValidatorTests(unittest.TestCase):
 
     def test_reconstructable_history_requires_dated_or_versioned_evidence(self) -> None:
         result = valid_result()
-        result["materials"][0]["version"] = None
+        result["temporal_assessment"]["historical_version_evidence"][0]["preserved_content_date_or_version"] = ""
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
 
@@ -597,8 +634,20 @@ class ValidatorTests(unittest.TestCase):
     def test_rejects_unknown_temporal_material(self) -> None:
         result = valid_result()
         result["temporal_assessment"]["version_evidence_ids"] = ["M-999"]
+        result["temporal_assessment"]["historical_version_evidence"][0]["material_id"] = "M-999"
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
+
+    def test_extract_and_comparison_crosscheck_historical_evidence(self) -> None:
+        extract = valid_extract()
+        extract["temporal_assessment"]["historical_version_evidence"][0]["scope"] = "fragment"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_extract(extract, valid_result("A"))
+
+        comparison = valid_comparison()
+        comparison["temporal_comparison"]["historical_evidence_agreement"] = "no"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_comparison(comparison, valid_result("A"), valid_result("B"))
 
     def test_calibration_requires_centrality_and_risk_for_small_issue(self) -> None:
         result = valid_result()

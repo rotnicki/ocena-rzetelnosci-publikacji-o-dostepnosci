@@ -1,17 +1,19 @@
 # Propozycje zmian po polskim pilotażu 0.3
 
 **Data:** 14 września 2026 r.  
-**Status:** S1–S10 zatwierdzone 14 września 2026 r. i wdrożone na gałęzi projektu 0.3; B1–B2 pozostają propozycjami
+**Status:** dokument historyczny po polskim pilotażu; S1–S10 wdrożone, B1 zakończone, T1–T2 wdrożone; B2 nie rozpoczęte
 **Podstawa:** pięć polskich publikacji, po dwa odizolowane przebiegi A/B
 
-> **Dokument historyczny — aktualizacja stanu 14 września 2026 r.:** S1–S10
-> zostały zatwierdzone i wdrożone. Następnie zatwierdzono projekt B1 i
-> rozpoczęto przygotowanie jego protokołu, korpusu oraz rejestrów. Ocen B1 nie
-> rozpoczęto. B2 pozostaje propozycją i nie zostało rozpoczęte.
+> **Dokument historyczny — aktualny stan 14 września 2026 r.:** S1–S10
+> zostały zatwierdzone i wdrożone, a B1 następnie wykonano i zakończono
+> proceduralnie. Publiczne wyniki zbiorcze znajdują się w
+> [`wyniki-B1.md`](wyniki-B1.md). T1 formalizuje to zamknięcie, a T2 wzmacnia
+> techniczny dowód wersji historycznej. Wyników pilotażu ani B1 nie przeliczono
+> wstecz. B2 nie zostało rozpoczęte.
 
 ## 1. Najważniejsza rekomendacja
 
-Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 ustanawia osobny kontrakt techniczny obowiązujący przyszłe serie. Badania B1–B2 pozostają propozycjami wymagającymi osobnej decyzji.
+Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 ustanowiło osobny kontrakt techniczny dla nowych serii. B1 zostało wykonane według osobno zatwierdzonego protokołu i zakończone proceduralnie. T1–T2 wdrażają bezpieczne zamknięcie dokumentacji B1 i techniczne uszczelnienie dowodu historycznego. B2 pozostaje niewykonanym badaniem wymagającym osobnego protokołu i decyzji.
 
 | ID | Rodzaj | Rekomendacja | Główny obszar |
 | --- | --- | --- | --- |
@@ -25,8 +27,10 @@ Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologi
 | S8 | znaczeniowa | przyjąć | werdykt i bezpieczne polecenie |
 | S9 | znaczeniowa | przyjąć po korekcie — wdrożono | wersja historyczna publikacji |
 | S10 | strukturalna | przyjąć po korekcie — wdrożono | jednolita metryka przebiegu |
-| B1 | badawcza | przyjąć | pokrycie nieprzetestowanych progów |
-| B2 | badawcza | przyjąć | przenośność między oceniającymi |
+| B1 | badawcza | wykonano i zakończono | pokrycie nieprzetestowanych progów |
+| T1 | techniczna | wdrożono po B1 | bezpieczne zamknięcie dokumentacji B1 |
+| T2 | techniczna | wdrożono po B1 | dowód rekonstrukcji wersji historycznej |
+| B2 | badawcza | nie rozpoczęto | przenośność między oceniającymi |
 
 ## S1. Operacyjne przykłady atomizacji
 
@@ -280,6 +284,11 @@ Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologi
 
 ## B1. Osobny pilotaż progów nieobecnych w pierwszej serii
 
+> **Stan po wykonaniu:** B1 zakończono proceduralnie 14 września 2026 r.
+> Wykonano 32 niezależne oceny i 16 porównań A/B. R3 nie uruchomiono.
+> Poniższy tekst zachowuje historyczne uzasadnienie decyzji o rozpoczęciu
+> badania; aktualne wyniki zawiera [`wyniki-B1.md`](wyniki-B1.md).
+
 **Proponowane brzmienie protokołu badawczego:**
 
 > Przed zamrożeniem 0.3 należy przeprowadzić kontrolowany test przypadków sondujących co najmniej: `rzetelny`, `rzetelny_z_niewielkimi_zastrzezeniami`, `nierzetelny`, `nie_mozna_rozstrzygnac`, prawidłowe `nd` w co najmniej dwóch wymiarach oraz problem potencjalnie krytyczny. Dobór ma testować granice, ale nie może nakazywać oceniającym oczekiwanego wyniku. Nieudane trafienie w planowaną kategorię jest wynikiem badania, nie podstawą do poprawiania oceny.
@@ -311,7 +320,9 @@ Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologi
 Po decyzjach z 14 września 2026 r.:
 
 - S1–S10 są zatwierdzone i zostały wdrożone w odpowiednich materiałach projektu 0.3;
-- B1–B2 pozostają propozycjami i nie zostały rozpoczęte;
+- B1 zostało zakończone proceduralnie, a R3 nie uruchomiono;
+- T1–T2 zostały zatwierdzone i wdrożone po analizie B1;
+- B2 nie zostało rozpoczęte;
 - nie wolno przeliczać wstecz wyników polskiego pilota;
 - PR nr 8 pozostaje niescalonym projektem, bez znacznika i wydania 0.3.
 
@@ -331,7 +342,7 @@ Poniższa lista rozwija skróty „kopia skilla” i „wzory” użyte powyżej
 | S8 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | S9 | `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | S10 | `README.md`; `metodologia/0.3/README.md`; `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; nowy `metodologia/0.3/metryka-0.3.schema.json`; nowy `skill/references/metryka-0.3.schema.json`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `metodologia/0.3/wyciag-kalibracyjny.schema.json`; `skill/references/wyciag-kalibracyjny-0.3.schema.json`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
-| B1 | nowy protokół w `kalibracja/0.3/`; bez zmian standardu, kotwic, schematów i skilla przed analizą wyników |
+| B1 | wykonany protokół i rejestry w `kalibracja/0.3/`; po zakończeniu bezpieczne podsumowanie `kalibracja/0.3/wyniki-B1.md` |
 | B2 | nowy protokół w `kalibracja/0.3/`; bez zmian standardu, kotwic, schematów i skilla przed analizą wyników |
 
 „Oba pliki testów 0.3” oznacza `tests/test_validate_0_3.py` i `tests/test_0_3_package.py`. „Wszystkie trzy schematy” oznacza wynik, wyciąg i porównanie pary. „Wszystkie trzy szablony” oznacza kartę oceny, wzór raportu i wzór porównania.

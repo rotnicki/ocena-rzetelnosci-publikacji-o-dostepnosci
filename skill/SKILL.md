@@ -46,7 +46,7 @@ Do not change criteria, anchors, verdict rules, or output vocabulary during an a
 1. Obtain the complete available publication, including central tables, code, images, footnotes, attachments, and linked material on which the argument depends.
 2. Verify the title, authorship or editorial signature, publisher, outlet, dates, language, type, purpose, audience, and completeness. Do not infer authorship from the domain alone.
 3. Separate the main publication from advertisements, newsletters, event notices, and unrelated material.
-4. Classify each inspected item using the selected standard's material roles. Record exact URLs, access dates, versions, and immutable identifiers when available. For every input to a new 0.3 calibration run, record SHA-256 and whether it covers `raw_bytes`, `rendered_capture`, or `canonical_text`.
+4. Classify each inspected item using the selected standard's material roles. Record exact URLs, access dates, versions, and immutable identifiers when available. For every input to a new 0.3 calibration run, record SHA-256 and whether it covers `raw_bytes`, `rendered_capture`, or `canonical_text`. When `historical_version_reconstructable` is true, add a separate `historical_version_evidence` record identifying the material, the date or designation of the preserved content, a stable identifier, the evidence type, and the covered scope. A current capture, its SHA-256, and `immutable: tak` do not by themselves prove historical content.
 5. If full material is unavailable, mark the assessment partial and do not infer missing content.
 6. Do not reproduce a full copyrighted publication without a lawful basis and explicit request. Prefer metadata, short quotations, and faithful paraphrases.
 

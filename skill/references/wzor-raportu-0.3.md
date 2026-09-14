@@ -133,6 +133,13 @@ Przedstawić cel, tok wywodu i wnioski autora bez oceny poprawności. Streszczen
 - Wersja historyczna odtwarzalna: true / false
 - Oceniana wersja historyczna: original / archived_update / not_reconstructable
 - Dowody wersji:
+- Osobne dowody wersji historycznej:
+
+| ID materiału | Data albo oznaczenie zachowanej treści | Stabilny identyfikator | Rodzaj dowodu | Objęty zakres |
+| --- | --- | --- | --- | --- |
+|  |  |  | archived_snapshot / versioned_repository_state / versioned_release / dated_preserved_copy / other_historical_record |  |
+
+- Potwierdzono, że bieżąca kopia, jej SHA-256 i samo `immutable: tak` nie są jedyną podstawą rekonstrukcji: tak / nie / nie dotyczy
 - Pewność oceny historycznej: wysoka / srednia / niska
 - Bieżąca użyteczność aktualnie dostępnej wersji:
 - Uzasadnienie:

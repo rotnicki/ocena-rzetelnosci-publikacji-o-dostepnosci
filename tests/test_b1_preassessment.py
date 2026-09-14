@@ -8,6 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CALIBRATION = ROOT / "kalibracja" / "0.3"
 CANDIDATES = CALIBRATION / "rejestr-kandydatow-B1.md"
 CORPUS = CALIBRATION / "rejestr-korpusu-B1.md"
+SUMMARY = CALIBRATION / "wyniki-B1.md"
+DEVIATIONS = CALIBRATION / "rejestr-odchylen-B1.md"
 
 
 def sha256(value: str) -> str:
@@ -22,8 +24,21 @@ class B1PreassessmentRegistersTest(unittest.TestCase):
             "rejestr-kandydatow-B1.md",
             "rejestr-korpusu-B1.md",
             "rejestr-odchylen-B1.md",
+            "wyniki-B1.md",
         ):
             self.assertTrue((CALIBRATION / name).is_file(), name)
+
+    def test_public_status_records_b1_as_completed_without_starting_b2(self):
+        summary = SUMMARY.read_text(encoding="utf-8")
+        deviations = DEVIATIONS.read_text(encoding="utf-8")
+
+        self.assertIn("B1 zakończone proceduralnie", summary)
+        self.assertIn("32 niezależne oceny", summary)
+        self.assertIn("16 par A/B", summary)
+        self.assertIn("R3 nie uruchomiono", summary)
+        self.assertIn("B2 nie zostało rozpoczęte", summary)
+        self.assertIn("zakończona proceduralnie", deviations)
+        self.assertIn("R3 nie uruchomiono", deviations)
 
     def test_protocol_hash_matches_search_log(self):
         protocol = (CALIBRATION / "protokol-B1.md").read_bytes()

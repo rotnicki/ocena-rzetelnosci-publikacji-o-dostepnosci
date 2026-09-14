@@ -611,7 +611,7 @@ def validate_temporal(value: object, materials: dict[str, dict], path: str = "te
     value = obj(value, path)
     keys = {
         "historical_accuracy", "historical_rationale", "historical_version_reconstructable",
-        "assessed_historical_version", "version_evidence_ids", "historical_confidence",
+        "assessed_historical_version", "version_evidence_ids", "historical_version_evidence", "historical_confidence",
         "current_applicability", "current_rationale", "current_version_basis", "material_changes",
     }
     exact(value, keys, path)
@@ -626,16 +626,38 @@ def validate_temporal(value: object, materials: dict[str, dict], path: str = "te
     if unknown:
         fail(f"{path}.version_evidence_ids", f"nieznane materiały: {', '.join(unknown)}")
     confidence = enum(value["historical_confidence"], CONFIDENCE, f"{path}.historical_confidence")
+    evidence_keys = {
+        "material_id", "preserved_content_date_or_version", "stable_identifier",
+        "evidence_type", "scope",
+    }
+    evidence_material_ids = []
+    for index, item in enumerate(array(value["historical_version_evidence"], f"{path}.historical_version_evidence")):
+        item_path = f"{path}.historical_version_evidence[{index}]"
+        item = obj(item, item_path)
+        exact(item, evidence_keys, item_path)
+        material_id = text(item["material_id"], f"{item_path}.material_id")
+        if material_id not in materials:
+            fail(f"{item_path}.material_id", "nieznany materiał")
+        if material_id in evidence_material_ids:
+            fail(f"{item_path}.material_id", "każdy materiał może mieć jeden kanoniczny zapis dowodu")
+        evidence_material_ids.append(material_id)
+        for key in ("preserved_content_date_or_version", "stable_identifier", "scope"):
+            text(item[key], f"{item_path}.{key}")
+        enum(item["evidence_type"], {
+            "archived_snapshot", "versioned_repository_state", "versioned_release",
+            "dated_preserved_copy", "other_historical_record",
+        }, f"{item_path}.evidence_type")
     text_array(value["material_changes"], f"{path}.material_changes")
     if reconstructable:
         if assessed not in {"original", "archived_update"}:
             fail(f"{path}.assessed_historical_version", "odtworzona wersja historyczna wymaga original albo archived_update")
         if not version_evidence_ids:
             fail(f"{path}.version_evidence_ids", "odtworzona wersja historyczna wymaga dowodu")
-        if not any(materials[identifier]["immutable"] == "tak" for identifier in version_evidence_ids):
-            fail(f"{path}.version_evidence_ids", "co najmniej jeden dowód wersji musi mieć immutable: tak")
-        if not any(materials[identifier]["immutable"] == "tak" and materials[identifier]["version"] is not None for identifier in version_evidence_ids):
-            fail(f"{path}.version_evidence_ids", "dowód rekonstrukcji musi identyfikować datę albo wersję")
+        if set(evidence_material_ids) != set(version_evidence_ids):
+            fail(f"{path}.historical_version_evidence", "osobne zapisy dowodowe muszą odpowiadać version_evidence_ids")
+        for identifier in version_evidence_ids:
+            if materials[identifier]["immutable"] != "tak":
+                fail(f"{path}.version_evidence_ids", "każdy dowód wersji musi mieć immutable: tak")
     else:
         if assessed != "not_reconstructable":
             fail(f"{path}.assessed_historical_version", "brak rekonstrukcji wymaga not_reconstructable")
@@ -643,6 +665,8 @@ def validate_temporal(value: object, materials: dict[str, dict], path: str = "te
             fail(f"{path}.historical_accuracy", "brak rekonstrukcji wymaga nierozstrzygniete")
         if confidence != "niska":
             fail(f"{path}.historical_confidence", "brak rekonstrukcji wymaga niskiej pewności oceny historycznej")
+        if version_evidence_ids or evidence_material_ids:
+            fail(path, "brak rekonstrukcji wymaga pustych list dowodów wersji historycznej")
 
 
 def validate_full_test(issue: dict, path: str) -> None:
@@ -884,7 +908,7 @@ def validate_extract(data: object, result: dict | None = None) -> None:
     root = obj(data, "root")
     keys = {
         "schema_version", "analysis_id", "publication_id", "methodology", "evaluator", "material_versions",
-        "publication_context_summary", "audience_language", "claim_count", "claim_map_confidence", "scores",
+        "publication_context_summary", "audience_language", "temporal_assessment", "claim_count", "claim_map_confidence", "scores",
         "issue_counts", "issues", "central_findings", "verdict", "verdict_confidence", "source_coverage",
         "counterfactual_correction",
     }
@@ -944,6 +968,37 @@ def validate_extract(data: object, result: dict | None = None) -> None:
             included_l_scores.append(l_score)
     if not included_h_scores:
         fail("audience_language.group_scores", "brak istotnej grupy objętej obietnicą")
+    temporal = obj(root["temporal_assessment"], "temporal_assessment")
+    temporal_keys = {
+        "historical_version_reconstructable", "assessed_historical_version",
+        "version_evidence_ids", "historical_version_evidence",
+    }
+    exact(temporal, temporal_keys, "temporal_assessment")
+    reconstructable = boolean(temporal["historical_version_reconstructable"], "temporal_assessment.historical_version_reconstructable")
+    assessed = enum(temporal["assessed_historical_version"], {"original", "archived_update", "not_reconstructable"}, "temporal_assessment.assessed_historical_version")
+    version_ids = text_array(temporal["version_evidence_ids"], "temporal_assessment.version_evidence_ids", unique=True)
+    evidence_material_ids = []
+    evidence_keys = {"material_id", "preserved_content_date_or_version", "stable_identifier", "evidence_type", "scope"}
+    for index, item in enumerate(array(temporal["historical_version_evidence"], "temporal_assessment.historical_version_evidence")):
+        item_path = f"temporal_assessment.historical_version_evidence[{index}]"
+        item = obj(item, item_path)
+        exact(item, evidence_keys, item_path)
+        evidence_material_ids.append(text(item["material_id"], f"{item_path}.material_id"))
+        for key in ("preserved_content_date_or_version", "stable_identifier", "scope"):
+            text(item[key], f"{item_path}.{key}")
+        enum(item["evidence_type"], {
+            "archived_snapshot", "versioned_repository_state", "versioned_release",
+            "dated_preserved_copy", "other_historical_record",
+        }, f"{item_path}.evidence_type")
+    if len(evidence_material_ids) != len(set(evidence_material_ids)):
+        fail("temporal_assessment.historical_version_evidence", "powtórzony identyfikator materiału")
+    if reconstructable:
+        if assessed not in {"original", "archived_update"} or not version_ids:
+            fail("temporal_assessment", "rekonstrukcja wymaga ocenianej wersji i dowodów")
+        if set(evidence_material_ids) != set(version_ids):
+            fail("temporal_assessment.historical_version_evidence", "zapisy dowodowe muszą odpowiadać version_evidence_ids")
+    elif assessed != "not_reconstructable" or version_ids or evidence_material_ids:
+        fail("temporal_assessment", "brak rekonstrukcji wymaga not_reconstructable i pustych list dowodów")
     integer(root["claim_count"], "claim_count")
     enum(root["claim_map_confidence"], CONFIDENCE, "claim_map_confidence")
     scores = validate_scores(root["scores"])
@@ -999,6 +1054,14 @@ def validate_extract(data: object, result: dict | None = None) -> None:
             if material["role"] in {"tresc_glowna", "material_centralny_zewnetrzny"}
         ]
         same(root["material_versions"], expected_materials, "material_versions")
+        result_temporal = result["temporal_assessment"]
+        expected_temporal = {
+            key: result_temporal[key] for key in (
+                "historical_version_reconstructable", "assessed_historical_version",
+                "version_evidence_ids", "historical_version_evidence",
+            )
+        }
+        same(temporal, expected_temporal, "temporal_assessment")
         result_context = result["publication_context"]
         # Pola opisowe wyciągu są z założenia skrótem i mogą być parafrazą.
         # Mechanicznie porównujemy tylko wartości kategoryczne, które nie tracą
@@ -1079,7 +1142,7 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
     root = obj(data, "root")
     keys = {
         "schema_version", "comparison_id", "publication_id", "run_a_id", "run_b_id", "methodology",
-        "same_material_version", "material_version_rationale", "audience_profile_comparison", "score_comparison",
+        "same_material_version", "material_version_rationale", "temporal_comparison", "audience_profile_comparison", "score_comparison",
         "verdict_comparison", "claim_matches", "issue_matches", "coverage_metrics", "aggregate_metrics",
         "disagreements", "conclusions",
     }
@@ -1094,6 +1157,24 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
     if method["version"] != "0.3-draft":
         fail("methodology.version", "oczekiwano '0.3-draft'")
     text(method["identifier"], "methodology.identifier")
+    temporal = obj(root["temporal_comparison"], "temporal_comparison")
+    temporal_keys = {
+        "a_historical_version_reconstructable", "b_historical_version_reconstructable",
+        "reconstructability_agreement", "a_assessed_historical_version",
+        "b_assessed_historical_version", "historical_evidence_agreement", "rationale",
+    }
+    exact(temporal, temporal_keys, "temporal_comparison")
+    a_reconstructable = boolean(temporal["a_historical_version_reconstructable"], "temporal_comparison.a_historical_version_reconstructable")
+    b_reconstructable = boolean(temporal["b_historical_version_reconstructable"], "temporal_comparison.b_historical_version_reconstructable")
+    reconstructability_agreement = boolean(temporal["reconstructability_agreement"], "temporal_comparison.reconstructability_agreement")
+    if reconstructability_agreement != (a_reconstructable == b_reconstructable):
+        fail("temporal_comparison.reconstructability_agreement", "wartość nie odpowiada rozstrzygnięciom A/B")
+    enum(temporal["a_assessed_historical_version"], {"original", "archived_update", "not_reconstructable"}, "temporal_comparison.a_assessed_historical_version")
+    enum(temporal["b_assessed_historical_version"], {"original", "archived_update", "not_reconstructable"}, "temporal_comparison.b_assessed_historical_version")
+    evidence_agreement = enum(temporal["historical_evidence_agreement"], {"yes", "no", "not_comparable"}, "temporal_comparison.historical_evidence_agreement")
+    if not a_reconstructable and not b_reconstructable and evidence_agreement != "not_comparable":
+        fail("temporal_comparison.historical_evidence_agreement", "dwie nieodtworzone wersje wymagają not_comparable")
+    text(temporal["rationale"], "temporal_comparison.rationale")
     audience = obj(root["audience_profile_comparison"], "audience_profile_comparison")
     audience_keys = {"outlet_type_agreement", "purpose_agreement", "declared_audience_agreement", "article_audience_agreement", "required_knowledge_agreement", "confidence_agreement", "group_scores", "rationale"}
     exact(audience, audience_keys, "audience_profile_comparison")
@@ -1265,6 +1346,19 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
         method_b = {key: result_b["methodology"][key] for key in ("version", "identifier")}
         same(method_b, method_a, "results.methodology")
         same(root["methodology"], method_a, "methodology")
+        temporal_a = result_a["temporal_assessment"]
+        temporal_b = result_b["temporal_assessment"]
+        same(a_reconstructable, temporal_a["historical_version_reconstructable"], "temporal_comparison.a_historical_version_reconstructable")
+        same(b_reconstructable, temporal_b["historical_version_reconstructable"], "temporal_comparison.b_historical_version_reconstructable")
+        same(temporal["a_assessed_historical_version"], temporal_a["assessed_historical_version"], "temporal_comparison.a_assessed_historical_version")
+        same(temporal["b_assessed_historical_version"], temporal_b["assessed_historical_version"], "temporal_comparison.b_assessed_historical_version")
+        if not a_reconstructable and not b_reconstructable:
+            expected_evidence_agreement = "not_comparable"
+        else:
+            expected_evidence_agreement = (
+                "yes" if temporal_a["historical_version_evidence"] == temporal_b["historical_version_evidence"] else "no"
+            )
+        same(evidence_agreement, expected_evidence_agreement, "temporal_comparison.historical_evidence_agreement")
         same(verdict["a_verdict"], result_a["verdict"], "verdict_comparison.a_verdict")
         same(verdict["b_verdict"], result_b["verdict"], "verdict_comparison.b_verdict")
         same(verdict["a_counterfactual_correction"], result_a["counterfactual_correction"], "verdict_comparison.a_counterfactual_correction")

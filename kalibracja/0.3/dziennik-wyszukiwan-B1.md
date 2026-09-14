@@ -5,7 +5,11 @@
 **Protokół:** `kalibracja/0.3/protokol-B1.md`
 **SHA-256 ostatecznie zamrożonego protokołu:** `252214885c81d944deb71e0a464700c2e651efd13c849d93be1d09e5f391d1fa`
 **Zamknięcie puli:** 14 września 2026 r., 11:59 UTC
-**Stan:** wyszukiwanie zakończone; ocen B1 nie rozpoczęto
+**Stan zapisany w tym dokumencie:** wyszukiwanie zakończone; ocen B1 jeszcze nie rozpoczęto
+**Stan późniejszy:** B1 zakończone proceduralnie; zob. [`wyniki-B1.md`](wyniki-B1.md)
+
+> Ten dziennik zachowuje stan zamrożonego etapu wyszukiwania sprzed ocen. Jego
+> sformułowania o czynnościach pozostających do wykonania są historyczne.
 
 ## 1. Zasada pracy
 

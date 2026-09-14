@@ -471,7 +471,11 @@ Sama data publikacji lub aktualizacji, bieżąca suma kontrolna, niezmieniony UR
 
 Jeżeli warunki rekonstrukcji nie są spełnione, `historical_version_reconstructable` ma wartość `false`, `assessed_historical_version` ma wartość `not_reconstructable`, `historical_accuracy` ma wartość `nierozstrzygniete`, a `historical_confidence` ma wartość `niska`. Pewność historyczna oznacza pewność ustalenia poprawności zachowanej wersji, a nie pewność, że dawnego materiału nie odnaleziono.
 
-Jeżeli wersja historyczna została odtworzona, `assessed_historical_version` wskazuje `original` albo `archived_update`, a `version_evidence_ids` zawiera co najmniej jeden materiał zachowujący ocenianą treść i oznaczony `immutable: tak`.
+Jeżeli wersja historyczna została odtworzona, `assessed_historical_version` wskazuje `original` albo `archived_update`, a `version_evidence_ids` zawiera co najmniej jeden materiał zachowujący ocenianą treść.
+
+`historical_version_reconstructable: true` wymaga osobnego zapisu `historical_version_evidence` dla każdego wskazanego materiału. Zapis zawiera identyfikator materiału, datę albo oznaczenie zachowanej treści, stabilny identyfikator, rodzaj dowodu oraz objęty zakres. Materiał musi być oznaczony `immutable: tak`, a zestaw identyfikatorów materiałów w zapisach dowodowych musi być zgodny z `version_evidence_ids`.
+
+Kopia pobrana w dniu analizy potwierdza wyłącznie treść bieżącą, chyba że osobny dowód wskazuje, jaką wcześniejszą wersję zachowuje. Bieżąca suma SHA-256 i oznaczenie `immutable: tak` nie są samodzielnym dowodem treści historycznej. Walidator sprawdza kompletność i spójność zapisu dowodowego, ale nie zastępuje merytorycznej oceny, czy wskazana migawka albo wersja rzeczywiście zachowuje deklarowaną treść.
 
 Przeskalowanie, zmiana kodowania lub techniczna rekompresja materiału nie tworzą odrębnej wersji znaczeniowej tylko wtedy, gdy zachowano całą treść, kolejność, znaczenie i czytelność. Transformację i podstawę uznania równoważności trzeba opisać w `material_changes`.
 

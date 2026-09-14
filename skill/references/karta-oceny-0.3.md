@@ -66,6 +66,8 @@
 - Wersja historyczna odtwarzalna: true / false
 - Oceniana wersja historyczna:
 - Dowody wersji i pewność:
+- Osobny dowód historyczny dla każdego wskazanego materiału — ID materiału, data albo wersja zachowanej treści, stabilny identyfikator, rodzaj dowodu i zakres:
+- Bieżąca kopia, jej SHA-256 i samo `immutable: tak` nie są jedyną podstawą rekonstrukcji: tak / nie / nie dotyczy
 - Transformacje materiału i podstawa uznania równoważności:
 - Bieżąca użyteczność:
 - Uzasadnienie różnicy:

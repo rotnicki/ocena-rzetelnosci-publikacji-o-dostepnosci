@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "comparison_id", "publication_id", "run_a_id", "run_b_id", "methodology",
-    "same_material_version", "material_version_rationale", "audience_profile_comparison", "score_comparison",
+    "same_material_version", "material_version_rationale", "temporal_comparison", "audience_profile_comparison", "score_comparison",
     "verdict_comparison", "claim_matches", "issue_matches", "coverage_metrics", "aggregate_metrics",
     "disagreements", "conclusions"
   ],
@@ -19,6 +19,7 @@
       "properties": {"version": {"const": "0.3-draft"}, "identifier": {"$ref": "#/$defs/nonempty"}}
     },
     "same_material_version": {"type": "boolean"}, "material_version_rationale": {"$ref": "#/$defs/nonempty"},
+    "temporal_comparison": {"$ref": "#/$defs/temporalComparison"},
     "audience_profile_comparison": {
       "type": "object", "additionalProperties": false,
       "required": ["outlet_type_agreement", "purpose_agreement", "declared_audience_agreement", "article_audience_agreement", "required_knowledge_agreement", "confidence_agreement", "group_scores", "rationale"],
@@ -78,6 +79,19 @@
     "correction": {"enum": ["ograniczona", "strukturalna", "nie_dotyczy"]},
     "idArray": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
     "triState": {"enum": ["yes", "no", "not_comparable"]},
+    "temporalComparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["a_historical_version_reconstructable", "b_historical_version_reconstructable", "reconstructability_agreement", "a_assessed_historical_version", "b_assessed_historical_version", "historical_evidence_agreement", "rationale"],
+      "properties": {
+        "a_historical_version_reconstructable": {"type": "boolean"},
+        "b_historical_version_reconstructable": {"type": "boolean"},
+        "reconstructability_agreement": {"type": "boolean"},
+        "a_assessed_historical_version": {"enum": ["original", "archived_update", "not_reconstructable"]},
+        "b_assessed_historical_version": {"enum": ["original", "archived_update", "not_reconstructable"]},
+        "historical_evidence_agreement": {"$ref": "#/$defs/triState"},
+        "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    },
     "groupComparison": {
       "type": "object", "additionalProperties": false,
       "required": ["audience", "a_h", "b_h", "a_l", "b_l", "rationale"],

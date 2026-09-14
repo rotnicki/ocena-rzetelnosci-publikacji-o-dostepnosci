@@ -8,10 +8,11 @@
 
 **Wynik:** kontrola zakończona pomyślnie
 
-> **Aktualizacja stanu projektu — 14 września 2026 r.:** ten raport opisuje
-> kontrolę wykonaną przed zatwierdzeniem projektu B1. Po tej kontroli rozpoczęto
-> wyłącznie przygotowanie B1: protokół, dobór korpusu i rejestry przed ocenami.
-> Ocen B1 nie rozpoczęto. B2 nadal nie zostało rozpoczęte.
+> **Dokument historyczny — aktualizacja stanu 14 września 2026 r.:** ten raport
+> opisuje kontrolę wykonaną przed B1 i zachowuje liczby właściwe tamtemu
+> stanowi. B1 zostało następnie wykonane i zakończone proceduralnie; jego
+> bezpieczne wyniki zbiorcze zawiera [`wyniki-B1.md`](wyniki-B1.md). Po B1
+> zatwierdzono T1–T2 i S11–S15. B2 nie zostało rozpoczęte.
 
 ## Stan wdrożenia
 
@@ -53,8 +54,8 @@ Raporty kontroli walidatora po pilocie oraz wdrożenia S1–S8 zachowano jako do
 - `git diff --check` nie wykrywa błędów formatowania;
 - wersje 0.1 i 0.2 pozostały niezmienione;
 - wyniki zakończonych przebiegów i pilota nie zostały przeliczone wstecz;
-- w chwili wykonania tej kontroli B1 i B2 nie zostały rozpoczęte; późniejszy
-  stan prac przygotowawczych B1 opisuje nota na początku dokumentu;
+- w chwili wykonania tej historycznej kontroli B1 i B2 nie były rozpoczęte;
+  późniejsze zakończenie B1 opisuje nota na początku dokumentu;
 - PR nr 8 pozostaje roboczy i niescalony;
 - nie utworzono znacznika ani wydania 0.3.
 
