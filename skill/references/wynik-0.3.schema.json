@@ -9,7 +9,7 @@
     "publication_context", "audience_profile", "temporal_assessment", "claim_map_confidence",
     "claim_map_confidence_rationale", "claim_count", "claims", "issues", "issue_counts", "scores",
     "score_rationales", "verdict", "verdict_basis_issue_ids", "counterfactual_correction", "verdict_confidence",
-    "source_coverage", "safe_recommendation", "verdict_rationale", "limitations", "sources"
+    "source_coverage", "safe_recommendation", "safe_recommendation_rationale", "verdict_rationale", "limitations", "sources"
   ],
   "properties": {
     "schema_version": {"const": "0.3-draft"}, "analysis_id": {"$ref": "#/$defs/nonempty"},
@@ -27,6 +27,7 @@
     "verdict_confidence": {"$ref": "#/$defs/confidence"},
     "source_coverage": {"enum": ["pelne", "wystarczajace", "czesciowe", "niewystarczajace"]},
     "safe_recommendation": {"enum": ["bez_zastrzezen", "z_niewielkimi_korektami", "z_nazwanymi_korektami_lub_zrodlami", "nie_do_praktycznego_uzycia", "nie_mozna_ocenic"]},
+    "safe_recommendation_rationale": {"$ref": "#/$defs/nullableText"},
     "verdict_rationale": {"$ref": "#/$defs/nonempty"}, "limitations": {"$ref": "#/$defs/textArray"},
     "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}}
   },
@@ -48,7 +49,7 @@
     }
   }],
   "$defs": {
-    "nonempty": {"type": "string", "minLength": 1}, "nullableText": {"type": ["string", "null"]},
+    "nonempty": {"type": "string", "minLength": 1}, "nullableText": {"oneOf": [{"$ref": "#/$defs/nonempty"}, {"type": "null"}]},
     "textArray": {"type": "array", "items": {"$ref": "#/$defs/nonempty"}},
     "uniqueTextArray": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}},
     "confidence": {"enum": ["wysoka", "srednia", "niska"]},
@@ -114,6 +115,14 @@
         "then": {"properties": {"evidence_ids": {"minItems": 1}}}
       }]
     },
+    "requiredKnowledgeItem": {
+      "type": "object", "additionalProperties": false,
+      "required": ["knowledge", "publication_location", "effect_without_knowledge", "evidence_ids"],
+      "properties": {
+        "knowledge": {"$ref": "#/$defs/nonempty"}, "publication_location": {"$ref": "#/$defs/nonempty"},
+        "effect_without_knowledge": {"$ref": "#/$defs/nonempty"}, "evidence_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}}
+      }
+    },
     "conflict": {
       "type": "object", "additionalProperties": false, "required": ["summary", "evidence_ids"],
       "properties": {"summary": {"$ref": "#/$defs/nonempty"}, "evidence_ids": {"$ref": "#/$defs/uniqueTextArray"}}
@@ -128,12 +137,14 @@
     },
     "publicationContext": {
       "type": "object", "additionalProperties": false,
-      "required": ["outlet_type", "outlet_declared_purpose", "declared_audiences", "reasonably_foreseeable_audiences", "additional_relevant_audiences", "article_audiences", "declared_required_knowledge", "actually_required_knowledge", "evidence", "checked_context_elements", "conflicts", "profile_status", "profile_confidence", "confidence_rationale", "audience_variants"],
+      "required": ["outlet_type", "outlet_declared_purpose", "declared_audiences", "reasonably_foreseeable_audiences", "additional_relevant_audiences", "article_audiences", "declared_required_knowledge", "actually_required_knowledge", "required_knowledge_details", "facilitating_knowledge", "evidence", "checked_context_elements", "conflicts", "profile_status", "profile_confidence", "confidence_rationale", "audience_variants"],
       "properties": {
         "outlet_type": {"$ref": "#/$defs/contextSingle"}, "outlet_declared_purpose": {"$ref": "#/$defs/contextSingle"},
         "declared_audiences": {"$ref": "#/$defs/contextList"}, "reasonably_foreseeable_audiences": {"$ref": "#/$defs/contextList"},
         "additional_relevant_audiences": {"$ref": "#/$defs/contextList"}, "article_audiences": {"$ref": "#/$defs/contextList"},
         "declared_required_knowledge": {"$ref": "#/$defs/contextList"}, "actually_required_knowledge": {"$ref": "#/$defs/contextList"},
+        "required_knowledge_details": {"type": "array", "items": {"$ref": "#/$defs/requiredKnowledgeItem"}},
+        "facilitating_knowledge": {"$ref": "#/$defs/contextList"},
         "evidence": {"type": "array", "items": {"$ref": "#/$defs/contextEvidence"}},
         "checked_context_elements": {"type": "array", "minItems": 10, "maxItems": 10, "items": {"$ref": "#/$defs/checkedContext"}},
         "conflicts": {"type": "array", "items": {"$ref": "#/$defs/conflict"}},
@@ -151,16 +162,17 @@
     },
     "groupComprehension": {
       "type": "object", "additionalProperties": false,
-      "required": ["audience", "significant", "included_in_article_promise", "scope_rationale", "group_h_score", "assumptions", "barriers", "evidence_ids"],
+      "required": ["audience", "significant", "included_in_article_promise", "scope_rationale", "group_h_score", "group_l_score", "assumptions", "barriers", "evidence_ids"],
       "properties": {
         "audience": {"$ref": "#/$defs/nonempty"}, "significant": {"type": "boolean"}, "included_in_article_promise": {"type": "boolean"},
         "scope_rationale": {"$ref": "#/$defs/nonempty"}, "group_h_score": {"type": "integer", "minimum": 0, "maximum": 4},
+        "group_l_score": {"type": "integer", "minimum": 0, "maximum": 4},
         "assumptions": {"$ref": "#/$defs/textArray"}, "barriers": {"$ref": "#/$defs/textArray"}, "evidence_ids": {"$ref": "#/$defs/uniqueTextArray"}
       }
     },
     "audienceProfile": {
       "type": "object", "additionalProperties": false,
-      "required": ["basis", "primary_audience", "subgroups", "assumed_knowledge", "popularizing_purpose", "core_terms", "unexplained_core_terms_block_nonspecialists", "core_requires_undisclosed_specialist_knowledge", "core_unrecoverable_without_expert", "group_comprehension", "lowest_significant_group_score", "expert_assessment_not_user_tested", "rationale"],
+      "required": ["basis", "primary_audience", "subgroups", "assumed_knowledge", "popularizing_purpose", "core_terms", "unexplained_core_terms_block_nonspecialists", "core_requires_undisclosed_specialist_knowledge", "core_unrecoverable_without_expert", "group_comprehension", "lowest_significant_group_score", "lowest_significant_group_l_score", "expert_assessment_not_user_tested", "rationale"],
       "properties": {
         "basis": {"enum": ["zadeklarowany", "wywnioskowany", "mieszana"]}, "primary_audience": {"$ref": "#/$defs/nonempty"},
         "subgroups": {"$ref": "#/$defs/textArray"}, "assumed_knowledge": {"$ref": "#/$defs/textArray"}, "popularizing_purpose": {"type": "boolean"},
@@ -168,6 +180,7 @@
         "core_requires_undisclosed_specialist_knowledge": {"type": "boolean"}, "core_unrecoverable_without_expert": {"type": "boolean"},
         "group_comprehension": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/groupComprehension"}},
         "lowest_significant_group_score": {"type": "integer", "minimum": 0, "maximum": 4},
+        "lowest_significant_group_l_score": {"type": "integer", "minimum": 0, "maximum": 4},
         "expert_assessment_not_user_tested": {"const": true}, "rationale": {"$ref": "#/$defs/nonempty"}
       }
     },
@@ -218,15 +231,26 @@
         "reversibility": {"enum": ["trudna", "umiarkowana", "latwa"]}, "rationale": {"$ref": "#/$defs/nonempty"}
       }
     },
+    "languageBarrier": {
+      "type": ["object", "null"], "additionalProperties": false,
+      "required": ["locations", "audience_groups", "terms_or_structural_elements", "affected_dimensions"],
+      "properties": {
+        "locations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}},
+        "audience_groups": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}},
+        "terms_or_structural_elements": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}},
+        "affected_dimensions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["G", "H", "L"]}}
+      }
+    },
     "issue": {
       "type": "object", "additionalProperties": false,
-      "required": ["issue_id", "claim_ids", "summary", "proposed_correction", "grouping_rationale", "severity", "centrality", "centrality_rationale", "application_risk", "application_risk_rationale", "centrality_test", "application_risk_test", "confidence", "rationale"],
+      "required": ["issue_id", "claim_ids", "summary", "proposed_correction", "grouping_rationale", "severity", "centrality", "centrality_rationale", "application_risk", "application_risk_rationale", "centrality_test", "application_risk_test", "language_barrier", "confidence", "rationale"],
       "properties": {
         "issue_id": {"type": "string", "pattern": "^P-[0-9]{3,}$"}, "claim_ids": {"$ref": "#/$defs/uniqueTextArray"}, "summary": {"$ref": "#/$defs/nonempty"},
         "proposed_correction": {"$ref": "#/$defs/nonempty"}, "grouping_rationale": {"$ref": "#/$defs/nonempty"}, "severity": {"enum": ["krytyczne", "duze", "srednie", "male"]},
         "centrality": {"enum": ["rdzen", "istotne_wsparcie", "element_poboczny", null]}, "centrality_rationale": {"$ref": "#/$defs/nullableText"},
         "application_risk": {"enum": ["wysokie", "srednie", "niskie", null]}, "application_risk_rationale": {"$ref": "#/$defs/nullableText"},
         "centrality_test": {"$ref": "#/$defs/centralityTest"}, "application_risk_test": {"$ref": "#/$defs/riskTest"},
+        "language_barrier": {"$ref": "#/$defs/languageBarrier"},
         "confidence": {"$ref": "#/$defs/confidence"}, "rationale": {"$ref": "#/$defs/nonempty"}
       },
       "allOf": [{

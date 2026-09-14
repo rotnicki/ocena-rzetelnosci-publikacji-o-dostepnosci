@@ -61,11 +61,23 @@ class PackageTests(unittest.TestCase):
             "porownanie-pary-0.3.schema.json",
             "fragment albo lokalizacja publikacji → dokładna liczba, kod lub treść źródłowa",
             "poziom centralności, poziom ryzyka zastosowania i krótkie uzasadnienie są obowiązkowe dla wszystkich problemów",
+            "Granicę wpisu ustala się według najmniejszego fragmentu",
+            "Raport zapisuje liczbę składowych każdego rodzaju",
+            "mają wspólną przyczynę, wymagają jednej zasadniczej korekty",
+            "`group_l_score`",
+            "Każdy element wiedzy koniecznej wskazuje fragment publikacji",
+            "musi zostać zapisana jako problem z własnym `issue_id`",
+            "Odchylenie jest dopuszczalne wyłącznie w kierunku większej ostrożności",
         ]
         for phrase in required_standard:
             self.assertIn(phrase, standard)
-        for phrase in ("A=3", "D=2", "D=3", "G=3", "najniższą oceną"):
+        for phrase in ("A=3", "D=2", "D=3", "G=3", "H=4", "H=3", "H=2", "H=1", "najniższą oceną"):
             self.assertIn(phrase, anchors)
+
+    def test_deferred_s9_and_s10_are_not_implemented(self) -> None:
+        standard = (ROOT / "metodologia/0.3/standard.md").read_text(encoding="utf-8")
+        self.assertNotIn("original_version_reconstructable", standard)
+        self.assertFalse((ROOT / "metodologia/0.3/metryka-0.3.schema.json").exists())
 
 
 if __name__ == "__main__":

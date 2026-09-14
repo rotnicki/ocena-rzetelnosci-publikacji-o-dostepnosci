@@ -70,6 +70,12 @@ Przedstawić cel, tok wywodu i wnioski autora bez oceny poprawności. Streszczen
 - Główny roboczy odbiorca przyjęty do dalszej analizy:
 - Wiedza deklarowana jako wymagana — wartości i dowody:
 - Wiedza rzeczywiście potrzebna — wartości i dowody:
+- Wiedza jedynie ułatwiająca lekturę — wartości i dowody:
+
+| Wiedza rzeczywiście konieczna | Fragment publikacji | Co staje się nieodtwarzalne lub ryzykowne bez tej wiedzy | Dowody |
+| --- | --- | --- | --- |
+|  |  |  |  |
+
 - Sprzeczności między opisem miejsca a artykułem — opis i dowody:
 - Stan profilu: ustalony / czesciowo_ustalony / nieustalony_wiarygodnie
 - Pewność profilu: wysoka / srednia / niska
@@ -152,9 +158,9 @@ Wymienić mocne strony poparte konkretnymi elementami publikacji.
 
 ## 10. Problemy według znaczenia
 
-| ID | Problem | Powiązane twierdzenia | Znaczenie | Centralność i uzasadnienie | Ryzyko i uzasadnienie | Pewność | Główna poprawka | Uzasadnienie grupowania |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| P-001 |  |  |  |  |  |  |  |  |
+| ID | Problem | Powiązane twierdzenia | Znaczenie | Centralność i uzasadnienie | Ryzyko i uzasadnienie | Bariera językowa | Pewność | Główna poprawka | Uzasadnienie grupowania |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| P-001 |  |  |  |  |  | lokalizacje, grupy, terminy lub struktura, wpływ G/H/L albo nie dotyczy |  |  |  |
 
 Dla każdego problemu dużego i krytycznego dodatkowo zapisać:
 
@@ -173,11 +179,11 @@ Następnie pogrupować problemy pod nagłówkami: krytyczne, duże, średnie i m
 
 ## 11. Zrozumiałość dla grup odbiorców
 
-| Istotna grupa | Objęta obietnicą artykułu | H 0–4 | Założenia | Bariery | Dowody | Uzasadnienie zakresu |
-| --- | --- | ---: | --- | --- | --- | --- |
-|  | tak / nie |  |  |  |  |  |
+| Istotna grupa | Objęta obietnicą artykułu | H 0–4 | L 0–4 | Założenia | Bariery | Dowody | Uzasadnienie zakresu i L |
+| --- | --- | ---: | ---: | --- | --- | --- | --- |
+|  | tak / nie |  |  |  |  |  |  |
 
-Ogólne H jest najniższym H wśród istotnych grup objętych obietnicą publikacji. Wyraźnie zaznaczyć, że jest to ocena ekspercka, a nie wynik badania z użytkownikami.
+Ogólne H i ogólne L są odpowiednio najniższym H i L wśród istotnych grup objętych obietnicą publikacji. L grupowe oceniać osobno, nie kopiować mechanicznie wyniku ogólnego. Wyraźnie zaznaczyć, że jest to ocena ekspercka, a nie wynik badania z użytkownikami.
 
 ## 12. Zalecane poprawki
 
@@ -195,6 +201,7 @@ Uporządkować poprawki według wpływu na rdzeń i bezpieczeństwo zastosowania
 - Najważniejsza mocna strona:
 - Najpoważniejszy problem:
 - Bezpieczne polecenie:
+- Osobne uzasadnienie, jeżeli polecenie jest ostrożniejsze niż domyślne dla werdyktu:
 - Uzasadnienie ewentualnej rozbieżności profilu A–L i werdyktu:
 
 ## 14. Pewność i pokrycie

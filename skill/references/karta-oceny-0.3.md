@@ -37,6 +37,8 @@
 - Rozsądnie przewidywani odbiorcy i dowody:
 - Odbiorcy artykułu i dowody:
 - Wiedza deklarowana / rzeczywiście potrzebna:
+- Wiedza jedynie ułatwiająca:
+- Każdy element wiedzy koniecznej wskazuje fragment i skutek jej braku: tak / nie
 - Sprzeczności:
 - Stan profilu: ustalony / czesciowo_ustalony / nieustalony_wiarygodnie
 - Pewność profilu: wysoka / srednia / niska
@@ -77,19 +79,20 @@ Każde `nd` wymaga uzasadnienia. Sprawdzić ograniczenia H i L dla niewyjaśnion
 
 ## Problemy
 
-| ID | Znaczenie | Centralność | Ryzyko | Pewność | Wynik testu centralności | Wynik testu ryzyka | Główna poprawka |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |  |
+| ID | Znaczenie | Centralność | Ryzyko | Bariera językowa | Pewność | Wynik testu centralności | Wynik testu ryzyka | Główna poprawka |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  | lokalizacje, grupy, elementy, G/H/L albo nie dotyczy |  |  |  |  |
 
 W kalibracji centralność, ryzyko i krótkie uzasadnienia są obowiązkowe dla każdego problemu. Pełne testy są zawsze obowiązkowe dla problemów dużych i krytycznych.
 
 ## Zrozumiałość grup
 
-| Istotna grupa | Objęta obietnicą artykułu | H 0–4 | Bariery i uzasadnienie |
-| --- | --- | ---: | --- |
-|  | tak / nie |  |  |
+| Istotna grupa | Objęta obietnicą artykułu | H 0–4 | L 0–4 | Bariery i uzasadnienie |
+| --- | --- | ---: | ---: | --- |
+|  | tak / nie |  |  |  |
 
 - Ogólne H, czyli minimum dla grup objętych obietnicą:
+- Ogólne L, czyli minimum dla grup objętych obietnicą:
 
 ## Werdykt
 
@@ -99,6 +102,7 @@ W kalibracji centralność, ryzyko i krótkie uzasadnienia są obowiązkowe dla 
 - Pewność werdyktu:
 - Pokrycie źródłowe:
 - Bezpieczne polecenie:
+- Uzasadnienie polecenia ostrożniejszego niż domyślne:
 - Najważniejsza mocna strona:
 - Najpoważniejszy problem:
 - Liczba problemów krytycznych / dużych / średnich / małych:

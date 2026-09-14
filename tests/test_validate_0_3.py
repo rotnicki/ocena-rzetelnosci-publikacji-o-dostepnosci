@@ -68,6 +68,8 @@ def valid_result(run: str = "A") -> dict:
             "article_audiences": {"values": ["osoby początkujące", "praktycy"], "evidence_ids": ["AUD-001", "AUD-002"]},
             "declared_required_knowledge": {"values": [], "evidence_ids": ["AUD-001"]},
             "actually_required_knowledge": {"values": ["podstawy dostępności"], "evidence_ids": ["AUD-002"]},
+            "required_knowledge_details": [{"knowledge": "podstawy dostępności", "publication_location": "akapit 2", "effect_without_knowledge": "nie da się wykonać ważnego kroku", "evidence_ids": ["AUD-002"]}],
+            "facilitating_knowledge": {"values": [], "evidence_ids": []},
             "evidence": [
                 {"evidence_id": "AUD-001", "rank": 1, "kind": "deklaracja wydawcy", "url": "https://example.com/about", "location": "O nas", "accessed_at": "2026-09-13", "excerpt_or_paraphrase": "Blog jest dla początkujących."},
                 {"evidence_id": "AUD-002", "rank": 4, "kind": "wskazówka w artykule", "url": "https://example.com/article", "location": "wstęp", "accessed_at": "2026-09-13", "excerpt_or_paraphrase": "Tekst zwraca się do praktyków."},
@@ -82,10 +84,10 @@ def valid_result(run: str = "A") -> dict:
             "unexplained_core_terms_block_nonspecialists": False, "core_requires_undisclosed_specialist_knowledge": False,
             "core_unrecoverable_without_expert": False,
             "group_comprehension": [
-                {"audience": "osoby początkujące", "significant": True, "included_in_article_promise": True, "scope_rationale": "Grupa zadeklarowana.", "group_h_score": 3, "assumptions": [], "barriers": ["jeden termin"], "evidence_ids": ["AUD-001"]},
-                {"audience": "praktycy", "significant": True, "included_in_article_promise": True, "scope_rationale": "Grupa wskazana w tekście.", "group_h_score": 4, "assumptions": ["praktyka"], "barriers": [], "evidence_ids": ["AUD-002"]},
+                {"audience": "osoby początkujące", "significant": True, "included_in_article_promise": True, "scope_rationale": "Grupa zadeklarowana.", "group_h_score": 3, "group_l_score": 3, "assumptions": [], "barriers": ["jeden termin"], "evidence_ids": ["AUD-001"]},
+                {"audience": "praktycy", "significant": True, "included_in_article_promise": True, "scope_rationale": "Grupa wskazana w tekście.", "group_h_score": 4, "group_l_score": 4, "assumptions": ["praktyka"], "barriers": [], "evidence_ids": ["AUD-002"]},
             ],
-            "lowest_significant_group_score": 3, "expert_assessment_not_user_tested": True,
+            "lowest_significant_group_score": 3, "lowest_significant_group_l_score": 3, "expert_assessment_not_user_tested": True,
             "rationale": "Profil wynika z dowodów miejsca i artykułu.",
         },
         "temporal_assessment": {
@@ -110,13 +112,15 @@ def valid_result(run: str = "A") -> dict:
             "proposed_correction": "Dodać warunek.", "grouping_rationale": "Jeden błąd i jedna poprawka.", "severity": "male",
             "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.",
             "application_risk": "niskie", "application_risk_rationale": "Skutek jest lokalny.",
-            "centrality_test": None, "application_risk_test": None, "confidence": "wysoka", "rationale": "Problem nie zmienia rdzenia.",
+            "centrality_test": None, "application_risk_test": None, "language_barrier": None,
+            "confidence": "wysoka", "rationale": "Problem nie zmienia rdzenia.",
         }],
         "issue_counts": {"krytyczne": 0, "duze": 0, "srednie": 0, "male": 1},
         "scores": result_scores, "score_rationales": {letter: f"Uzasadnienie wymiaru {letter}." for letter in "ABCDEFGHIJKL"},
         "verdict": "rzetelny_z_niewielkimi_zastrzezeniami", "verdict_basis_issue_ids": ["P-001"],
         "counterfactual_correction": "ograniczona", "verdict_confidence": "wysoka", "source_coverage": "pelne",
-        "safe_recommendation": "z_niewielkimi_korektami", "verdict_rationale": "Rdzeń jest poprawny.",
+        "safe_recommendation": "z_niewielkimi_korektami", "safe_recommendation_rationale": None,
+        "verdict_rationale": "Rdzeń jest poprawny.",
         "limitations": ["Brak testu z użytkownikami."],
         "sources": [{"source_id": "Z-001", "title": "Źródło testowe", "url": "https://example.com/source", "accessed_at": "2026-09-13", "version": "1"}],
     }
@@ -129,12 +133,12 @@ def valid_extract() -> dict:
         "material_versions": [{"material_id": "M-001", "role": "tresc_glowna", "url": "https://example.com/article", "version": "2026-01-01"}],
         "publication_context_summary": {"outlet_type": "blog popularyzatorski", "outlet_declared_purpose": "wyjaśnianie dostępności", "declared_audiences": ["osoby początkujące"], "article_audiences": ["osoby początkujące", "praktycy"], "actually_required_knowledge": ["podstawy dostępności"], "conflicts": [], "profile_status": "ustalony", "profile_confidence": "wysoka"},
         "audience_language": {"primary_audience": "osoby początkujące", "popularizing_purpose": True, "unexplained_core_terms_block_nonspecialists": False, "core_requires_undisclosed_specialist_knowledge": False, "core_unrecoverable_without_expert": False, "group_scores": [
-            {"audience": "osoby początkujące", "significant": True, "included_in_article_promise": True, "group_h_score": 3},
-            {"audience": "praktycy", "significant": True, "included_in_article_promise": True, "group_h_score": 4},
+            {"audience": "osoby początkujące", "significant": True, "included_in_article_promise": True, "group_h_score": 3, "group_l_score": 3},
+            {"audience": "praktycy", "significant": True, "included_in_article_promise": True, "group_h_score": 4, "group_l_score": 4},
         ]},
         "claim_count": 1, "claim_map_confidence": "wysoka", "scores": scores(),
         "issue_counts": {"krytyczne": 0, "duze": 0, "srednie": 0, "male": 1},
-        "issues": [{"issue_id": "P-001", "severity": "male", "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.", "application_risk": "niskie", "application_risk_rationale": "Skutek jest lokalny.", "confidence": "wysoka"}],
+        "issues": [{"issue_id": "P-001", "severity": "male", "centrality": "element_poboczny", "centrality_rationale": "Nie zmienia rdzenia.", "application_risk": "niskie", "application_risk_rationale": "Skutek jest lokalny.", "language_barrier": None, "confidence": "wysoka"}],
         "central_findings": ["Rdzeń jest poprawny."], "verdict": "rzetelny_z_niewielkimi_zastrzezeniami",
         "verdict_confidence": "wysoka", "source_coverage": "pelne", "counterfactual_correction": "ograniczona",
     }
@@ -149,7 +153,7 @@ def valid_comparison() -> dict:
         "audience_profile_comparison": {"outlet_type_agreement": True, "purpose_agreement": True, "declared_audience_agreement": True, "article_audience_agreement": True, "required_knowledge_agreement": True, "confidence_agreement": True, "group_scores": [{"audience": "osoby początkujące", "a_h": 3, "b_h": 3, "a_l": 3, "b_l": 3, "rationale": "Zgodność."}], "rationale": "Profile zgodne."},
         "score_comparison": score_rows,
         "verdict_comparison": {"a_verdict": "rzetelny_z_niewielkimi_zastrzezeniami", "b_verdict": "rzetelny_z_niewielkimi_zastrzezeniami", "agreement": True, "a_counterfactual_correction": "ograniczona", "b_counterfactual_correction": "ograniczona", "rationale": "Zgodność."},
-        "claim_matches": [{"relation": "one_to_one", "a_ids": ["T-001"], "b_ids": ["T-001"], "semantic_summary": "To samo twierdzenie.", "result_agreement": "exact", "atomization_difference": "Brak.", "rationale": "Znaczenie zgodne."}],
+        "claim_matches": [{"relation": "one_to_one", "a_ids": ["T-001"], "b_ids": ["T-001"], "semantic_summary": "To samo twierdzenie.", "result_agreement": "exact", "component_agreement_counts": None, "atomization_difference": "Brak.", "rationale": "Znaczenie zgodne."}],
         "issue_matches": [{"relation": "one_to_one", "a_ids": ["P-001"], "b_ids": ["P-001"], "semantic_summary": "Ten sam problem.", "severity_agreement": "yes", "centrality_agreement": "yes", "risk_agreement": "yes", "grouping_difference": "Brak.", "rationale": "Znaczenie zgodne."}],
         "coverage_metrics": {"a_claims_total": 1, "b_claims_total": 1, "a_issues_total": 1, "b_issues_total": 1, "a_claims_mapped": 1, "b_claims_mapped": 1, "a_issues_mapped": 1, "b_issues_mapped": 1},
         "aggregate_metrics": {"exact_score_agreement": 1.0, "within_one_score_agreement": 1.0, "mean_absolute_score_difference": 0.0, "score_difference_direction": "balanced", "verdict_agreement": True, "one_to_one_claim_result_agreement": 1.0, "all_issue_centrality_agreement": 1.0, "all_issue_risk_agreement": 1.0, "major_critical_centrality_agreement": None, "major_critical_risk_agreement": None, "nd_disagreements": []},
@@ -223,11 +227,49 @@ class ValidatorTests(unittest.TestCase):
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
 
+    def test_l_is_minimum_for_included_significant_groups(self) -> None:
+        result = valid_result()
+        result["audience_profile"]["group_comprehension"][0]["group_l_score"] = 2
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_required_knowledge_needs_matching_trace(self) -> None:
+        result = valid_result()
+        result["publication_context"]["required_knowledge_details"] = []
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_high_audience_confidence_requires_unconflicted_established_profile(self) -> None:
+        result = valid_result()
+        result["publication_context"]["conflicts"] = [{"summary": "Sprzeczna deklaracja.", "evidence_ids": ["AUD-001"]}]
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+        result = valid_result()
+        result["publication_context"]["profile_status"] = "czesciowo_ustalony"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
     def test_language_caps_h_and_l(self) -> None:
         result = valid_result()
         result["audience_profile"]["unexplained_core_terms_block_nonspecialists"] = True
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
+
+    def test_active_language_cap_requires_issue_trace(self) -> None:
+        result = valid_result()
+        profile = result["audience_profile"]
+        profile["unexplained_core_terms_block_nonspecialists"] = True
+        profile["group_comprehension"][0]["group_h_score"] = 2
+        profile["lowest_significant_group_score"] = 2
+        result["scores"]["H"] = 2
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+        barrier = {
+            "locations": ["akapit 1"], "audience_groups": ["osoby początkujące"],
+            "terms_or_structural_elements": ["niewyjaśniony skrót"], "affected_dimensions": ["H"],
+        }
+        result["issues"][0]["language_barrier"] = barrier
+        VALIDATOR.validate_result(result)
         result = valid_result()
         result["audience_profile"]["core_requires_undisclosed_specialist_knowledge"] = True
         with self.assertRaises(VALIDATOR.ValidationError):
@@ -268,6 +310,20 @@ class ValidatorTests(unittest.TestCase):
         result["counterfactual_correction"] = "nie_dotyczy"
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_result(result)
+
+    def test_safe_recommendation_cannot_be_less_cautious(self) -> None:
+        result = valid_result()
+        result["safe_recommendation"] = "bez_zastrzezen"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+
+    def test_stricter_safe_recommendation_requires_rationale(self) -> None:
+        result = valid_result()
+        result["safe_recommendation"] = "z_nazwanymi_korektami_lub_zrodlami"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_result(result)
+        result["safe_recommendation_rationale"] = "Niepewność jednego źródła uzasadnia większą ostrożność."
+        VALIDATOR.validate_result(result)
 
     def test_updated_page_without_original_is_unresolved(self) -> None:
         result = valid_result()
@@ -355,6 +411,29 @@ class ValidatorTests(unittest.TestCase):
         result_b["claims"][0]["extraction_trace"]["result"] = "czesciowo_zgodne"
         with self.assertRaises(VALIDATOR.ValidationError):
             VALIDATOR.validate_comparison(comparison, valid_result("A"), result_b)
+
+    def test_comparison_accepts_only_declared_adjacent_pairs(self) -> None:
+        comparison = valid_comparison()
+        comparison["claim_matches"][0]["result_agreement"] = "adjacent"
+        comparison["aggregate_metrics"]["one_to_one_claim_result_agreement"] = 0.0
+        result_b = valid_result("B")
+        result_b["claims"][0]["result"] = "czesciowo_zgodne"
+        result_b["claims"][0]["extraction_trace"]["result"] = "czesciowo_zgodne"
+        VALIDATOR.validate_comparison(comparison, valid_result("A"), result_b)
+        comparison["claim_matches"][0]["result_agreement"] = "different"
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_comparison(comparison, valid_result("A"), result_b)
+
+    def test_complex_agreement_counts_determine_result(self) -> None:
+        VALIDATOR.validate_component_agreement(
+            {"exact": 1, "adjacent": 2, "different": 0, "not_comparable": 0},
+            "adjacent", "test",
+        )
+        with self.assertRaises(VALIDATOR.ValidationError):
+            VALIDATOR.validate_component_agreement(
+                {"exact": 1, "adjacent": 2, "different": 0, "not_comparable": 0},
+                "exact", "test",
+            )
 
     def test_comparison_rejects_false_issue_agreement(self) -> None:
         comparison = valid_comparison()

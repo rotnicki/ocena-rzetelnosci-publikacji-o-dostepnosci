@@ -1,7 +1,7 @@
 # Propozycje zmian po polskim pilotażu 0.3
 
 **Data:** 14 września 2026 r.  
-**Status:** materiał do decyzji; żadna zmiana znaczeniowa opisana niżej nie została wdrożona  
+**Status:** S1–S8 zatwierdzone 14 września 2026 r. i wdrożone na gałęzi projektu 0.3; S9–S10 oraz B1–B2 pozostają propozycjami
 **Podstawa:** pięć polskich publikacji, po dwa odizolowane przebiegi A/B
 
 ## 1. Najważniejsza rekomendacja
@@ -297,12 +297,12 @@ Przed kandydatem wydawniczym warto przyjąć zmiany S1–S8. Usuwają one luki u
 
 ## 2. Granica decyzji
 
-Do chwili zatwierdzenia:
+Po decyzji z 14 września 2026 r.:
 
-- S1–S10 i B1–B2 pozostają wyłącznie propozycjami;
-- nie zmieniają standardu, kotwic, schematów, szablonów ani instrukcji skilla;
+- S1–S8 są zatwierdzone i zostały wdrożone w standardzie, kotwicach, schematach, szablonach, walidatorze i instrukcji skilla na gałęzi projektu 0.3;
+- S9–S10 oraz B1–B2 pozostają wyłącznie propozycjami i nie zostały wdrożone;
 - nie wolno przeliczać wstecz wyników polskiego pilota;
-- wdrożone są tylko opisane osobno poprawki techniczne walidatora.
+- PR nr 8 pozostaje niescalonym projektem, bez znacznika i wydania 0.3.
 
 ## 3. Dokładna macierz plików do przyszłej zmiany
 

@@ -16,6 +16,12 @@ Jeżeli materiał zawiera cechy dwóch poziomów:
 
 Wartość `nd` stosować wyłącznie według reguły ze standardu 0.3. Profil odbiorcy i profil językowy trzeba ustalić przed oceną G, H i L.
 
+## Kotwica znaczenia i grupowania problemów
+
+Problem jest `duze`, gdy minimalna uczciwa naprawa zmienia ważne zalecenie, zakres ważnego wniosku albo sposób działania istotnej grupy. Jest `srednie`, gdy naprawa pozostawia ten sam ważny wniosek i sposób działania, ale usuwa materialną nieścisłość lub lokalne ryzyko.
+
+Twierdzenia można połączyć tylko wtedy, gdy mają wspólną przyczynę, jedną zasadniczą korektę, tę samą centralność i to samo ryzyko. Sama liczba drobnych wystąpień nie podnosi problemu do `duze`; wspólny wzorzec może to zrobić, jeżeli łącznie zmienia odbiór albo działanie.
+
 ## A. Poprawność faktograficzna
 
 | Ocena | Kotwica |
@@ -131,6 +137,16 @@ H ocenia rzeczywistą możliwość prześledzenia wywodu osobno przez każdą is
 - **Granica 2/3:** kilka objaśnionych terminów specjalistycznych wskazuje na 3; seria niewyjaśnionych terminów koniecznych dla rdzenia wskazuje na 2.
 - **Ograniczenie:** jeżeli niewyjaśnione terminy blokują ważną część tekstu dla istotnej grupy niespecjalistycznej, H nie może przekroczyć 2. Jeżeli bez pomocy eksperta nie da się odtworzyć głównej myśli, H nie może przekroczyć 1.
 
+H=4 wymaga, aby grupa samodzielnie odtworzyła główną tezę, przesłanki i bezpieczny sposób użycia bez istotnego dopowiedzenia zewnętrznego.
+
+H=3 stosuje się, gdy grupa rozumie główną tezę i praktyczny rdzeń, a potrzebne dopowiedzenia są lokalne, łatwo wskazywalne i nie zmieniają decyzji ani działania.
+
+H=2 stosuje się, gdy główna teza jest odtwarzalna, lecz bez wiedzy niewskazanej w profilu grupa nie odtworzy co najmniej jednego ważnego warunku, kroku, ograniczenia lub skutku potrzebnego do bezpiecznego zastosowania.
+
+H=1 stosuje się, gdy bez pomocy eksperta grupa nie odtworzy głównego toku, pomyli centralne pojęcia albo nie będzie w stanie odróżnić zalecanego działania od działania ryzykownego.
+
+Pojedynczy krok wymagający CMS, inspektora, kodu albo wiedzy prawnej obniża H do 2 tylko wtedy, gdy jest konieczny dla obiecanego rezultatu tej grupy. Jeżeli jest jawnie opcjonalny albo skierowany do innej, nazwanej grupy, wpływa na opis ograniczeń, nie na H tej grupy.
+
 ## I. Użyteczność i bezpieczeństwo zaleceń
 
 | Ocena | Kotwica |
@@ -175,6 +191,8 @@ K ocenia jawność statusu wiedzy, a nie samą liczbę przypisów. Brak źróde�
 - **Granica 2/3:** pojedyncze niedookreślone zdanie wskazuje na 3; powtarzające się mieszanie obserwacji lub prognozy z regułą wskazuje na 2.
 
 ## L. Dopasowanie do celu i miejsca publikacji
+
+L ocenia się osobno dla każdej istotnej grupy objętej obietnicą publikacji. Ogólny wynik L jest najniższą z tych ocen. Wynik grupowy odpowiada spełnieniu celu i obiecanego sposobu użycia wobec tej grupy; nie jest mechaniczną kopią ogólnego L.
 
 | Ocena | Kotwica |
 | ---: | --- |

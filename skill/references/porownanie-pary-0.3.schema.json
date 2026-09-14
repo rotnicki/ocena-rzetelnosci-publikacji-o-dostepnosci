@@ -97,12 +97,35 @@
     },
     "claimMatch": {
       "type": "object", "additionalProperties": false,
-      "required": ["relation", "a_ids", "b_ids", "semantic_summary", "result_agreement", "atomization_difference", "rationale"],
+      "required": ["relation", "a_ids", "b_ids", "semantic_summary", "result_agreement", "component_agreement_counts", "atomization_difference", "rationale"],
       "properties": {
         "relation": {"$ref": "#/$defs/relation"}, "a_ids": {"$ref": "#/$defs/idArray"}, "b_ids": {"$ref": "#/$defs/idArray"},
         "semantic_summary": {"$ref": "#/$defs/nonempty"}, "result_agreement": {"enum": ["exact", "adjacent", "different", "not_comparable"]},
+        "component_agreement_counts": {"$ref": "#/$defs/componentAgreementCounts"},
         "atomization_difference": {"$ref": "#/$defs/nonempty"}, "rationale": {"$ref": "#/$defs/nonempty"}
-      }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"relation": {"enum": ["one_to_many", "many_to_one", "many_to_many"]}}, "required": ["relation"]},
+          "then": {"properties": {"component_agreement_counts": {"type": "object"}}},
+          "else": {"properties": {"component_agreement_counts": {"type": "null"}}}
+        }
+      ]
+    },
+    "componentAgreementCounts": {
+      "type": ["object", "null"], "additionalProperties": false,
+      "required": ["exact", "adjacent", "different", "not_comparable"],
+      "properties": {
+        "exact": {"type": "integer", "minimum": 0}, "adjacent": {"type": "integer", "minimum": 0},
+        "different": {"type": "integer", "minimum": 0}, "not_comparable": {"type": "integer", "minimum": 0}
+      },
+      "anyOf": [
+        {"properties": {"exact": {"minimum": 1}}},
+        {"properties": {"adjacent": {"minimum": 1}}},
+        {"properties": {"different": {"minimum": 1}}},
+        {"properties": {"not_comparable": {"minimum": 1}}},
+        {"type": "null"}
+      ]
     },
     "issueMatch": {
       "type": "object", "additionalProperties": false,

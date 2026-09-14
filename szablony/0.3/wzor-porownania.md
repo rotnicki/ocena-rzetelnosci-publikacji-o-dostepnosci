@@ -41,9 +41,11 @@ Porównanie przygotować dopiero po zamknięciu i walidacji obu ocen. Dopasowywa
 
 Każdy identyfikator z A i B musi wystąpić dokładnie raz. Relacje: `one_to_one`, `one_to_many`, `many_to_one`, `many_to_many`, `a_only`, `b_only`.
 
-| Relacja | ID A | ID B | Wspólne znaczenie | Zgodność wyniku | Różnica atomizacji | Uzasadnienie |
-| --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  | exact / adjacent / different / not_comparable |  |  |
+| Relacja | ID A | ID B | Wspólne znaczenie | Zgodność wyniku | Składowe exact / adjacent / different / not_comparable | Różnica atomizacji | Uzasadnienie |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  | exact / adjacent / different / not_comparable | liczby dla relacji złożonej; nie dotyczy dla prostej |  |  |
+
+Dla relacji 1:1 stosować zamkniętą listę par sąsiednich ze standardu. W relacjach złożonych najpierw porównać najmniejsze wspólne składowe i zapisać liczbę składowych każdego rodzaju.
 
 ## 6. Dopasowanie problemów
 

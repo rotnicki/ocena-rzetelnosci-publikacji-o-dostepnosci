@@ -65,7 +65,7 @@ Do not let later findings rewrite this neutral summary.
 
 ### Pass 2: verify and assess
 
-Build a claim map covering every statement material to the conclusion or likely reader action. For 0.3, split a statement whenever part of it could receive a different result, category, importance, source set, time reference, or practical effect. Preserve quantifiers, absolutes, exceptions, conditions, and legal or normative status. Record the atomization rationale and confidence in the completeness of the claim map.
+Build a claim map covering every statement material to the conclusion or likely reader action. For 0.3, split a statement whenever part of it could receive a different result, category, importance, source set, time reference, or practical effect. Keep dependent procedure steps together when they work only as a whole, but separate an independently incorrect step. Split lists when their items have different bases or results and repeat their shared condition. Preserve quantifiers, absolutes, exceptions, conditions, and legal or normative status. Record which atomization example from the standard applies, or explain why the case differs, plus confidence in the completeness of the claim map.
 
 Verify claims against sources appropriate to their type, prioritizing:
 
@@ -86,7 +86,7 @@ Before assigning G, H, or L, inspect every available context element required by
 
 Never infer a specialist audience from difficult specialist language alone. If the outlet includes nonspecialists or declares a popularizing purpose, retain that group unless the article, category, or series clearly and accessibly narrows its audience. If the profile cannot be established reliably, record at least two reasonable variants when they would change H or L.
 
-Establish the language profile only after this context profile. Identify terms necessary to understand the core, their first use, whether they are explained or clear in context, and their effect on comprehension. Score H separately for every significant audience group included in the publication's promise; overall H is the lowest of those scores.
+Establish the language profile only after this context profile. Separate knowledge necessary to recover the main thesis, an important condition, or promised action from knowledge that merely helps. For every necessary item, identify the publication location and the effect of lacking it. Identify terms necessary to understand the core, their first use, whether they are explained or clear in context, and their effect on comprehension. Score H and L separately for every significant audience group included in the publication's promise; overall H and overall L are the respective lowest group scores. Lower L for a comprehension defect only when it also prevents the publication from fulfilling its declared purpose for that group.
 
 Keep the dimensions separate:
 
@@ -98,13 +98,15 @@ Do not penalize specialist vocabulary merely for being specialist. Apply the 0.3
 
 ## Group issues and determine the verdict
 
-Do not turn every claim defect into a separate problem. Under 0.3, group defects only when they share one underlying cause, correction, and practical effect; otherwise keep them separate. Explain each grouping and propose a correction.
+Do not turn every claim defect into a separate problem. Under 0.3, group defects only when they share one underlying cause, one essential correction, the same centrality, and the same application risk; otherwise keep them separate. Do not automatically merge missing evidence, a substantive error, unclear normative status, and a comprehension barrier merely because they occur in one paragraph. Explain each grouping and propose a correction.
+
+If a language, terminology, or structural barrier lowers H or L, activates a language score cap, or affects the verdict, record it as an issue with `language_barrier`. Identify its locations, affected audience groups, relevant terms or structural elements, and affected dimensions. A local difficulty that changes none of H, L, or the verdict may remain only in the language profile. Do not count one phenomenon twice.
 
 Assign severity and confidence separately. For every large or critical issue under 0.2 or 0.3, assign centrality and application risk. Under 0.3, begin the centrality test with the minimal honest repair, not automatic deletion of a section, and explicitly perform the full centrality and application-risk tests for every large or critical issue. In calibration mode, record centrality, application risk, and short rationales for every issue; full component tests remain optional for small and medium issues unless they affect the verdict, grouping, or disagreement.
 
 Score A–L from 0 to 4 or `nd` only where the selected version permits it. Compare each score with adjacent anchors. For 0, 1, or 4, identify the boundary-crossing evidence. Do not calculate a total or infer the verdict from an average or raw issue count.
 
-Determine the descriptive verdict using the selected standard's decision sequence and counterfactual-correction test. State whether the publication is safe to recommend without qualification, only with named corrections or additional sources, or not for practical use.
+Determine the descriptive verdict using the selected standard's decision sequence and counterfactual-correction test. Apply its default `safe_recommendation`. A stricter recommendation is allowed only with a separate rationale; a more permissive one is forbidden.
 
 ## Produce and validate outputs
 
@@ -124,7 +126,7 @@ When the user designates an analysis repository, save each case under a unique d
 
 Two calibration assessments A and B must not know each other's result. If the environment can create isolated workers or contexts, the coordinating agent should run both assessments itself, preserve their isolation, validate the outputs, and then compare them. Do not require the user to copy prompts between empty chats when the environment can safely provide that isolation.
 
-For 0.3, compare only after both results validate. Match claims and issues by meaning rather than local numbering. Use `one_to_one`, `one_to_many`, `many_to_one`, `many_to_many`, `a_only`, or `b_only`; every claim and issue identifier from both runs must occur exactly once in the mapping. Compare audience profiles, per-group G/H/L evidence, all A–L and `nd`, verdicts, atomization, claim results, issue grouping, severity, centrality, and risk.
+For 0.3, compare only after both results validate. Match claims and issues by meaning rather than local numbering. Use `one_to_one`, `one_to_many`, `many_to_one`, `many_to_many`, `a_only`, or `b_only`; every claim and issue identifier from both runs must occur exactly once in the mapping. Use only the closed adjacent-result pairs defined in the standard. For a complex claim relation, compare the smallest shared semantic components and record counts of `exact`, `adjacent`, `different`, and `not_comparable`. Compare audience profiles, per-group G/H/L evidence, all A–L and `nd`, verdicts, atomization, claim results, issue grouping, severity, centrality, and risk.
 
 If isolated execution is unavailable, say so before starting and provide a reproducible handoff. Do not present two mutually informed passes as independent assessments.
 

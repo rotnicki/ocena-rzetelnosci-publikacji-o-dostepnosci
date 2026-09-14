@@ -35,6 +35,24 @@ CONTEXT_KINDS = {
 RELATIONS = {
     "one_to_one", "one_to_many", "many_to_one", "many_to_many", "a_only", "b_only",
 }
+RESULT_ADJACENCY = {
+    frozenset(("zgodne", "zasadniczo_zgodne")),
+    frozenset(("zasadniczo_zgodne", "czesciowo_zgodne")),
+    frozenset(("czesciowo_zgodne", "mylace")),
+    frozenset(("mylace", "niezgodne")),
+}
+NON_SUBSTANTIVE_RESULTS = {"nieweryfikowalne", "nierozstrzygniete"}
+SAFE_RECOMMENDATIONS = (
+    "bez_zastrzezen", "z_niewielkimi_korektami",
+    "z_nazwanymi_korektami_lub_zrodlami", "nie_do_praktycznego_uzycia",
+)
+DEFAULT_SAFE_RECOMMENDATION = {
+    "rzetelny": "bez_zastrzezen",
+    "rzetelny_z_niewielkimi_zastrzezeniami": "z_niewielkimi_korektami",
+    "rzetelny_z_istotnymi_zastrzezeniami": "z_nazwanymi_korektami_lub_zrodlami",
+    "nierzetelny": "nie_do_praktycznego_uzycia",
+    "nie_mozna_rozstrzygnac": "nie_mozna_ocenic",
+}
 
 
 class ValidationError(Exception):
@@ -177,6 +195,7 @@ def validate_publication_context(value: object, path: str = "publication_context
         "outlet_type", "outlet_declared_purpose", "declared_audiences",
         "reasonably_foreseeable_audiences", "additional_relevant_audiences",
         "article_audiences", "declared_required_knowledge", "actually_required_knowledge",
+        "required_knowledge_details", "facilitating_knowledge",
         "evidence", "checked_context_elements", "conflicts", "profile_status",
         "profile_confidence", "confidence_rationale", "audience_variants",
     }
@@ -244,6 +263,30 @@ def validate_publication_context(value: object, path: str = "publication_context
         if values and not identifiers:
             fail(f"{path}.{key}.evidence_ids", "niepuste ustalenie wymaga co najmniej jednego dowodu")
 
+    facilitating = obj(value["facilitating_knowledge"], f"{path}.facilitating_knowledge")
+    exact(facilitating, {"values", "evidence_ids"}, f"{path}.facilitating_knowledge")
+    facilitating_values = text_array(facilitating["values"], f"{path}.facilitating_knowledge.values", unique=True)
+    facilitating_refs = refs(facilitating["evidence_ids"], f"{path}.facilitating_knowledge.evidence_ids")
+    if facilitating_values and not facilitating_refs:
+        fail(f"{path}.facilitating_knowledge.evidence_ids", "niepuste ustalenie wymaga co najmniej jednego dowodu")
+
+    required_details = array(value["required_knowledge_details"], f"{path}.required_knowledge_details")
+    detail_values = []
+    for index, item in enumerate(required_details):
+        item_path = f"{path}.required_knowledge_details[{index}]"
+        item = obj(item, item_path)
+        exact(item, {"knowledge", "publication_location", "effect_without_knowledge", "evidence_ids"}, item_path)
+        detail_values.append(text(item["knowledge"], f"{item_path}.knowledge"))
+        text(item["publication_location"], f"{item_path}.publication_location")
+        text(item["effect_without_knowledge"], f"{item_path}.effect_without_knowledge")
+        if not refs(item["evidence_ids"], f"{item_path}.evidence_ids"):
+            fail(f"{item_path}.evidence_ids", "element wiedzy koniecznej wymaga dowodu")
+    if len(detail_values) != len(set(detail_values)):
+        fail(f"{path}.required_knowledge_details", "elementy wiedzy muszą być unikatowe")
+    required_values = value["actually_required_knowledge"]["values"]
+    if set(detail_values) != set(required_values):
+        fail(f"{path}.required_knowledge_details", "szczegóły muszą odpowiadać wiedzy rzeczywiście potrzebnej")
+
     for index, conflict in enumerate(array(value["conflicts"], f"{path}.conflicts")):
         item_path = f"{path}.conflicts[{index}]"
         conflict = obj(conflict, item_path)
@@ -269,6 +312,9 @@ def validate_publication_context(value: object, path: str = "publication_context
             fail(f"{path}.profile_confidence", "nieustalony profil wymaga niskiej pewności")
         if len(variants) < 2:
             fail(f"{path}.audience_variants", "nieustalony profil wymaga co najmniej dwóch wariantów")
+    if confidence == "wysoka":
+        if status != "ustalony" or value["conflicts"]:
+            fail(f"{path}.profile_confidence", "wysoka pewność wymaga ustalonego profilu bez sprzeczności")
     return value, evidence_ids
 
 
@@ -278,7 +324,7 @@ def validate_audience(value: object, evidence_ids: set[str], path: str = "audien
         "basis", "primary_audience", "subgroups", "assumed_knowledge", "popularizing_purpose",
         "core_terms", "unexplained_core_terms_block_nonspecialists",
         "core_requires_undisclosed_specialist_knowledge", "core_unrecoverable_without_expert",
-        "group_comprehension", "lowest_significant_group_score",
+        "group_comprehension", "lowest_significant_group_score", "lowest_significant_group_l_score",
         "expert_assessment_not_user_tested", "rationale",
     }
     exact(value, keys, path)
@@ -303,11 +349,12 @@ def validate_audience(value: object, evidence_ids: set[str], path: str = "audien
             text(term[key], f"{item_path}.{key}")
         boolean(term["explained_or_clear_from_context"], f"{item_path}.explained_or_clear_from_context")
         boolean(term["necessary_for_core"], f"{item_path}.necessary_for_core")
-    group_keys = {"audience", "significant", "included_in_article_promise", "scope_rationale", "group_h_score", "assumptions", "barriers", "evidence_ids"}
+    group_keys = {"audience", "significant", "included_in_article_promise", "scope_rationale", "group_h_score", "group_l_score", "assumptions", "barriers", "evidence_ids"}
     groups = array(value["group_comprehension"], f"{path}.group_comprehension")
     if not groups:
         fail(f"{path}.group_comprehension", "wymagana co najmniej jedna grupa")
-    included_scores = []
+    included_h_scores = []
+    included_l_scores = []
     for index, group in enumerate(groups):
         item_path = f"{path}.group_comprehension[{index}]"
         group = obj(group, item_path)
@@ -317,6 +364,7 @@ def validate_audience(value: object, evidence_ids: set[str], path: str = "audien
         included = boolean(group["included_in_article_promise"], f"{item_path}.included_in_article_promise")
         text(group["scope_rationale"], f"{item_path}.scope_rationale")
         h_score = integer(group["group_h_score"], f"{item_path}.group_h_score", 0, 4)
+        l_score = integer(group["group_l_score"], f"{item_path}.group_l_score", 0, 4)
         text_array(group["assumptions"], f"{item_path}.assumptions")
         text_array(group["barriers"], f"{item_path}.barriers")
         refs = text_array(group["evidence_ids"], f"{item_path}.evidence_ids", unique=True)
@@ -328,12 +376,16 @@ def validate_audience(value: object, evidence_ids: set[str], path: str = "audien
         if significant and not refs:
             fail(f"{item_path}.evidence_ids", "istotna grupa wymaga dowodu")
         if significant and included:
-            included_scores.append(h_score)
-    if not included_scores:
+            included_h_scores.append(h_score)
+            included_l_scores.append(l_score)
+    if not included_h_scores:
         fail(f"{path}.group_comprehension", "co najmniej jedna istotna grupa musi być objęta obietnicą artykułu")
     lowest = integer(value["lowest_significant_group_score"], f"{path}.lowest_significant_group_score", 0, 4)
-    if lowest != min(included_scores):
-        fail(f"{path}.lowest_significant_group_score", f"oczekiwano minimum {min(included_scores)}")
+    if lowest != min(included_h_scores):
+        fail(f"{path}.lowest_significant_group_score", f"oczekiwano minimum {min(included_h_scores)}")
+    lowest_l = integer(value["lowest_significant_group_l_score"], f"{path}.lowest_significant_group_l_score", 0, 4)
+    if lowest_l != min(included_l_scores):
+        fail(f"{path}.lowest_significant_group_l_score", f"oczekiwano minimum {min(included_l_scores)}")
     return value
 
 
@@ -348,6 +400,47 @@ def validate_language_caps(profile: dict, scores: dict, path: str = "scores") ->
         fail(f"{path}.H", "rdzeń nieodtwarzalny bez eksperta ogranicza H do 1")
     if profile["popularizing_purpose"] and profile["core_requires_undisclosed_specialist_knowledge"] and scores["L"] > 2:
         fail(f"{path}.L", "niespełniona funkcja popularyzatorska ogranicza L do 2")
+
+
+def validate_language_barrier(value: object, path: str) -> dict | None:
+    if value is None:
+        return None
+    value = obj(value, path)
+    exact(value, {"locations", "audience_groups", "terms_or_structural_elements", "affected_dimensions"}, path)
+    for key in ("locations", "audience_groups", "terms_or_structural_elements"):
+        text_array(value[key], f"{path}.{key}", nonempty=True, unique=True)
+    dimensions = text_array(value["affected_dimensions"], f"{path}.affected_dimensions", nonempty=True, unique=True)
+    unknown = sorted(set(dimensions) - {"G", "H", "L"})
+    if unknown:
+        fail(f"{path}.affected_dimensions", f"niedozwolone wymiary: {', '.join(unknown)}")
+    return value
+
+
+def language_cap_active(profile: dict) -> bool:
+    return bool(
+        profile["unexplained_core_terms_block_nonspecialists"]
+        or profile["core_unrecoverable_without_expert"]
+        or (
+            profile["popularizing_purpose"]
+            and profile["core_requires_undisclosed_specialist_knowledge"]
+        )
+    )
+
+
+def validate_safe_recommendation(verdict: str, recommendation: object, rationale: object) -> None:
+    allowed = set(SAFE_RECOMMENDATIONS) | {"nie_mozna_ocenic"}
+    recommendation = enum(recommendation, allowed, "safe_recommendation")
+    nullable_text(rationale, "safe_recommendation_rationale")
+    default = DEFAULT_SAFE_RECOMMENDATION[verdict]
+    if verdict == "nie_mozna_rozstrzygnac":
+        if recommendation != default:
+            fail("safe_recommendation", "brak rozstrzygnięcia wymaga wartości nie_mozna_ocenic")
+    elif recommendation == "nie_mozna_ocenic":
+        fail("safe_recommendation", "nie_mozna_ocenic jest zastrzeżone dla braku rozstrzygnięcia")
+    elif SAFE_RECOMMENDATIONS.index(recommendation) < SAFE_RECOMMENDATIONS.index(default):
+        fail("safe_recommendation", "polecenie nie może być łagodniejsze niż domyślne dla werdyktu")
+    if recommendation != default and rationale is None:
+        fail("safe_recommendation_rationale", "ostrzejsze polecenie wymaga osobnego uzasadnienia")
 
 
 def validate_temporal(value: object, publication: dict, material_ids: set[str], path: str = "temporal_assessment") -> None:
@@ -405,7 +498,8 @@ def validate_result(data: object) -> None:
         "evaluator", "publication_context", "audience_profile", "temporal_assessment", "claim_map_confidence",
         "claim_map_confidence_rationale", "claim_count", "claims", "issues", "issue_counts", "scores",
         "score_rationales", "verdict", "verdict_basis_issue_ids", "counterfactual_correction",
-        "verdict_confidence", "source_coverage", "safe_recommendation", "verdict_rationale", "limitations", "sources",
+        "verdict_confidence", "source_coverage", "safe_recommendation", "safe_recommendation_rationale",
+        "verdict_rationale", "limitations", "sources",
     }
     exact(root, keys, "root")
     if root["schema_version"] != "0.3-draft":
@@ -515,7 +609,7 @@ def validate_result(data: object) -> None:
     issue_keys = {
         "issue_id", "claim_ids", "summary", "proposed_correction", "grouping_rationale", "severity",
         "centrality", "centrality_rationale", "application_risk", "application_risk_rationale",
-        "centrality_test", "application_risk_test", "confidence", "rationale",
+        "centrality_test", "application_risk_test", "language_barrier", "confidence", "rationale",
     }
     issues = array(root["issues"], "issues")
     issue_ids = set()
@@ -529,6 +623,11 @@ def validate_result(data: object) -> None:
         issue_ids.add(issue_id)
         for key in ("summary", "proposed_correction", "grouping_rationale", "rationale"):
             text(issue[key], f"{path}.{key}")
+        barrier = validate_language_barrier(issue["language_barrier"], f"{path}.language_barrier")
+        if barrier is not None:
+            linked_dimensions = set(barrier["affected_dimensions"])
+            if not linked_dimensions.intersection({"H", "L"}) and not set(issue["claim_ids"]):
+                fail(f"{path}.language_barrier", "bariera bez twierdzenia musi wskazywać wpływ na H lub L")
         refs = text_array(issue["claim_ids"], f"{path}.claim_ids", unique=True)
         unknown = sorted(set(refs) - claim_ids)
         if unknown:
@@ -562,6 +661,9 @@ def validate_result(data: object) -> None:
             if risk["reader_action_likelihood"] != "wysokie" or risk["impact_severity"] != "powazna":
                 fail(f"{path}.application_risk_test", "problem krytyczny wymaga prawdopodobnego działania i poważnego skutku")
 
+    if language_cap_active(profile) and not any(issue["language_barrier"] is not None for issue in issues):
+        fail("issues", "aktywne ograniczenie językowe wymaga jawnego problemu z language_barrier")
+
     validate_counts(root["issue_counts"], "issue_counts", issues)
     scores = validate_scores(root["scores"])
     validate_language_caps(profile, scores)
@@ -593,7 +695,7 @@ def validate_result(data: object) -> None:
         fail("counterfactual_correction", "nie_dotyczy jest dozwolone tylko przy braku możliwości rozstrzygnięcia")
     enum(root["verdict_confidence"], CONFIDENCE, "verdict_confidence")
     enum(root["source_coverage"], {"pelne", "wystarczajace", "czesciowe", "niewystarczajace"}, "source_coverage")
-    enum(root["safe_recommendation"], {"bez_zastrzezen", "z_niewielkimi_korektami", "z_nazwanymi_korektami_lub_zrodlami", "nie_do_praktycznego_uzycia", "nie_mozna_ocenic"}, "safe_recommendation")
+    validate_safe_recommendation(verdict, root["safe_recommendation"], root["safe_recommendation_rationale"])
     text(root["verdict_rationale"], "verdict_rationale")
     text_array(root["limitations"], "limitations")
 
@@ -646,31 +748,36 @@ def validate_extract(data: object, result: dict | None = None) -> None:
     group_scores = array(audience["group_scores"], "audience_language.group_scores")
     if not group_scores:
         fail("audience_language.group_scores", "wymagana co najmniej jedna grupa")
-    included_scores = []
+    included_h_scores = []
+    included_l_scores = []
     for index, group in enumerate(group_scores):
         path = f"audience_language.group_scores[{index}]"
         group = obj(group, path)
-        exact(group, {"audience", "significant", "included_in_article_promise", "group_h_score"}, path)
+        exact(group, {"audience", "significant", "included_in_article_promise", "group_h_score", "group_l_score"}, path)
         text(group["audience"], f"{path}.audience")
         significant = boolean(group["significant"], f"{path}.significant")
         included = boolean(group["included_in_article_promise"], f"{path}.included_in_article_promise")
         h_score = integer(group["group_h_score"], f"{path}.group_h_score", 0, 4)
+        l_score = integer(group["group_l_score"], f"{path}.group_l_score", 0, 4)
         if significant and included:
-            included_scores.append(h_score)
-    if not included_scores:
+            included_h_scores.append(h_score)
+            included_l_scores.append(l_score)
+    if not included_h_scores:
         fail("audience_language.group_scores", "brak istotnej grupy objętej obietnicą")
     integer(root["claim_count"], "claim_count")
     enum(root["claim_map_confidence"], CONFIDENCE, "claim_map_confidence")
     scores = validate_scores(root["scores"])
-    if scores["H"] != min(included_scores):
+    if scores["H"] != min(included_h_scores):
         fail("scores.H", "musi równać się minimum H grup istotnych i objętych obietnicą")
+    if scores["L"] != min(included_l_scores):
+        fail("scores.L", "musi równać się minimum L grup istotnych i objętych obietnicą")
     if audience["unexplained_core_terms_block_nonspecialists"] and scores["H"] > 2:
         fail("scores.H", "blokujące terminy ograniczają H do 2")
     if audience["core_unrecoverable_without_expert"] and scores["H"] > 1:
         fail("scores.H", "rdzeń nieodtwarzalny bez eksperta ogranicza H do 1")
     if audience["popularizing_purpose"] and audience["core_requires_undisclosed_specialist_knowledge"] and scores["L"] > 2:
         fail("scores.L", "niespełniona funkcja popularyzatorska ogranicza L do 2")
-    issue_keys = {"issue_id", "severity", "centrality", "centrality_rationale", "application_risk", "application_risk_rationale", "confidence"}
+    issue_keys = {"issue_id", "severity", "centrality", "centrality_rationale", "application_risk", "application_risk_rationale", "language_barrier", "confidence"}
     issues = array(root["issues"], "issues")
     issue_ids = set()
     for index, issue in enumerate(issues):
@@ -686,7 +793,10 @@ def validate_extract(data: object, result: dict | None = None) -> None:
         text(issue["centrality_rationale"], f"{path}.centrality_rationale")
         enum(issue["application_risk"], RISKS, f"{path}.application_risk")
         text(issue["application_risk_rationale"], f"{path}.application_risk_rationale")
+        validate_language_barrier(issue["language_barrier"], f"{path}.language_barrier")
         enum(issue["confidence"], CONFIDENCE, f"{path}.confidence")
+    if language_cap_active(audience) and not any(issue["language_barrier"] is not None for issue in issues):
+        fail("issues", "aktywne ograniczenie językowe wymaga jawnego problemu z language_barrier")
     validate_counts(root["issue_counts"], "issue_counts", issues)
     text_array(root["central_findings"], "central_findings", nonempty=True)
     enum(root["verdict"], VERDICTS, "verdict")
@@ -725,7 +835,7 @@ def validate_extract(data: object, result: dict | None = None) -> None:
         if len(group_scores) != len(result_groups):
             fail("audience_language.group_scores", "liczba grup nie odpowiada pełnemu wynikowi")
         for index, (summary_group, result_group) in enumerate(zip(group_scores, result_groups)):
-            for key in ("significant", "included_in_article_promise", "group_h_score"):
+            for key in ("significant", "included_in_article_promise", "group_h_score", "group_l_score"):
                 same(summary_group[key], result_group[key], f"audience_language.group_scores[{index}].{key}")
         for key in (
             "claim_count", "claim_map_confidence", "scores", "issue_counts", "verdict",
@@ -737,7 +847,7 @@ def validate_extract(data: object, result: dict | None = None) -> None:
         for index, (summary_issue, result_issue) in enumerate(zip(issues, result["issues"])):
             # Uzasadnienia w wyciągu mogą być skrócone. Identyfikator i pola
             # kategoryczne muszą pozostać dokładnie takie jak w pełnym wyniku.
-            for key in ("issue_id", "severity", "centrality", "application_risk", "confidence"):
+            for key in ("issue_id", "severity", "centrality", "application_risk", "language_barrier", "confidence"):
                 same(summary_issue[key], result_issue[key], f"issues[{index}].{key}")
 
 
@@ -753,6 +863,36 @@ def validate_relation(relation: str, a_ids: list[str], b_ids: list[str], path: s
         valid = len(a_ids) >= a_min and len(b_ids) >= b_min
     if not valid:
         fail(path, f"liczność identyfikatorów nie odpowiada relacji {relation}")
+
+
+def claim_result_agreement(a_result: str, b_result: str) -> str:
+    if a_result == b_result:
+        return "exact"
+    if a_result in NON_SUBSTANTIVE_RESULTS or b_result in NON_SUBSTANTIVE_RESULTS:
+        return "not_comparable"
+    if frozenset((a_result, b_result)) in RESULT_ADJACENCY:
+        return "adjacent"
+    return "different"
+
+
+def validate_component_agreement(value: object, result_agreement: str, path: str) -> None:
+    value = obj(value, path)
+    keys = {"exact", "adjacent", "different", "not_comparable"}
+    exact(value, keys, path)
+    for key in keys:
+        integer(value[key], f"{path}.{key}")
+    if sum(value.values()) == 0:
+        fail(path, "relacja złożona wymaga co najmniej jednej wspólnej składowej")
+    if value["different"]:
+        expected = "different"
+    elif value["not_comparable"]:
+        expected = "not_comparable"
+    elif value["adjacent"]:
+        expected = "adjacent"
+    else:
+        expected = "exact"
+    if result_agreement != expected:
+        fail(path, f"liczby składowych wymagają wyniku {expected}")
 
 
 def validate_comparison(data: object, result_a: dict | None = None, result_b: dict | None = None) -> None:
@@ -829,7 +969,7 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
         a_all: list[str] = []
         b_all: list[str] = []
         required = {"relation", "a_ids", "b_ids", "semantic_summary", "rationale"}
-        required |= ({"severity_agreement", "centrality_agreement", "risk_agreement", "grouping_difference"} if issues else {"result_agreement", "atomization_difference"})
+        required |= ({"severity_agreement", "centrality_agreement", "risk_agreement", "grouping_difference"} if issues else {"result_agreement", "component_agreement_counts", "atomization_difference"})
         for index, item in enumerate(array(items, path)):
             item_path = f"{path}[{index}]"
             item = obj(item, item_path)
@@ -847,7 +987,11 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
                     enum(item[key], {"yes", "no", "not_comparable"}, f"{item_path}.{key}")
                 text(item["grouping_difference"], f"{item_path}.grouping_difference")
             else:
-                enum(item["result_agreement"], {"exact", "adjacent", "different", "not_comparable"}, f"{item_path}.result_agreement")
+                result_agreement = enum(item["result_agreement"], {"exact", "adjacent", "different", "not_comparable"}, f"{item_path}.result_agreement")
+                if relation in {"one_to_many", "many_to_one", "many_to_many"}:
+                    validate_component_agreement(item["component_agreement_counts"], result_agreement, f"{item_path}.component_agreement_counts")
+                elif item["component_agreement_counts"] is not None:
+                    fail(f"{item_path}.component_agreement_counts", "pole ma być null poza relacją złożoną")
                 text(item["atomization_difference"], f"{item_path}.atomization_difference")
         if len(a_all) != len(set(a_all)):
             fail(path, "identyfikator A występuje więcej niż raz")
@@ -973,12 +1117,11 @@ def validate_comparison(data: object, result_a: dict | None = None, result_b: di
                 same(match["result_agreement"], "not_comparable", path)
             elif match["relation"] == "one_to_one":
                 one_to_one_claims.append(match)
-                results_equal = (
-                    claims_a[match["a_ids"][0]]["result"]
-                    == claims_b[match["b_ids"][0]]["result"]
+                expected_agreement = claim_result_agreement(
+                    claims_a[match["a_ids"][0]]["result"],
+                    claims_b[match["b_ids"][0]]["result"],
                 )
-                if (match["result_agreement"] == "exact") != results_equal:
-                    fail(path, "exact musi odpowiadać identyczności wyników twierdzeń 1:1")
+                same(match["result_agreement"], expected_agreement, path)
 
         issues_a = {item["issue_id"]: item for item in result_a["issues"]}
         issues_b = {item["issue_id"]: item for item in result_b["issues"]}
@@ -1078,3 +1221,5 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+    if scores["L"] != profile["lowest_significant_group_l_score"]:
+        fail(f"{path}.L", "musi równać się minimum L istotnych grup objętych obietnicą")

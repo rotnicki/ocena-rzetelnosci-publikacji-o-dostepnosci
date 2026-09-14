@@ -212,17 +212,23 @@ Profil zapisuje:
 
 Każde ustalenie wskazuje identyfikatory wspierających dowodów. Dowód zapisuje rodzaj, rangę 1–5, URL, lokalizację, datę dostępu oraz krótki cytat lub wierną parafrazę.
 
-Pewność jest wysoka, gdy istnieje bezpośrednia deklaracja odpowiedniej rangi i nie ma nierozwiązanej materialnej sprzeczności. Jest średnia, gdy spójne dowody pośrednie pozwalają na rozsądny profil. Jest niska, gdy pozostają tylko wskazówki artykułu, poziom trudności albo sprzeczne dowody.
+Profil jest `ustalony`, gdy dowody rangi 1 lub 2 pozwalają określić istotne grupy i nie pozostaje sprzeczność mogąca zmienić H lub L. Jest `czesciowo_ustalony`, gdy główna grupa jest znana, lecz co najmniej jedna istotna grupa, wymagany poziom wiedzy albo zakres obietnicy pozostaje sporny i może zmienić H lub L. Jest `nieustalony_wiarygodnie`, gdy brak podstaw do wyboru między co najmniej dwoma rozsądnymi profilami prowadzącymi do różnych H lub L.
+
+Pewność `wysoka` wymaga bezpośredniego dowodu odpowiedniej rangi dla grup i zakresu konkretnego artykułu oraz braku materialnej sprzeczności. Pewność `srednia` stosuje się przy zgodnych dowodach pośrednich albo gdy deklaracja miejsca wymaga doprecyzowania przez artykuł. Pewność `niska` stosuje się przy samych wskazówkach z tekstu, sprzecznych dowodach albo profilu nieustalonym wiarygodnie.
+
+„Wiedza rzeczywiście potrzebna” obejmuje tylko wiedzę konieczną do odtworzenia głównej tezy, ważnego warunku albo obiecanego działania. Wiedzę pomocną, lecz niekonieczną, zapisuje się osobno jako ułatwiającą. Każdy element wiedzy koniecznej wskazuje fragment publikacji, który bez niej staje się nieodtwarzalny lub ryzykowny.
 
 Jeżeli odbiorcy nie mogą zostać wiarygodnie ustaleni, nie wolno bez odpowiednich dowodów uznać ich za specjalistów. Należy zapisać warianty profilu i wrażliwość H oraz L na te warianty. Wynik H pozostaje liczbowy, ale przy równorzędnych wariantach przyjmuje ostrożniejszy wynik i niską pewność.
 
 ### 6.5. Publikacje dla grup mieszanych
 
-Dla każdej istotnej grupy odbiorców należy osobno ocenić możliwość zrozumienia rdzenia i zapisać `group_h_score` od 0 do 4, wymagane założenia oraz bariery.
+Dla każdej istotnej grupy odbiorców należy osobno ocenić możliwość zrozumienia rdzenia i zapisać `group_h_score` od 0 do 4, wymagane założenia oraz bariery. Dla każdej istotnej grupy objętej obietnicą publikacji zapisuje się także `group_l_score` od 0 do 4. Ocena odpowiada na pytanie, czy publikacja realizuje wobec tej grupy deklarowany cel i obiecany sposób użycia; nie jest kopią ogólnego L.
 
 Grupa jest istotna, jeżeli jest bezpośrednio zadeklarowana dla publikacji lub miejsca albo jeżeli cel, promocja i przewidywane użycie wskazują, że publikacja składa wobec niej materialną obietnicę. Sama możliwość przypadkowego trafienia na stronę nie czyni grupy istotną.
 
 Ogólna ocena H odpowiada najniższej ocenie wśród istotnych grup objętych obietnicą konkretnej publikacji. Grupa zadeklarowana dla całego miejsca pozostaje objęta domniemaniem, chyba że artykuł, kategoria albo cykl został wyraźnie i dostępnie oznaczony jako przeznaczony dla węższej grupy.
+
+Ogólne L odpowiada najniższej ocenie L wśród istotnych grup objętych obietnicą publikacji. Grupy nieobjęte obietnicą mogą być opisane, lecz nie obniżają ogólnego L. Jeżeli ten sam brak dotyczy wyłącznie zrozumiałości, obniża H. Obniża również L tylko wtedy, gdy przez ten brak publikacja nie realizuje zadeklarowanej funkcji wobec danej grupy.
 
 Trudności grupy wpływają tylko na opis ograniczeń, a nie na ogólną ocenę H, jeżeli grupa nie jest zadeklarowana, nie jest rozsądnie przewidywaną grupą celu i nie otrzymuje od publikacji materialnej obietnicy.
 
@@ -325,6 +331,17 @@ Przed zamknięciem wpisu oceniający odpowiada na trzy pytania:
 
 Jedna odpowiedź „tak” wymaga rozdzielenia, chyba że spowodowałoby to utratę znaczenia zależnego; wyjątek trzeba uzasadnić w polu `atomization_rationale`.
 
+Granicę wpisu ustala się według najmniejszego fragmentu, który zachowuje pełny warunek, zakres i skutek, a zarazem może otrzymać jeden wynik. Nie wolno łączyć poprawnego rdzenia z wadliwym absolutem tylko dlatego, że występują w jednym zdaniu. Nie wolno też rozdzielić kwantyfikatora, wyjątku, przeczenia albo statusu prawnego od części, którą ogranicza.
+
+Przykłady:
+
+1. „Narzędzie wykrywa część błędów, dlatego gwarantuje zgodność” tworzy co najmniej dwa wpisy: opis wykrywania oraz wniosek o gwarancji.
+2. „Każdy podmiot musi stosować X, z wyjątkiem Y” tworzy osobne wpisy tylko wtedy, gdy każdy zachowuje informację o właściwym zakresie i wyjątku.
+3. Wyliczenie kilku wymagań tworzy osobne wpisy, jeżeli mają różne podstawy lub mogą otrzymać różne wyniki; wspólny warunek należy powtórzyć.
+4. Jedna procedura kodowa pozostaje jednym wpisem, jeżeli jej kroki działają wyłącznie łącznie; niezależny błędny krok tworzy osobny wpis.
+
+W kalibracji `atomization_rationale` musi wskazać zastosowany przykład albo wyjaśnić, dlaczego przypadek jest inny.
+
 ### 8.5. Minimalny wpis
 
 Każdy wpis zawiera:
@@ -355,6 +372,17 @@ Jeżeli krótki cytat nie jest potrzebny albo jego zapis byłby nieproporcjonaln
 Jeżeli przed oceną istnieje neutralna wspólna lista twierdzeń, można przypisać `claim_match_id` bez ujawniania ocen innych przebiegów. Oceniający mogą dodawać nowe twierdzenia.
 
 Jeżeli lista nie istnieje, dopasowanie wykonuje się dopiero po zamknięciu obu wyników. Zachowuje się identyfikatory lokalne i osobno zapisuje relacje 1:1, 1:wiele, wiele:1, wiele:wiele oraz wpisy jednostronne.
+
+Dla relacji 1:1 wynik dopasowania ustala się następująco:
+
+- `exact` — oba twierdzenia mają tę samą etykietę wyniku;
+- `adjacent` — etykiety tworzą jedną z par: `zgodne`–`zasadniczo_zgodne`, `zasadniczo_zgodne`–`czesciowo_zgodne`, `czesciowo_zgodne`–`mylace` albo `mylace`–`niezgodne`;
+- `different` — oba wyniki są rozstrzygnięciami merytorycznymi, lecz nie są identyczne ani sąsiednie;
+- `not_comparable` — co najmniej jeden wynik to `nieweryfikowalne` lub `nierozstrzygniete`, albo wpisy mimo wspólnego tematu nie oceniają tego samego zakresu.
+
+`nieweryfikowalne` i `nierozstrzygniete` są `exact` wyłącznie wtedy, gdy obie strony mają tę samą z tych etykiet i ten sam przedmiot rozstrzygnięcia.
+
+W relacji złożonej najpierw porównuje się najmniejsze wspólne składowe semantyczne. Cała relacja jest `exact`, gdy wszystkie składowe są dokładnie zgodne; `adjacent`, gdy żadna nie jest `different` ani `not_comparable`, a co najmniej jedna jest sąsiednia; `different`, gdy co najmniej jedna materialna składowa jest różna; w pozostałych przypadkach `not_comparable`. Raport zapisuje liczbę składowych każdego rodzaju.
 
 ## 9. Wyniki sprawdzenia twierdzeń
 
@@ -502,7 +530,13 @@ Pewność `wysoka`, `srednia` albo `niska` opisuje siłę podstaw klasyfikacji, 
 
 Kilka błędnych twierdzeń tworzy jeden problem, jeżeli mają wspólną przyczynę i można je naprawić jedną korektą zasadniczą.
 
-Należy je rozdzielić, jeżeli wymagają różnych poprawek albo mają różną centralność lub ryzyko. Każdy problem zawiera opis wzorca, powiązane twierdzenia, główną poprawkę i uzasadnienie sposobu grupowania.
+Twierdzenia wolno połączyć w jeden problem tylko wtedy, gdy łącznie spełniają cztery warunki: mają wspólną przyczynę, wymagają jednej zasadniczej korekty, mają ten sam poziom centralności oraz mają ten sam poziom ryzyka zastosowania. Różnica któregokolwiek z tych elementów wymaga osobnych problemów.
+
+Brak źródła, błąd merytoryczny, niejasny status normatywny i bariera zrozumienia nie są automatycznie jednym problemem, nawet gdy dotyczą tego samego akapitu. Można je połączyć tylko wtedy, gdy jedna korekta rzeczywiście usuwa wszystkie skutki.
+
+Problem jest `duze`, gdy minimalna uczciwa naprawa zmienia ważne zalecenie, zakres ważnego wniosku albo sposób działania istotnej grupy. Jest `srednie`, gdy naprawa pozostawia ten sam ważny wniosek i sposób działania, ale usuwa materialną nieścisłość lub lokalne ryzyko. Duża liczba drobnych wystąpień sama nie tworzy problemu dużego; może go tworzyć wspólny wzorzec, jeżeli łącznie zmienia odbiór lub działanie.
+
+Każdy problem zawiera opis wzorca, powiązane twierdzenia, główną poprawkę i uzasadnienie sposobu grupowania.
 
 ## 14. Oceny A–L
 
@@ -544,6 +578,12 @@ Ten sam brak może wpływać na więcej niż jeden wymiar wyłącznie wtedy, gdy
 
 Brak tekstowego odpowiednika wykresu wpływa na H, jeżeli blokuje zrozumienie danych. Wpływa na D, jeżeli uniemożliwia prześledzenie wartości lub metody. Wpływa na C tylko wtedy, gdy publikacja twierdzi, że artefakt jest technicznie dostępny albo działanie artefaktu jest częścią ocenianej porady. Nie wolno obniżyć wszystkich trzech wymiarów jednym zdaniem „wykres jest niedostępny”.
 
+Jeżeli bariera językowa, terminologiczna albo strukturalna obniża H lub L, uruchamia ograniczenie H≤2, H≤1 lub L≤2 albo wpływa na werdykt, musi zostać zapisana jako problem z własnym `issue_id`. Problem może mieć pustą listę `claim_ids`, jeżeli nie wynika z jednego twierdzenia; wtedy wskazuje lokalizacje, grupy odbiorców i terminy lub elementy struktury tworzące barierę.
+
+Lokalna trudność, która nie zmienia H, L ani werdyktu, może pozostać wyłącznie w profilu językowym i uzasadnieniu wymiaru.
+
+Tego samego zjawiska nie liczy się podwójnie. Jeżeli niepoprawny termin jest już problemem merytorycznym, opis problemu wskazuje osobno skutek dla G oraz skutek dla H lub L.
+
 ## 15. Sekwencja werdyktu
 
 ### Krok 1. Możliwość rozstrzygnięcia
@@ -578,6 +618,16 @@ Pytanie: „Co pozostaje po uczciwym poprawieniu potwierdzonych problemów?”
 - `nie_mozna_rozstrzygnac` — ocena rdzenia nie jest odpowiedzialnie możliwa.
 
 Werdyktu nie wolno wyprowadzać z sumy punktów ani liczby problemów.
+
+Domyślna relacja werdyktu z bezpiecznym poleceniem jest następująca:
+
+- `rzetelny` → `bez_zastrzezen`;
+- `rzetelny_z_niewielkimi_zastrzezeniami` → `z_niewielkimi_korektami`;
+- `rzetelny_z_istotnymi_zastrzezeniami` → `z_nazwanymi_korektami_lub_zrodlami`;
+- `nierzetelny` → `nie_do_praktycznego_uzycia`;
+- `nie_mozna_rozstrzygnac` → `nie_mozna_ocenic`.
+
+Odchylenie jest dopuszczalne wyłącznie w kierunku większej ostrożności i wymaga osobnego uzasadnienia. Nie wolno wydać polecenia łagodniejszego niż domyślne dla danego werdyktu.
 
 ### Krok 5. Kontrola spójności
 
