@@ -87,6 +87,25 @@ class PackageTests(unittest.TestCase):
         self.assertTrue(metric_schema.is_file())
         self.assertIn("Kanoniczna metryka przebiegu", metric_schema.read_text(encoding="utf-8"))
 
+    def test_technical_control_documents_distinguish_historical_and_current_state(self) -> None:
+        calibration = ROOT / "kalibracja/0.3"
+        for name in (
+            "kontrola-techniczna-walidatora-po-pilocie.md",
+            "kontrola-techniczna-S1-S8.md",
+        ):
+            self.assertIn(
+                "Dokument historyczny",
+                (calibration / name).read_text(encoding="utf-8"),
+            )
+
+        current = (calibration / "kontrola-techniczna-S1-S10.md").read_text(encoding="utf-8")
+        self.assertIn("Kontrola techniczna wdrożenia S1–S10", current)
+        self.assertIn("S9 i S10 są wdrożone", current)
+        self.assertIn("B1 i B2 nie zostały rozpoczęte", current)
+
+        pilot = (calibration / "wyniki-pilota.md").read_text(encoding="utf-8")
+        self.assertIn("S1–S10 zostały następnie osobno zatwierdzone i wdrożone", pilot)
+
 
 if __name__ == "__main__":
     unittest.main()

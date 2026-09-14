@@ -1,5 +1,10 @@
 # Kontrola techniczna walidatora po polskim pilotażu 0.3
 
+> **Dokument historyczny.** Opisuje stan walidatora na commicie
+> `af5f556fa49c5a383e487a591a896a3292ccfe84`, przed decyzjami i wdrożeniem
+> S1–S10. Aktualny stan dokumentuje
+> [kontrola techniczna S1–S10](kontrola-techniczna-S1-S10.md).
+
 **Data:** 14 września 2026 r.  
 **Status:** poprawki techniczne projektu; bez zmiany znaczenia metodologii  
 **Zakres danych kontrolnych:** 10 wyników, 10 wyciągów i 5 porównań par z polskiego pilotażu P01–P05
