@@ -87,13 +87,13 @@ To projekt zmian użyty w zakończonej serii kalibracyjnej powtarzalności. Doda
 
 Wersja 0.2-draft nie jest jeszcze stabilnym standardem. Umiejętność używa jej tylko wtedy, gdy polecenie wyraźnie wybiera tę wersję. Właściwa seria ośmiu publikacji i szesnastu przebiegów została zakończona 31 sierpnia 2026 r. Jej reguł i wyników nie zmienia się wstecz; wnioski posłużą do przygotowania osobnej kolejnej wersji.
 
-### Projekt 0.3
+### Wersja 0.3
 
-To publiczna wersja robocza przygotowana na podstawie wniosków z serii 0.2. Jest pełnym, samodzielnym dokumentem i nie wymaga łączenia zasad 0.1 z poprawkami 0.2.
+To oficjalna, zamrożona wersja eksperymentalna przygotowana na podstawie wniosków z serii 0.2. Jest pełnym, samodzielnym dokumentem i nie wymaga łączenia zasad 0.1 z poprawkami 0.2.
 
 Projekt doprecyzowuje między innymi podział twierdzeń, granice wyników, grupowanie problemów, stosowanie `nd`, ocenę zmian zachodzących po publikacji oraz wpływ niewyjaśnionego żargonu na zrozumiałość i dopasowanie tekstu do jego celu. Przed oceną G, H i L wymaga udokumentowanego sprawdzenia miejsca publikacji, celu i istotnych grup odbiorców. Dodaje też jeden format porównania niezależnych przebiegów A i B, kanoniczną metrykę JSON dla nowych przebiegów kalibracyjnych, osobny ustrukturyzowany dowód każdej rekonstruowanej wersji historycznej oraz kontrole granic C/J, znaczenia problemu, właściwego przedmiotu wymiarów, rozstrzygalności i krytyczności.
 
-Projekt 0.3 nie jest wydaniem `v0.3.0`. Może służyć do przeglądu i testów dopiero po świadomym wybraniu tej wersji. Jego reguły mogą się zmienić przed zamrożeniem.
+Wydanie `v0.3.0` jest niezmiennym punktem odniesienia do nowych ocen i badań. Pozostaje wersją eksperymentalną przed 1.0, ale jego reguł i znaczenia wyników nie zmienia się wstecz.
 
 ## Główne zasady
 
@@ -132,7 +132,7 @@ Ocena powinna:
 - `metodologia/0.2/kotwice.md` — szczegółowe kotwice ocen 0–4 dla wymiarów A–L;
 - `metodologia/0.2/wynik.schema.json` — schemat pełnego wyniku;
 - `metodologia/0.2/wyciag-kalibracyjny.schema.json` — schemat krótkiego wyniku do porównywania przebiegów.
-- `metodologia/0.3/` — samodzielna metodologia 0.3, kotwice oraz schematy metryki, wyniku, wyciągu i porównania pary w statusie publicznego projektu roboczego.
+- `metodologia/0.3/` — oficjalna, samodzielna metodologia 0.3, kotwice oraz schematy metryki, wyniku, wyciągu i porównania pary.
 
 ### Szablony, umiejętność i narzędzia
 
@@ -182,9 +182,9 @@ Wynik pokazuje powtarzalność w badanym środowisku. Nie jest jeszcze dowodem p
 
 Walidacja wersji 0.3 obejmowała wcześniejszy pilotaż oraz zakończone badanie B1. Przenośność metodologii pomiędzy różnymi rodzinami AI nie była objęta zakresem walidacji 0.3. Może zostać zbadana osobno na podstawie zamrożonej wersji 0.3, a wyniki takiego badania mogą posłużyć do prac nad przyszłą wersją 0.4.
 
-Publiczny projekt 0.3 nadal podlega przeglądowi spójności. Dopiero po dalszych testach, zatwierdzeniu, zamrożeniu i końcowej kontroli może powstać wydanie `v0.3.0`.
+Wydanie `v0.3.0` zamraża metodologię sprawdzoną w pilotażu i B1. Dalsze badania nie zmieniają tego wydania wstecz; mogą prowadzić do wersji 0.4.
 
-Metodologia 0.1 pozostaje wersją domyślną źródłowej umiejętności. Wersję 0.2 lub projekt 0.3 należy wybierać jawnie. Osobna paczka robocza 0.3 ustawia projekt 0.3 jako aktywny i zawiera wszystkie potrzebne pliki bez konieczności pobierania metodologii z repozytorium.
+Metodologia 0.3 jest domyślną wersją źródłowej umiejętności. Wersje 0.1 i 0.2 pozostają dostępne jako historyczne punkty odniesienia i trzeba wybierać je jawnie. Paczka wydania 0.3 zawiera wszystkie potrzebne pliki bez konieczności pobierania metodologii z repozytorium.
 
 ## Licencja
 

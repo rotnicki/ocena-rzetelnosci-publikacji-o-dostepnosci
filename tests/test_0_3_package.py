@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Technical consistency checks for the complete 0.3 draft package."""
+"""Technical consistency checks for the complete 0.3 release package."""
 
 from __future__ import annotations
 
@@ -13,6 +13,26 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PackageTests(unittest.TestCase):
+    def test_0_3_is_the_frozen_default_release(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        method_readme = (ROOT / "metodologia/0.3/README.md").read_text(encoding="utf-8")
+        skill = (ROOT / "skill/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("oficjalna, zamrożona wersja eksperymentalna", readme)
+        self.assertIn("Metodologia 0.3 jest domyślną wersją", readme)
+        self.assertIn("zamrożona wersja eksperymentalna", method_readme)
+        self.assertIn("Use version 0.3 unless", skill)
+        self.assertIn("frozen experimental release `v0.3.0`", skill)
+
+    def test_0_3_schema_ids_use_the_release_tag(self) -> None:
+        for name in (
+            "metryka-0.3.schema.json",
+            "wynik.schema.json",
+            "wyciag-kalibracyjny.schema.json",
+            "porownanie-pary-0.3.schema.json",
+        ):
+            schema = json.loads((ROOT / "metodologia/0.3" / name).read_text(encoding="utf-8"))
+            self.assertIn("/v0.3.0/", schema["$id"])
+
     def test_skill_copies_match_public_sources(self) -> None:
         pairs = {
             ROOT / "metodologia/0.3/standard.md": ROOT / "skill/references/standard-0.3.md",

@@ -9,7 +9,7 @@ Apply one fixed, evidence-led workflow to every publication. Evaluate the public
 
 ## Load the governing materials
 
-Select and record the methodology version before reading the publication critically. Use version 0.1 unless the user or a frozen calibration prompt explicitly selects another version. Never combine rules from different versions.
+Select and record the methodology version before reading the publication critically. Use version 0.3 unless the user or a frozen calibration prompt explicitly selects another version. Never combine rules from different versions.
 
 For version 0.1:
 
@@ -24,7 +24,7 @@ For version 0.2 draft:
 - validate data against [references/wynik-0.2.schema.json](references/wynik-0.2.schema.json) and [references/wyciag-kalibracyjny-0.2.schema.json](references/wyciag-kalibracyjny-0.2.schema.json);
 - run `python3 scripts/validate_0_2.py result wynik.json` and, when applicable, `python3 scripts/validate_0_2.py extract wyciag-kalibracyjny.json`.
 
-For version 0.3 draft:
+For version 0.3:
 
 - read the standalone [references/standard-0.3.md](references/standard-0.3.md) and [references/kotwice-0.3.md](references/kotwice-0.3.md) completely; do not load 0.1 or 0.2 as a base;
 - use [references/wzor-raportu-0.3.md](references/wzor-raportu-0.3.md) and [references/karta-oceny-0.3.md](references/karta-oceny-0.3.md);
@@ -33,7 +33,7 @@ For version 0.3 draft:
 - for every new calibration run, run `python3 scripts/validate_0_3.py metric metryka.json`, then `python3 scripts/validate_0_3.py result wynik.json --metric metryka.json`, and cross-check the extract with `python3 scripts/validate_0_3.py extract wyciag-kalibracyjny.json --result wynik.json`.
 - validate a pair with `python3 scripts/validate_0_3.py comparison porownanie-pary.json --result-a A/wynik.json --result-b B/wynik.json`.
 
-Treat the selected standard as authoritative if this file differs from it. The 0.3 materials are a public working draft, not a frozen release.
+Treat the selected standard as authoritative if this file differs from it. The 0.3 materials belong to the frozen experimental release `v0.3.0`.
 
 ## Freeze the method and environment
 

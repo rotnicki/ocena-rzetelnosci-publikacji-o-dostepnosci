@@ -1,8 +1,10 @@
 # Standard oceny rzetelności publikacji o dostępności
 
-**Wersja:** 0.3 — projekt roboczy  
-**Data:** 8 września 2026 r.  
-**Status:** wersja w przygotowaniu; nie jest jeszcze zamrożonym wydaniem  
+**Wersja:** 0.3 — zamrożona wersja eksperymentalna
+
+**Data:** 8 września 2026 r.
+
+**Wydanie:** `v0.3.0`, 15 września 2026 r.
 **Przeznaczenie:** ocena artykułów, poradników, komentarzy, analiz, newsletterów i innych publikacji dotyczących dostępności, wykonywana przez człowieka albo system sztucznej inteligencji
 
 ## 1. Cel standardu

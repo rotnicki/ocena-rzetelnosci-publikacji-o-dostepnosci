@@ -6,6 +6,9 @@
 
 **Stan:** B1 zakończone proceduralnie; projekt 0.3 pozostaje roboczy i niezamrożony
 
+> **Dokument historyczny:** powyższy stan opisuje chwilę zamknięcia B1 przed
+> wydaniem `v0.3.0`. Wyniki i zastosowane reguły pozostają niezmienione.
+
 ## Zakres i bezpieczeństwo publikacji wyników
 
 B1 sprawdzało przypadki słabo reprezentowane w pierwszym polskim pilotażu. Wykonano 32 niezależne oceny, czyli 16 par A/B: 12 par korpusu głównego oraz 4 par uruchomionych rezerw. Rezerwy R1, R2, R4 i R5 wykorzystano zgodnie z zamrożoną procedurą; R3 nie uruchomiono.
