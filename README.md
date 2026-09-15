@@ -21,7 +21,13 @@ Metoda pomaga AI:
 - wydać jeden z pięciu opisowych werdyktów;
 - zapisać wynik tak, aby można go było sprawdzić i porównać z drugą oceną.
 
-Publikacja otrzymuje osobne oceny w dwunastu obszarach oznaczonych od A do L. Nie tworzy się z nich jednej średniej ani sumy, która automatycznie wyznacza werdykt. Liczy się znaczenie konkretnych problemów, ich wpływ na odbiorców oraz jakość uzasadnienia.
+Publikacja otrzymuje osobne oceny w dwunastu obszarach oznaczonych od A do L:
+
+- A–D: poprawność faktów, prawa i norm, zagadnień technicznych oraz jakość źródeł;
+- E–H: kompletność i kontekst, jakość rozumowania, precyzja pojęć oraz zrozumiałość;
+- I–L: użyteczność i bezpieczeństwo zaleceń, uwzględnienie doświadczeń użytkowników, jasne odróżnianie wiedzy od niepewności oraz dopasowanie treści do jej celu.
+
+Każdy obszar ocenia się osobno. Nie tworzy się z nich jednej średniej ani sumy, która automatycznie wyznacza werdykt. Liczy się znaczenie konkretnych problemów, ich wpływ na odbiorców oraz jakość uzasadnienia. Pełne znaczenie wszystkich obszarów opisują [kotwice ocen A–L](metodologia/0.3/kotwice.md).
 
 Metoda ocenia konkretną publikację, a nie charakter, intencje ani kompetencje jej autora.
 
@@ -51,7 +57,7 @@ Dokładna instrukcja operacyjna dla AI znajduje się w pliku [`skill/SKILL.md`](
 
 Rozwój metody obejmował wcześniejsze próby, serię dla wersji 0.2, polski pilotaż projektu 0.3 oraz zakończone badanie B1.
 
-W B1 wykonano 32 niezależne oceny, czyli 16 porównań A/B. Werdykt był zgodny w 15/16 par. Szczegóły, pozostałe miary i ograniczenia zawiera [publiczne podsumowanie B1](kalibracja/0.3/wyniki-B1.md). Wyniki wcześniejszej serii znajdują się w [podsumowaniu kalibracji 0.2](kalibracja/0.2/wyniki-serii.md).
+W badaniu nazwanym B1 każdą z 16 publikacji oceniono dwa razy, w odizolowanych przebiegach. Pozwoliło to sprawdzić, czy zastosowanie tych samych zasad prowadzi do podobnych wyników. Łącznie wykonano 32 niezależne oceny. Werdykt był taki sam w 15 z 16 porównań. Szczegóły, pozostałe miary i ograniczenia zawiera [publiczne podsumowanie B1](kalibracja/0.3/wyniki-B1.md). Wyniki wcześniejszej serii znajdują się w [podsumowaniu kalibracji 0.2](kalibracja/0.2/wyniki-serii.md).
 
 Wyników zakończonych badań ani wcześniejszych wersji nie przelicza się później według nowych zasad. Pełne analizy, prywatny manifest i kopie ocenianych publikacji nie są publikowane w tym repozytorium.
 

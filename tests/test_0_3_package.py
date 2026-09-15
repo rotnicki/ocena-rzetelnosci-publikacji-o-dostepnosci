@@ -26,7 +26,12 @@ class PackageTests(unittest.TestCase):
         self.assertIn("## Dokumentacja", readme)
         self.assertIn("releases/tag/v0.3.0", readme)
         self.assertIn("32 niezależne oceny", readme)
-        self.assertIn("15/16", readme)
+        self.assertIn("każdą z 16 publikacji oceniono dwa razy", readme)
+        self.assertIn("15 z 16 porównań", readme)
+        self.assertIn("A–D: poprawność faktów, prawa i norm", readme)
+        self.assertIn("E–H: kompletność i kontekst", readme)
+        self.assertIn("I–L: użyteczność i bezpieczeństwo zaleceń", readme)
+        self.assertNotRegex(readme, r"\bS\d+(?:[–-]S?\d+)?\b")
 
         headings = [line for line in readme.splitlines() if line.startswith("#")]
         self.assertTrue(headings[0].startswith("# "))
