@@ -14,7 +14,7 @@ Pełne warunki: https://creativecommons.org/licenses/by/4.0/legalcode.pl
 
 Zalecana informacja o autorstwie:
 
-> Na podstawie „Oceny rzetelności publikacji o dostępności” autorstwa Mikołaja Rotnickiego, CC BY 4.0. Zmieniono: [krótki opis zmian].
+> Na podstawie projektu „Probiernik” autorstwa Mikołaja Rotnickiego, wersja [numer wersji], udostępnionego na licencji CC BY 4.0: https://github.com/rotnicki/probiernik. Zmieniono: [krótki opis zmian].
 
 ## Kod i pliki techniczne
 
