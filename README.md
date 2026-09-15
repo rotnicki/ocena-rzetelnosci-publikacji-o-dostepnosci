@@ -70,7 +70,7 @@ Projekt pozostaje na wczesnym etapie rozwoju, przed wersją 1.0.
 
 ### Wersja 0.1
 
-To pierwsza zamrożona wersja robocza. Została użyta w początkowej serii ocen i w ich zaślepionym powtórzeniu. Pozostaje domyślną wersją działającej umiejętności.
+To pierwsza zamrożona wersja robocza. Została użyta w początkowej serii ocen i w ich zaślepionym powtórzeniu. Pozostaje dostępna jako historyczny punkt odniesienia; domyślną wersją działającej umiejętności jest obecnie 0.3.
 
 „Zamrożona” oznacza tutaj, że podczas porównywania wyników nie zmieniano jej reguł. Nie oznacza to, że wersja 0.1 jest ostateczna albo w pełni zwalidowana.
 
@@ -87,13 +87,13 @@ To projekt zmian użyty w zakończonej serii kalibracyjnej powtarzalności. Doda
 
 Wersja 0.2-draft nie jest jeszcze stabilnym standardem. Umiejętność używa jej tylko wtedy, gdy polecenie wyraźnie wybiera tę wersję. Właściwa seria ośmiu publikacji i szesnastu przebiegów została zakończona 31 sierpnia 2026 r. Jej reguł i wyników nie zmienia się wstecz; wnioski posłużą do przygotowania osobnej kolejnej wersji.
 
-### Projekt 0.3
+### Wersja 0.3
 
-To publiczna wersja robocza przygotowana na podstawie wniosków z serii 0.2. Jest pełnym, samodzielnym dokumentem i nie wymaga łączenia zasad 0.1 z poprawkami 0.2.
+To oficjalna, zamrożona wersja eksperymentalna przygotowana na podstawie wniosków z serii 0.2. Jest pełnym, samodzielnym dokumentem i nie wymaga łączenia zasad 0.1 z poprawkami 0.2.
 
 Projekt doprecyzowuje między innymi podział twierdzeń, granice wyników, grupowanie problemów, stosowanie `nd`, ocenę zmian zachodzących po publikacji oraz wpływ niewyjaśnionego żargonu na zrozumiałość i dopasowanie tekstu do jego celu. Przed oceną G, H i L wymaga udokumentowanego sprawdzenia miejsca publikacji, celu i istotnych grup odbiorców. Dodaje też jeden format porównania niezależnych przebiegów A i B, kanoniczną metrykę JSON dla nowych przebiegów kalibracyjnych, osobny ustrukturyzowany dowód każdej rekonstruowanej wersji historycznej oraz kontrole granic C/J, znaczenia problemu, właściwego przedmiotu wymiarów, rozstrzygalności i krytyczności.
 
-Projekt 0.3 nie jest wydaniem `v0.3.0`. Może służyć do przeglądu i testów dopiero po świadomym wybraniu tej wersji. Jego reguły mogą się zmienić przed zamrożeniem.
+Wydanie `v0.3.0` jest niezmiennym punktem odniesienia do nowych ocen i badań. Pozostaje wersją eksperymentalną przed 1.0, ale jego reguł i znaczenia wyników nie zmienia się wstecz.
 
 ## Główne zasady
 
@@ -122,8 +122,7 @@ Ocena powinna:
 - `kalibracja/0.3/propozycje-zmian-po-polskim-pilocie.md` — historyczne decyzje S1–S10 oraz decyzje S11–S15 po B1;
 - `kalibracja/0.3/wyniki-B1.md` — bezpieczne, zagregowane wyniki zakończonego B1, bez powiązania nazwanych publikacji z negatywnymi wynikami;
 - `kalibracja/0.3/kontrola-techniczna-S1-S10.md` — historyczna kontrola techniczna stanu sprzed wykonania B1.
-- `kalibracja/0.3/kontrola-techniczna-S1-S15.md` — aktualna kontrola techniczna projektu po wdrożeniu T1–T2 i S11–S15.
-- `kalibracja/0.3/protokol-B2.md` — przygotowany protokół badania przenośności między ChatGPT, Gemini i Grokiem; oceny B2 nie zostały rozpoczęte.
+- `kalibracja/0.3/kontrola-techniczna-S1-S15.md` — kontrola techniczna projektu po wdrożeniu T1–T2 i S11–S15.
 
 ### Metodologia
 
@@ -133,7 +132,7 @@ Ocena powinna:
 - `metodologia/0.2/kotwice.md` — szczegółowe kotwice ocen 0–4 dla wymiarów A–L;
 - `metodologia/0.2/wynik.schema.json` — schemat pełnego wyniku;
 - `metodologia/0.2/wyciag-kalibracyjny.schema.json` — schemat krótkiego wyniku do porównywania przebiegów.
-- `metodologia/0.3/` — samodzielna metodologia 0.3, kotwice oraz schematy metryki, wyniku, wyciągu i porównania pary w statusie publicznego projektu roboczego.
+- `metodologia/0.3/` — oficjalna, samodzielna metodologia 0.3, kotwice oraz schematy metryki, wyniku, wyciągu i porównania pary.
 
 ### Szablony, umiejętność i narzędzia
 
@@ -181,11 +180,11 @@ Wynik pokazuje powtarzalność w badanym środowisku. Nie jest jeszcze dowodem p
 
 ## Następny etap
 
-Badanie B1 zakończono proceduralnie. Wynikające z niego techniczne poprawki T1–T2 oraz doprecyzowania S11–S15 zostały wdrożone i obowiązują wyłącznie w przyszłych ocenach. Protokół B2 i odizolowane pakiety wejściowe zostały przygotowane do zatwierdzenia; żadna ocena B2 nie została jeszcze rozpoczęta.
+Walidacja wersji 0.3 obejmowała wcześniejszy pilotaż oraz zakończone badanie B1. Przenośność metodologii pomiędzy różnymi rodzinami AI nie była objęta zakresem walidacji 0.3. Może zostać zbadana osobno na podstawie zamrożonej wersji 0.3, a wyniki takiego badania mogą posłużyć do prac nad przyszłą wersją 0.4.
 
-Publiczny projekt 0.3 nadal podlega przeglądowi spójności. Dopiero po dalszych testach, zatwierdzeniu, zamrożeniu i końcowej kontroli może powstać wydanie `v0.3.0`.
+Wydanie `v0.3.0` zamraża metodologię sprawdzoną w pilotażu i B1. Dalsze badania nie zmieniają tego wydania wstecz; mogą prowadzić do wersji 0.4.
 
-Metodologia 0.1 pozostaje wersją domyślną źródłowej umiejętności. Wersję 0.2 lub projekt 0.3 należy wybierać jawnie. Osobna paczka robocza 0.3 ustawia projekt 0.3 jako aktywny i zawiera wszystkie potrzebne pliki bez konieczności pobierania metodologii z repozytorium.
+Metodologia 0.3 jest domyślną wersją źródłowej umiejętności. Wersje 0.1 i 0.2 pozostają dostępne jako historyczne punkty odniesienia i trzeba wybierać je jawnie. Paczka wydania 0.3 zawiera wszystkie potrzebne pliki bez konieczności pobierania metodologii z repozytorium.
 
 ## Licencja
 

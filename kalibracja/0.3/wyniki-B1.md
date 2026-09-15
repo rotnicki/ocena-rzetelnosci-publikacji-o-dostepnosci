@@ -4,7 +4,10 @@
 
 **Metodologia:** zamrożony projekt 0.3 z wdrożonymi S1–S10
 
-**Stan:** B1 zakończone proceduralnie; projekt 0.3 pozostaje roboczy i niezamrożony; B2 nie zostało rozpoczęte
+**Stan:** B1 zakończone proceduralnie; projekt 0.3 pozostaje roboczy i niezamrożony
+
+> **Dokument historyczny:** powyższy stan opisuje chwilę zamknięcia B1 przed
+> wydaniem `v0.3.0`. Wyniki i zastosowane reguły pozostają niezmienione.
 
 ## Zakres i bezpieczeństwo publikacji wyników
 
@@ -60,4 +63,4 @@ Braki pokrycia wskazały dwie odrębne przyczyny. Część wynikała z właściw
 
 ## Wniosek
 
-B1 dostarczyło wystarczających danych do decyzji o doprecyzowaniach T1–T2 i S11–S15. Nie dowodzi pełnej trafności ani przenośności metodologii. Następnym odrębnym etapem badawczym może być B2, ale wymaga ono osobnego protokołu i decyzji; niniejsze zamknięcie B1 go nie rozpoczyna.
+B1 dostarczyło wystarczających danych do decyzji o doprecyzowaniach T1–T2 i S11–S15. Nie dowodzi pełnej trafności ani przenośności metodologii. Przenośność pomiędzy rodzinami AI może zostać zbadana osobno na podstawie zamrożonej wersji 0.3, a wyniki takiego badania mogą posłużyć do prac nad przyszłą wersją 0.4.

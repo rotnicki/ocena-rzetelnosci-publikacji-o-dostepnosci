@@ -6,6 +6,10 @@
 
 **Wynik:** kontrola zakończona powodzeniem
 
+> **Dokument historyczny:** raport opisuje kontrolę wykonaną przed oficjalnym
+> wydaniem `v0.3.0`. Zachowuje właściwe dla tamtego momentu oznaczenie projektu
+> i paczki roboczej; końcową kontrolę wydania dokumentuje osobny raport.
+
 ## Stan projektu
 
 - B1 zostało zakończone proceduralnie po 32 niezależnych ocenach i 16

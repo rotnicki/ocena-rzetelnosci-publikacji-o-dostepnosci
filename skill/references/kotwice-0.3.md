@@ -1,6 +1,7 @@
-# Kotwice ocen A–L — projekt 0.3
+# Kotwice ocen A–L — wersja 0.3
 
-**Wersja:** 0.3 — projekt roboczy  
+**Wersja:** 0.3 — zamrożona wersja eksperymentalna
+
 **Data:** 8 września 2026 r.
 
 ## Zasady wspólne

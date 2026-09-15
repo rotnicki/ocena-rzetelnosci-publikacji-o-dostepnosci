@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Technical consistency checks for the complete 0.3 draft package."""
+"""Technical consistency checks for the complete 0.3 release package."""
 
 from __future__ import annotations
 
@@ -13,6 +13,48 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PackageTests(unittest.TestCase):
+    def test_0_3_is_the_frozen_default_release(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        method_readme = (ROOT / "metodologia/0.3/README.md").read_text(encoding="utf-8")
+        skill = (ROOT / "skill/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("oficjalna, zamrożona wersja eksperymentalna", readme)
+        self.assertIn("Metodologia 0.3 jest domyślną wersją", readme)
+        self.assertIn("zamrożona wersja eksperymentalna", method_readme)
+        self.assertIn("Use version 0.3 unless", skill)
+        self.assertIn("frozen experimental release `v0.3.0`", skill)
+
+    def test_0_3_schema_ids_use_the_release_tag(self) -> None:
+        for name in (
+            "metryka-0.3.schema.json",
+            "wynik.schema.json",
+            "wyciag-kalibracyjny.schema.json",
+            "porownanie-pary-0.3.schema.json",
+        ):
+            schema = json.loads((ROOT / "metodologia/0.3" / name).read_text(encoding="utf-8"))
+            self.assertIn("/v0.3.0/", schema["$id"])
+
+    def test_release_builder_pins_the_0_3_source(self) -> None:
+        builder = (ROOT / "scripts/build_skill_release.py").read_text(encoding="utf-8")
+        versioning = (ROOT / "WERSJONOWANIE.md").read_text(encoding="utf-8")
+        workflow = (ROOT / ".github/workflows/publish-v0.3.0.yml").read_text(encoding="utf-8")
+        self.assertIn('"0.3.0"', builder)
+        self.assertIn("714a5979e52f889671ba52f376824990549da013", builder)
+        self.assertIn("714a5979e52f889671ba52f376824990549da013", versioning)
+        self.assertIn("cmp dist-a/assess-accessibility-articles-v0.3.0.zip", workflow)
+        self.assertNotIn("--prerelease", workflow)
+        self.assertIn("gh release download v0.3.0", workflow)
+
+    def test_release_documents_record_scope_and_integrity(self) -> None:
+        notes = (ROOT / "wydania/v0.3.0.md").read_text(encoding="utf-8")
+        control = (ROOT / "kalibracja/0.3/kontrola-techniczna-v0.3.0.md").read_text(encoding="utf-8")
+        digest = "72b2604d3a9e4581241570c4ca89726e5a8dd7a8e3fd6addafb3a4596b9a6979"
+        for text in (notes, control):
+            self.assertIn(digest, text)
+            self.assertIn("32", text)
+            self.assertIn("15/16", text)
+        self.assertIn("nie była objęta zakresem walidacji 0.3", notes)
+        self.assertIn("research/0.4-przenosnosc-ai", control)
+
     def test_skill_copies_match_public_sources(self) -> None:
         pairs = {
             ROOT / "metodologia/0.3/standard.md": ROOT / "skill/references/standard-0.3.md",
@@ -96,6 +138,14 @@ class PackageTests(unittest.TestCase):
         self.assertIn("32 niezależne oceny", summary)
         self.assertIn("R3 nie uruchomiono", summary)
         self.assertIn("B2 nie zostało rozpoczęte", summary)
+
+    def test_portability_is_outside_the_0_3_release_scope(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        method_readme = (ROOT / "metodologia/0.3/README.md").read_text(encoding="utf-8")
+        self.assertIn("nie była objęta zakresem walidacji 0.3", readme)
+        self.assertIn("prac nad przyszłą wersją 0.4", readme)
+        self.assertIn("poza zakresem walidacji 0.3", method_readme)
+        self.assertFalse((ROOT / "kalibracja/0.3/protokol-B2.md").exists())
 
     def test_s11_through_s15_are_implemented(self) -> None:
         standard = (ROOT / "metodologia/0.3/standard.md").read_text(encoding="utf-8")

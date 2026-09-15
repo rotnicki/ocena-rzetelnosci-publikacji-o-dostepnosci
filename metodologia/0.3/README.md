@@ -1,8 +1,8 @@
-# Metodologia 0.3 — publiczny projekt roboczy
+# Metodologia 0.3 — zamrożona wersja eksperymentalna
 
-Ten katalog zawiera pełną propozycję metodologii 0.3. Nie jest to jeszcze zamrożone wydanie ani wersja przeznaczona do cytowania jako stabilna.
+Ten katalog zawiera pełną metodologię wydania `v0.3.0`. Jest to zamrożona wersja eksperymentalna przeznaczona do ocen i dalszych badań, a nie wersja stabilna 1.0.
 
-Projekt 0.3:
+Wersja 0.3:
 
 - jest samodzielny — nie wymaga składania zasad z wersji 0.1 i 0.2;
 - powstał na podstawie wniosków z 16 przebiegów kalibracyjnych 0.2;
@@ -27,8 +27,10 @@ Pliki:
 - `wyciag-kalibracyjny.schema.json` — schemat skrótu do porównywania przebiegów;
 - `porownanie-pary-0.3.schema.json` — schemat kompletnego porównania dwóch przebiegów A/B.
 
-Historyczne wersje 0.1 i 0.2 pozostają niezmienione. Zmiany w tym katalogu obowiązują wyłącznie wtedy, gdy oceniający świadomie wybierze projekt 0.3.
+Historyczne wersje 0.1 i 0.2 pozostają niezmienione. W nowych ocenach pakietu 0.3 ta wersja jest aktywna; wcześniejsze wersje należy wybierać jawnie.
 
-Projekt obejmuje zatwierdzone doprecyzowania S1–S15. Badanie B1 zostało zakończone proceduralnie, lecz metodologia nadal jest robocza i niezamrożona. B2 nie zostało rozpoczęte.
+Wersja obejmuje zatwierdzone doprecyzowania S1–S15. Badanie B1 zostało zakończone proceduralnie. Przenośność pomiędzy rodzinami AI pozostaje poza zakresem walidacji 0.3 i może zostać zbadana osobno podczas prac nad 0.4.
+
+Wartość `0.3-draft` zachowana w schematach i walidatorze jest zamrożonym identyfikatorem formatu danych użytego podczas kalibracji. Nie oznacza roboczego statusu wydania i nie została zmieniona, aby nie unieważniać zgodnych wyników B1.
 
 Historycznych metryk YAML ani wyników zakończonych serii nie migruje się do nowego kontraktu. `metryka.yaml` może być w przyszłych seriach jedynie automatycznie wygenerowaną kopią dla człowieka; źródłem kanonicznym pozostaje JSON.

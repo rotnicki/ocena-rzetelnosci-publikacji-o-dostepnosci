@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/feature/0.3-draft/metodologia/0.3/porownanie-pary-0.3.schema.json",
+  "$id": "https://raw.githubusercontent.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/v0.3.0/metodologia/0.3/porownanie-pary-0.3.schema.json",
   "title": "Porównanie pary niezależnych ocen A i B — metodologia 0.3",
   "type": "object",
   "additionalProperties": false,
