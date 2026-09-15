@@ -10,7 +10,7 @@ Projekt łączy metodologię określającą zasady oceny, skill prowadzący AI p
 
 Otwarty format pozwala używać skilla w zgodnych środowiskach AI. Nie oznacza to jednak, że różne rodziny AI zawsze przygotują takie same oceny. Ich porównywalność nie została jeszcze zbadana.
 
-Aktualną wersją jest [oficjalne wydanie v0.3.0](https://github.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/releases/tag/v0.3.0). Jest to oficjalna, zamrożona wersja eksperymentalna i stały punkt odniesienia przed stabilną wersją 1.0. Metodologia 0.3 jest domyślną wersją skilla.
+Aktualną wersją jest [oficjalne wydanie v0.3.0](https://github.com/rotnicki/probiernik/releases/tag/v0.3.0). Jest to oficjalna, zamrożona wersja eksperymentalna i stały punkt odniesienia przed stabilną wersją 1.0. Metodologia 0.3 jest domyślną wersją skilla.
 
 ## Skąd nazwa „Probiernik”?
 
@@ -65,7 +65,7 @@ Metoda ocenia publikację i przedstawione w niej dowody, a nie charakter ani int
 
 ## Jak używać Probiernika?
 
-1. Pobierz pakiet ZIP z [wydania v0.3.0](https://github.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/releases/tag/v0.3.0).
+1. Pobierz pakiet ZIP z [wydania v0.3.0](https://github.com/rotnicki/probiernik/releases/tag/v0.3.0).
 2. Dodaj go do narzędzia obsługującego Agent Skills. Jeżeli nie jest to możliwe, przekaż AI plik `SKILL.md` razem z katalogami `references` i `scripts`.
 3. Podaj pełną treść materiału albo jego adres internetowy, jeżeli używane AI ma dostęp do internetu.
 4. Wydaj polecenie:
