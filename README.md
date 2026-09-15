@@ -70,7 +70,7 @@ Projekt pozostaje na wczesnym etapie rozwoju, przed wersją 1.0.
 
 ### Wersja 0.1
 
-To pierwsza zamrożona wersja robocza. Została użyta w początkowej serii ocen i w ich zaślepionym powtórzeniu. Pozostaje domyślną wersją działającej umiejętności.
+To pierwsza zamrożona wersja robocza. Została użyta w początkowej serii ocen i w ich zaślepionym powtórzeniu. Pozostaje dostępna jako historyczny punkt odniesienia; domyślną wersją działającej umiejętności jest obecnie 0.3.
 
 „Zamrożona” oznacza tutaj, że podczas porównywania wyników nie zmieniano jej reguł. Nie oznacza to, że wersja 0.1 jest ostateczna albo w pełni zwalidowana.
 
@@ -86,6 +86,14 @@ To projekt zmian użyty w zakończonej serii kalibracyjnej powtarzalności. Doda
 - walidowane dane ustrukturyzowane do porównywania przebiegów.
 
 Wersja 0.2-draft nie jest jeszcze stabilnym standardem. Umiejętność używa jej tylko wtedy, gdy polecenie wyraźnie wybiera tę wersję. Właściwa seria ośmiu publikacji i szesnastu przebiegów została zakończona 31 sierpnia 2026 r. Jej reguł i wyników nie zmienia się wstecz; wnioski posłużą do przygotowania osobnej kolejnej wersji.
+
+### Wersja 0.3
+
+To oficjalna, zamrożona wersja eksperymentalna przygotowana na podstawie wniosków z serii 0.2. Jest pełnym, samodzielnym dokumentem i nie wymaga łączenia zasad 0.1 z poprawkami 0.2.
+
+Projekt doprecyzowuje między innymi podział twierdzeń, granice wyników, grupowanie problemów, stosowanie `nd`, ocenę zmian zachodzących po publikacji oraz wpływ niewyjaśnionego żargonu na zrozumiałość i dopasowanie tekstu do jego celu. Przed oceną G, H i L wymaga udokumentowanego sprawdzenia miejsca publikacji, celu i istotnych grup odbiorców. Dodaje też jeden format porównania niezależnych przebiegów A i B, kanoniczną metrykę JSON dla nowych przebiegów kalibracyjnych, osobny ustrukturyzowany dowód każdej rekonstruowanej wersji historycznej oraz kontrole granic C/J, znaczenia problemu, właściwego przedmiotu wymiarów, rozstrzygalności i krytyczności.
+
+Wydanie `v0.3.0` jest niezmiennym punktem odniesienia do nowych ocen i badań. Pozostaje wersją eksperymentalną przed 1.0, ale jego reguł i znaczenia wyników nie zmienia się wstecz.
 
 ## Główne zasady
 
@@ -110,6 +118,11 @@ Ocena powinna:
 - `kalibracja/0.2/rejestr-kandydatow.md` — zamknięta pula 24 kandydatów;
 - `kalibracja/0.2/rejestr-korpusu.md` — osiem wybranych publikacji i kolejność ocen;
 - `kalibracja/0.2/wyniki-serii.md` — ogólne wyniki zakończonej serii.
+- `kalibracja/0.3/wyniki-pilota.md` — zagregowane wyniki pilota projektu 0.3, bez pełnych analiz przypadków.
+- `kalibracja/0.3/propozycje-zmian-po-polskim-pilocie.md` — historyczne decyzje S1–S10 oraz decyzje S11–S15 po B1;
+- `kalibracja/0.3/wyniki-B1.md` — bezpieczne, zagregowane wyniki zakończonego B1, bez powiązania nazwanych publikacji z negatywnymi wynikami;
+- `kalibracja/0.3/kontrola-techniczna-S1-S10.md` — historyczna kontrola techniczna stanu sprzed wykonania B1.
+- `kalibracja/0.3/kontrola-techniczna-S1-S15.md` — kontrola techniczna projektu po wdrożeniu T1–T2 i S11–S15.
 
 ### Metodologia
 
@@ -119,13 +132,15 @@ Ocena powinna:
 - `metodologia/0.2/kotwice.md` — szczegółowe kotwice ocen 0–4 dla wymiarów A–L;
 - `metodologia/0.2/wynik.schema.json` — schemat pełnego wyniku;
 - `metodologia/0.2/wyciag-kalibracyjny.schema.json` — schemat krótkiego wyniku do porównywania przebiegów.
+- `metodologia/0.3/` — oficjalna, samodzielna metodologia 0.3, kotwice oraz schematy metryki, wyniku, wyciągu i porównania pary.
 
 ### Szablony, umiejętność i narzędzia
 
-- `szablony/0.1/` i `szablony/0.2/` — wersjonowane karty oraz wzory raportów;
+- `szablony/0.1/`, `szablony/0.2/` i `szablony/0.3/` — wersjonowane karty, wzory raportów oraz wzór porównania pary 0.3;
 - `skill/SKILL.md` — główna instrukcja działania umiejętności AI i wyboru wersji;
 - `skill/references/` — kopie materiałów metodologicznych używane przez umiejętność;
 - `skill/scripts/validate_0_2.py` — walidator pełnego wyniku i wyciągu kalibracyjnego;
+- `skill/scripts/validate_0_3.py` — walidator kanonicznej metryki, pełnego wyniku, wyciągu i porównania pary projektu 0.3;
 - `skill/agents/openai.yaml` — opcjonalne metadane interfejsu dla środowiska OpenAI.
 
 Formalne pliki metodologii są źródłem obowiązujących reguł. Ten README służy ich prostemu objaśnieniu i nie zastępuje standardu.
@@ -165,15 +180,11 @@ Wynik pokazuje powtarzalność w badanym środowisku. Nie jest jeszcze dowodem p
 
 ## Następny etap
 
-Plan dalszych prac obejmuje:
+Walidacja wersji 0.3 obejmowała wcześniejszy pilotaż oraz zakończone badanie B1. Przenośność metodologii pomiędzy różnymi rodzinami AI nie była objęta zakresem walidacji 0.3. Może zostać zbadana osobno na podstawie zamrożonej wersji 0.3, a wyniki takiego badania mogą posłużyć do prac nad przyszłą wersją 0.4.
 
-1. dokończenie zbiorczego dopasowania map twierdzeń i problemów dla ośmiu par;
-2. przygotowanie jawnej listy niejednoznaczności ujawnionych w serii;
-3. zaprojektowanie kolejnej wersji jako osobnego projektu, bez zmiany wyników i reguł 0.2 wstecz;
-4. doprecyzowanie przede wszystkim wymiarów C, G i K, grupowania twierdzeń oraz oceny późniejszej dezaktualizacji;
-5. podjęcie osobnej decyzji o sposobie testowania trafności i przenośności między systemami AI.
+Wydanie `v0.3.0` zamraża metodologię sprawdzoną w pilotażu i B1. Dalsze badania nie zmieniają tego wydania wstecz; mogą prowadzić do wersji 0.4.
 
-Metodologia 0.1 pozostaje wersją domyślną umiejętności. Wersję 0.2-draft nadal należy wybierać jawnie.
+Metodologia 0.3 jest domyślną wersją źródłowej umiejętności. Wersje 0.1 i 0.2 pozostają dostępne jako historyczne punkty odniesienia i trzeba wybierać je jawnie. Paczka wydania 0.3 zawiera wszystkie potrzebne pliki bez konieczności pobierania metodologii z repozytorium.
 
 ## Licencja
 

@@ -1,0 +1,58 @@
+name: Publish v0.3.0
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/publish-v0.3.0.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out complete history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run regression tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Build twice and verify reproducibility
+        run: |
+          python3 scripts/build_skill_release.py 0.3.0 --output dist-a
+          python3 scripts/build_skill_release.py 0.3.0 --output dist-b
+          cmp dist-a/assess-accessibility-articles-v0.3.0.zip dist-b/assess-accessibility-articles-v0.3.0.zip
+          cmp dist-a/assess-accessibility-articles-v0.3.0.zip.sha256 dist-b/assess-accessibility-articles-v0.3.0.zip.sha256
+          unzip -t dist-a/assess-accessibility-articles-v0.3.0.zip
+          (cd dist-a && sha256sum -c assess-accessibility-articles-v0.3.0.zip.sha256)
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v0.3.0 >/dev/null 2>&1; then
+            echo "v0.3.0 already exists; refusing to replace it."
+            exit 1
+          fi
+          cp wydania/v0.3.0.md release-notes.md
+          printf '\n## Commit oznaczony znacznikiem\n\n`%s`\n' "$GITHUB_SHA" >> release-notes.md
+          gh release create v0.3.0 \
+            dist-a/assess-accessibility-articles-v0.3.0.zip \
+            dist-a/assess-accessibility-articles-v0.3.0.zip.sha256 \
+            --target "$GITHUB_SHA" \
+            --title "0.3.0 — zamrożona metodologia po B1" \
+            --notes-file release-notes.md
+
+      - name: Download and verify published assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir downloaded-release
+          gh release download v0.3.0 --dir downloaded-release
+          (cd downloaded-release && sha256sum -c assess-accessibility-articles-v0.3.0.zip.sha256)
+          unzip -t downloaded-release/assess-accessibility-articles-v0.3.0.zip

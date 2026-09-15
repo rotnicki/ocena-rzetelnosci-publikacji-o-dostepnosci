@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/v0.3.0/metodologia/0.3/metryka-0.3.schema.json",
+  "title": "Kanoniczna metryka przebiegu kalibracyjnego 0.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "analysis_id", "series_id", "case_id", "run_label", "calibration_mode",
+    "methodology", "run", "publication", "materials", "evaluator", "independence", "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.3-draft"},
+    "analysis_id": {"$ref": "#/$defs/nonempty"},
+    "series_id": {"$ref": "#/$defs/nonempty"},
+    "case_id": {"$ref": "#/$defs/nonempty"},
+    "run_label": {"$ref": "#/$defs/nonempty"},
+    "calibration_mode": {"const": true},
+    "methodology": {"$ref": "#/$defs/methodology"},
+    "run": {"$ref": "#/$defs/run"},
+    "publication": {"$ref": "#/$defs/publication"},
+    "materials": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/material"}},
+    "evaluator": {"$ref": "#/$defs/evaluator"},
+    "independence": {"$ref": "#/$defs/independence"},
+    "limitations": {"$ref": "#/$defs/textArray"}
+  },
+  "$defs": {
+    "nonempty": {"type": "string", "minLength": 1},
+    "nullableText": {"oneOf": [{"$ref": "#/$defs/nonempty"}, {"type": "null"}]},
+    "textArray": {"type": "array", "items": {"$ref": "#/$defs/nonempty"}},
+    "access": {"enum": ["tak", "nie", "not_available", "not_applicable"]},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "identifier", "artifact_sha256", "frozen_before_critical_pass"],
+      "properties": {
+        "version": {"const": "0.3-draft"},
+        "identifier": {"$ref": "#/$defs/nonempty"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "frozen_before_critical_pass": {"const": true}
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["started_at", "completed_at", "language"],
+      "properties": {
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"oneOf": [{"type": "string", "format": "date-time"}, {"type": "null"}]},
+        "language": {"type": "string", "minLength": 2}
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publication_id", "title", "authors", "publisher", "outlet", "url", "published_at",
+        "updated_at", "accessed_at", "analyzed_at", "language", "publication_type", "full_text"
+      ],
+      "properties": {
+        "publication_id": {"$ref": "#/$defs/nonempty"},
+        "title": {"$ref": "#/$defs/nonempty"},
+        "authors": {"$ref": "#/$defs/textArray"},
+        "publisher": {"$ref": "#/$defs/nullableText"},
+        "outlet": {"$ref": "#/$defs/nonempty"},
+        "url": {"type": "string", "format": "uri"},
+        "published_at": {"$ref": "#/$defs/nullableText"},
+        "updated_at": {"$ref": "#/$defs/nullableText"},
+        "accessed_at": {"$ref": "#/$defs/nonempty"},
+        "analyzed_at": {"$ref": "#/$defs/nonempty"},
+        "language": {"type": "string", "minLength": 2},
+        "publication_type": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonempty"}},
+        "full_text": {"enum": ["tak", "nie", "czesciowo"]}
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["material_id", "role", "url", "accessed_at", "version", "immutable", "scope", "sha256", "hash_basis"],
+      "properties": {
+        "material_id": {"$ref": "#/$defs/nonempty"},
+        "role": {"enum": ["tresc_glowna", "material_centralny_zewnetrzny", "material_dodatkowy", "material_wylaczony"]},
+        "url": {"type": "string", "format": "uri"},
+        "accessed_at": {"$ref": "#/$defs/nonempty"},
+        "version": {"$ref": "#/$defs/nullableText"},
+        "immutable": {"enum": ["tak", "nie", "not_available"]},
+        "scope": {"$ref": "#/$defs/nonempty"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "hash_basis": {"enum": ["raw_bytes", "rendered_capture", "canonical_text"]}
+      }
+    },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type", "evaluator_id", "name", "provider", "model_name", "model_snapshot",
+        "reasoning_setting", "tools", "memory_access", "project_access", "private_repository_access"
+      ],
+      "properties": {
+        "type": {"enum": ["czlowiek", "ai", "zespol"]},
+        "evaluator_id": {"$ref": "#/$defs/nonempty"},
+        "name": {"$ref": "#/$defs/nonempty"},
+        "provider": {"$ref": "#/$defs/nullableText"},
+        "model_name": {"$ref": "#/$defs/nullableText"},
+        "model_snapshot": {"$ref": "#/$defs/nonempty"},
+        "reasoning_setting": {"$ref": "#/$defs/nonempty"},
+        "tools": {"$ref": "#/$defs/textArray"},
+        "memory_access": {"$ref": "#/$defs/access"},
+        "project_access": {"$ref": "#/$defs/access"},
+        "private_repository_access": {"$ref": "#/$defs/access"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"type": {"const": "ai"}}, "required": ["type"]},
+          "then": {"properties": {"provider": {"$ref": "#/$defs/nonempty"}, "model_name": {"$ref": "#/$defs/nonempty"}}}
+        },
+        {
+          "if": {"properties": {"type": {"const": "czlowiek"}}, "required": ["type"]},
+          "then": {"properties": {"provider": {"type": "null"}, "model_name": {"type": "null"}, "model_snapshot": {"const": "not_applicable"}}}
+        }
+      ]
+    },
+    "independence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["isolated_context", "other_run_results_access", "prior_case_results_access", "rationale"],
+      "properties": {
+        "isolated_context": {"type": "boolean"},
+        "other_run_results_access": {"$ref": "#/$defs/access"},
+        "prior_case_results_access": {"$ref": "#/$defs/access"},
+        "rationale": {"$ref": "#/$defs/nonempty"}
+      }
+    }
+  }
+}
