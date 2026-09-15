@@ -2,86 +2,100 @@
 
 ## W skrócie
 
-Projekt pomaga sztucznej inteligencji sprawdzać rzetelność artykułów, poradników, ofert i innych publikacji o dostępności. Zamiast ogólnego polecenia „oceń ten tekst” daje AI wspólne zasady, źródła oceny i format wyniku.
+Projekt pomaga wykorzystywać AI do oceny rzetelności artykułów, poradników, ofert, materiałów szkoleniowych i innych publikacji dotyczących dostępności.
 
-Aktualną wersją jest [oficjalne wydanie v0.3.0](https://github.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/releases/tag/v0.3.0). Jest to oficjalna, zamrożona wersja eksperymentalna. Można jej używać jako stałego punktu odniesienia, ale projekt pozostaje na etapie przed wersją stabilną 1.0.
+Zawiera metodologię określającą zasady oceny, skill prowadzący AI przez analizę oraz walidator sprawdzający strukturę wyniku. Skill, czyli przygotowana umiejętność AI, wykorzystuje otwarty standard [Agent Skills](https://agentskills.io/). Dzięki temu może być używany przez różne zgodne narzędzia, a nie tylko przez jeden model AI.
 
-Metodologia 0.3 jest domyślną wersją źródłowej umiejętności dostępnej w tym repozytorium.
+Aktualną wersją jest [oficjalne wydanie v0.3.0](https://github.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/releases/tag/v0.3.0). Jest to oficjalna, zamrożona wersja eksperymentalna i stały punkt odniesienia przed stabilną wersją 1.0. Metodologia 0.3 jest domyślną wersją skilla.
 
-## Do czego służy
+## Jaki problem rozwiązuje projekt
 
-Metoda pomaga AI:
+Wyobraź sobie, że chcesz nauczyć się czegoś o dostępności albo musisz ocenić artykuł, szkolenie czy ofertę audytu. Materiał wygląda profesjonalnie, ale nie masz pewności, czy przekazuje aktualną wiedzę, właściwie opisuje przepisy i standardy oraz proponuje bezpieczne rozwiązania.
 
-- przeczytać pełną publikację i ważne materiały, do których ona odsyła;
-- oddzielić stanowisko autora od jego oceny;
-- wskazać twierdzenia wymagające sprawdzenia;
-- porównać je przede wszystkim ze źródłami pierwotnymi i autorytatywnymi;
-- ocenić poprawność, jakość dowodów, zrozumiałość i bezpieczeństwo zaleceń;
-- opisać wykryte problemy i ich znaczenie;
-- wydać jeden z pięciu opisowych werdyktów;
-- zapisać wynik tak, aby można go było sprawdzić i porównać z drugą oceną.
+Publikacja może zawierać błędy, uczyć nieprawidłowych praktyk, powielać utrwalone mity albo przedstawiać dobrą praktykę jako bezwzględny wymóg. Materiał marketingowy może wyolbrzymiać korzyści, pomijać ograniczenia lub sugerować skuteczność i kompetencje, których odpowiednio nie udokumentowano.
 
-Publikacja otrzymuje osobne oceny w dwunastu obszarach oznaczonych od A do L:
+Specjalistyczny język i pewny ton mogą sprawić, że nierzetelna treść brzmi wiarygodnie. Osobie bez odpowiedniej wiedzy lub czasu może być trudno odróżnić rzeczywiste wymaganie od uproszczenia, branżowego przyzwyczajenia albo chwytu marketingowego.
 
-- A–D: poprawność faktów, prawa i norm, zagadnień technicznych oraz jakość źródeł;
-- E–H: kompletność i kontekst, jakość rozumowania, precyzja pojęć oraz zrozumiałość;
-- I–L: użyteczność i bezpieczeństwo zaleceń, uwzględnienie doświadczeń użytkowników, jasne odróżnianie wiedzy od niepewności oraz dopasowanie treści do jej celu.
+Naturalnym odruchem jest poproszenie AI o pomoc. W zwykłej rozmowie na czacie AI może jednak pominąć ważne źródło, przedstawić niepełną ocenę albo przy kolejnej próbie wydać inny werdykt. Użytkownik, który nie zna ograniczeń AI, może zbyt łatwo zaufać jednej odpowiedzi.
 
-Każdy obszar ocenia się osobno. Nie tworzy się z nich jednej średniej ani sumy, która automatycznie wyznacza werdykt. Liczy się znaczenie konkretnych problemów, ich wpływ na odbiorców oraz jakość uzasadnienia. Pełne znaczenie wszystkich obszarów opisują [kotwice ocen A–L](metodologia/0.3/kotwice.md).
-
-Metoda ocenia konkretną publikację, a nie charakter, intencje ani kompetencje jej autora.
+Projekt wyrósł z wieloletnich doświadczeń i obserwacji Mikołaja Rotnickiego — eksperta i popularyzatora dostępności cyfrowej. Potrzeby te pojawiały się podczas szkoleń, audytów, przygotowywania ofert, rozmów na forach internetowych oraz analizowania problemów zgłaszanych przez urzędników, zamawiających i osoby uczące się dostępności.
 
 ## Dla kogo
 
-Projekt jest przeznaczony przede wszystkim dla systemów AI działających pod kontrolą człowieka. Może być przydatny osobom zajmującym się dostępnością, redakcjom, badaczom oraz wszystkim, którzy chcą otrzymać udokumentowaną i porównywalną ocenę publikacji.
+Projekt może pomagać:
 
-Pakiet korzysta z formatu Agent Skills. Nie oznacza to, że każdy czat AI automatycznie odczyta repozytorium, zainstaluje pakiet lub uruchomi walidator. Środowisko musi obsługiwać taki pakiet albo umożliwiać przekazanie jego plików z zachowaniem ich struktury.
+- osobom uczącym się dostępności i sprawdzającym jakość wybranej publikacji;
+- osobom bez wiedzy lub czasu potrzebnego do samodzielnej kontroli wszystkich twierdzeń i źródeł;
+- urzędnikom odbierającym publikacje lub szkolenia przygotowane za pieniądze publiczne;
+- zamawiającym porównującym oferty audytu, badania, szkolenia albo przebudowy strony czy aplikacji;
+- redakcjom, trenerom i autorom sprawdzającym materiał przed publikacją;
+- ekspertom porządkującym analizę i porównującym niezależne wyniki.
+
+Metoda może skrócić pierwszą analizę i wskazać elementy wymagające dokładniejszego sprawdzenia. Nie wybiera jednak automatycznie najlepszej oferty ani nie potwierdza rzeczywistych kompetencji wykonawcy.
+
+## Jak pomagają metodologia i skill
+
+Metodologia określa, co należy ocenić: jakie twierdzenia sprawdzić, jak dobierać źródła, jak rozpoznawać problemy oraz jak ustalać ich znaczenie dla odbiorców.
+
+Skill jest przygotowaną umiejętnością AI. Zawiera instrukcję postępowania, materiały metodologiczne, schematy, szablony i skrypty kontrolne. Zgodne narzędzie AI może wczytać ten pakiet i przeprowadzić ocenę według opisanej procedury.
+
+Stały format wyniku pozwala wykonać drugą, niezależną ocenę i porównać oba przebiegi. Pokazuje nie tylko końcowy werdykt, ale także miejsca zgodności i rozbieżności.
+
+Metodologia i skill powstały na podstawie kolejnych prób, pilotaży i badań powtarzalności. Nie usuwają ryzyka błędu AI, ale wymagają korzystania ze źródeł i pokazania podstaw oceny.
+
+## Co jest oceniane
+
+Publikacja otrzymuje osobne oceny w dwunastu obszarach:
+
+- A–D: poprawność faktów, prawa i norm, zagadnień technicznych oraz jakość źródeł;
+- E–H: kompletność i kontekst, jakość rozumowania, precyzja pojęć i zrozumiałość;
+- I–L: użyteczność i bezpieczeństwo zaleceń, doświadczenia użytkowników, odróżnianie wiedzy od niepewności oraz dopasowanie treści do celu.
+
+Nie tworzy się z nich średniej automatycznie wyznaczającej werdykt. Pełne definicje zawierają [kotwice ocen A–L](metodologia/0.3/kotwice.md).
+
+Metoda ocenia publikację i przedstawione w niej dowody, a nie charakter ani intencje autora.
 
 ## Jak użyć
 
 1. Pobierz pakiet ZIP z [wydania v0.3.0](https://github.com/rotnicki/ocena-rzetelnosci-publikacji-o-dostepnosci/releases/tag/v0.3.0).
-2. Dodaj pakiet do narzędzia obsługującego Agent Skills. Jeżeli narzędzie nie instaluje takich pakietów, przekaż mu plik `SKILL.md` razem z katalogami `references` i `scripts`.
-3. Podaj pełną treść publikacji albo jej adres internetowy. AI musi mieć możliwość odczytania całego materiału i otwierania źródeł potrzebnych do sprawdzenia twierdzeń.
+2. Dodaj go do narzędzia obsługującego Agent Skills. Jeżeli nie jest to możliwe, przekaż AI plik `SKILL.md` razem z katalogami `references` i `scripts`.
+3. Podaj pełną treść materiału albo jego adres internetowy.
 4. Wydaj polecenie:
 
 ```text
-Oceń tę publikację zgodnie z metodologią 0.3. Zastosuj dołączony skill, sprawdź twierdzenia w źródłach i przygotuj pełny raport oraz wynik strukturalny.
+Oceń ten materiał zgodnie z metodologią 0.3. Zastosuj dołączony skill, sprawdź twierdzenia w wiarygodnych źródłach i przygotuj pełny raport oraz wynik strukturalny.
 ```
 
-5. Jeżeli środowisko potrafi uruchamiać skrypty, sprawdź plik wyniku dołączonym walidatorem. Walidator kontroluje kompletność i zgodność struktury danych, ale nie potwierdza, że sama analiza jest prawdziwa.
-6. Gdy potrzebujesz sprawdzić powtarzalność, uruchom drugą ocenę w osobnym kontekście, bez udostępniania pierwszego wyniku. Dopiero potem porównaj oba przebiegi.
+5. Jeżeli środowisko pozwala uruchamiać skrypty, sprawdź wynik dołączonym walidatorem.
+6. Aby zbadać powtarzalność, wykonaj drugi przebieg bez udostępniania pierwszego wyniku.
 
-Dokładna instrukcja operacyjna dla AI znajduje się w pliku [`skill/SKILL.md`](skill/SKILL.md). Pełny raport nie gwarantuje sam w sobie poprawności oceny — uzasadnienia i źródła nadal wymagają krytycznej kontroli.
+Dokładna instrukcja znajduje się w pliku [`skill/SKILL.md`](skill/SKILL.md).
 
 ## Co sprawdzono
 
-Rozwój metody obejmował wcześniejsze próby, serię dla wersji 0.2, polski pilotaż projektu 0.3 oraz zakończone badanie B1.
+Rozwój metody obejmował wcześniejsze próby, serię wersji 0.2, polski pilotaż 0.3 oraz badanie B1.
 
-W badaniu nazwanym B1 każdą z 16 publikacji oceniono dwa razy, w odizolowanych przebiegach. Pozwoliło to sprawdzić, czy zastosowanie tych samych zasad prowadzi do podobnych wyników. Łącznie wykonano 32 niezależne oceny. Werdykt był taki sam w 15 z 16 porównań. Szczegóły, pozostałe miary i ograniczenia zawiera [publiczne podsumowanie B1](kalibracja/0.3/wyniki-B1.md). Wyniki wcześniejszej serii znajdują się w [podsumowaniu kalibracji 0.2](kalibracja/0.2/wyniki-serii.md).
-
-Wyników zakończonych badań ani wcześniejszych wersji nie przelicza się później według nowych zasad. Pełne analizy, prywatny manifest i kopie ocenianych publikacji nie są publikowane w tym repozytorium.
+W B1 każdą z 16 publikacji oceniono dwa razy w odizolowanych przebiegach. Łącznie wykonano 32 niezależne oceny. Werdykt był taki sam w 15 z 16 porównań. Szczegóły zawiera [publiczne podsumowanie B1](kalibracja/0.3/wyniki-B1.md).
 
 ## Ograniczenia
 
-- Metoda nie zastępuje porady prawnej, badania naukowego ani profesjonalnego audytu produktu.
-- Jeden wynik AI nie jest automatycznie ostateczną prawdą.
-- Poprawny format raportu nie dowodzi poprawności jego treści.
-- Zamrożenie oznacza, że reguły wydania v0.3.0 nie są zmieniane wstecz. Nie oznacza pełnego potwierdzenia trafności metody.
-- Przenośność metodologii pomiędzy różnymi rodzinami AI nie była objęta zakresem walidacji 0.3. Może zostać zbadana osobno na podstawie zamrożonej wersji 0.3, a wyniki mogą posłużyć do prac nad przyszłą wersją 0.4.
+- AI może popełnić błąd, pominąć źródło albo niewłaściwie zinterpretować materiał.
+- Walidator sprawdza strukturę wyniku, a nie prawdziwość analizy.
+- Metoda nie zastępuje porady prawnej, audytu ani procedury udzielania zamówienia.
+- Wynik powinien wspierać odpowiedzialną decyzję, a nie automatycznie ją zastępować.
+- Przenośność pomiędzy różnymi rodzinami AI nie była objęta zakresem walidacji 0.3. Może zostać zbadana podczas prac nad przyszłą wersją 0.4.
 
 ## Dokumentacja
 
-- [Opis metodologii 0.3](metodologia/0.3/README.md) — zawartość i status aktualnej wersji.
-- [Pełny standard 0.3](metodologia/0.3/standard.md) — wszystkie obowiązujące reguły oceny.
-- [Instrukcja operacyjna skilla](skill/SKILL.md) — kolejność pracy systemu AI.
-- [Wyniki badania B1](kalibracja/0.3/wyniki-B1.md) — bezpieczne podsumowanie 32 ocen.
-- [Wyniki serii 0.2](kalibracja/0.2/wyniki-serii.md) — wcześniejsze badanie powtarzalności.
-- [Informacje o wydaniu v0.3.0](wydania/v0.3.0.md) — zakres zmian i suma kontrolna pakietu.
-- [Zasady wersjonowania](WERSJONOWANIE.md) — statusy oraz historia wersji 0.1, 0.2 i 0.3.
-- [Licencje i zasady wykorzystania](LICENSE.md) — zakres licencji oraz sposób wskazywania autorstwa.
-
-Metodologia 0.3 jest samodzielna. Wersje 0.1 i 0.2 pozostają niezmiennymi, historycznymi punktami odniesienia i trzeba wybierać je jawnie.
+- [Opis metodologii 0.3](metodologia/0.3/README.md).
+- [Pełny standard 0.3](metodologia/0.3/standard.md).
+- [Kotwice ocen A–L](metodologia/0.3/kotwice.md).
+- [Instrukcja skilla](skill/SKILL.md).
+- [Wyniki badania B1](kalibracja/0.3/wyniki-B1.md).
+- [Informacje o wydaniu v0.3.0](wydania/v0.3.0.md).
+- [Historia wersji](WERSJONOWANIE.md).
+- [Licencje i autorstwo](LICENSE.md).
 
 ## Licencja
 
-Metodologia i pozostałe materiały tekstowe są udostępniane na licencji CC BY 4.0. Kod, skrypty, schematy i pliki techniczne są udostępniane na licencji MIT. Szczegóły zawiera dokument [Licencje i autorstwo](LICENSE.md).
+Metodologia i materiały tekstowe są udostępniane na licencji CC BY 4.0. Kod, skrypty, schematy i pliki techniczne są udostępniane na licencji MIT.
