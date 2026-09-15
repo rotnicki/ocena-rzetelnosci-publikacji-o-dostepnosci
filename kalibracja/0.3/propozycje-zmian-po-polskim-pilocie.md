@@ -1,7 +1,7 @@
 # Propozycje zmian po polskim pilotażu 0.3
 
 **Data:** 14 września 2026 r.  
-**Status:** dokument historyczny po polskim pilotażu i B1; T1–T2 oraz S1–S15 wdrożone; B1 zakończone; B2 nie rozpoczęte
+**Status:** dokument historyczny po polskim pilotażu i B1; T1–T2 oraz S1–S15 wdrożone; B1 zakończone
 **Podstawa:** pięć polskich publikacji, po dwa odizolowane przebiegi A/B
 
 > **Dokument historyczny — aktualny stan 14 września 2026 r.:** S1–S15
@@ -10,11 +10,13 @@
 > [`wyniki-B1.md`](wyniki-B1.md). T1 formalizuje to zamknięcie, a T2 wzmacnia
 > techniczny dowód wersji historycznej. S11–S15 są prospektywnymi
 > doprecyzowaniami wynikającymi z B1. Wyników pilotażu ani B1 nie przeliczono
-> wstecz. B2 nie zostało rozpoczęte.
+> wstecz. Wzmianki o B2 niżej dokumentują rozważany podczas rozwoju test
+> przenośności. Test nie należał do zakresu walidacji wydania 0.3; jego pełny
+> materiał roboczy zachowano osobno dla przyszłych prac nad 0.4.
 
 ## 1. Najważniejsza rekomendacja
 
-Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 ustanowiło osobny kontrakt techniczny dla nowych serii. B1 zostało wykonane według osobno zatwierdzonego protokołu i zakończone proceduralnie. T1–T2 wdrażają bezpieczne zamknięcie dokumentacji B1 i techniczne uszczelnienie dowodu historycznego. S11–S15 doprecyzowują ujawnione w B1 granice decyzji bez zmiany pięciu werdyktów, obniżenia progu krytyczności ani wprowadzenia sumy A–L. B2 pozostaje niewykonanym badaniem wymagającym osobnego protokołu i decyzji.
+Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologii. S10 ustanowiło osobny kontrakt techniczny dla nowych serii. B1 zostało wykonane według osobno zatwierdzonego protokołu i zakończone proceduralnie. T1–T2 wdrażają bezpieczne zamknięcie dokumentacji B1 i techniczne uszczelnienie dowodu historycznego. S11–S15 doprecyzowują ujawnione w B1 granice decyzji bez zmiany pięciu werdyktów, obniżenia progu krytyczności ani wprowadzenia sumy A–L. Rozważane B2 nie weszło do zakresu wydania 0.3; materiały do przyszłego testu przenośności należą do osobnych prac nad 0.4.
 
 | ID | Rodzaj | Rekomendacja | Główny obszar |
 | --- | --- | --- | --- |
@@ -36,7 +38,7 @@ Zmiany S1–S10 zostały zatwierdzone i wdrożone bez przebudowy celu metodologi
 | S13 | znaczeniowa i strukturalna | wdrożono po B1 | właściwy przedmiot wymiarów A–L |
 | S14 | znaczeniowa i strukturalna | wdrożono po B1 | rozstrzygalność i przesłanki krytyczności |
 | S15 | znaczeniowa i strukturalna | wdrożono po B1 | jednolite grupy odbiorców |
-| B2 | badawcza | nie rozpoczęto | przenośność między oceniającymi |
+| B2 | badawcza | rozważane poza zakresem 0.3 | przenośność między oceniającymi; materiał przeniesiony do prac nad 0.4 |
 
 ## S1. Operacyjne przykłady atomizacji
 
@@ -367,7 +369,7 @@ Po decyzjach z 14 września 2026 r.:
 - B1 zostało zakończone proceduralnie, a R3 nie uruchomiono;
 - T1–T2 zostały zatwierdzone i wdrożone po analizie B1;
 - S11–S15 obowiązują prospektywnie i nie zmieniają historycznych wyników B1;
-- B2 nie zostało rozpoczęte;
+- w ramach 0.3 nie prowadzono ocen przenośności B2;
 - nie wolno przeliczać wstecz wyników polskiego pilota;
 - PR nr 8 pozostaje niescalonym projektem, bez znacznika i wydania 0.3.
 
@@ -389,6 +391,6 @@ Poniższa lista rozwija skróty „kopia skilla” i „wzory” użyte powyżej
 | S10 | `README.md`; `metodologia/0.3/README.md`; `metodologia/0.3/standard.md`; `skill/references/standard-0.3.md`; nowy `metodologia/0.3/metryka-0.3.schema.json`; nowy `skill/references/metryka-0.3.schema.json`; `metodologia/0.3/wynik.schema.json`; `skill/references/wynik-0.3.schema.json`; `metodologia/0.3/wyciag-kalibracyjny.schema.json`; `skill/references/wyciag-kalibracyjny-0.3.schema.json`; `szablony/0.3/karta-oceny.md`; `skill/references/karta-oceny-0.3.md`; `szablony/0.3/wzor-raportu.md`; `skill/references/wzor-raportu-0.3.md`; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | S11–S15 | standard i kotwice 0.3 wraz z kopiami; wszystkie trzy szablony 0.3 i ich kopie; schematy wyniku, wyciągu i porównania pary wraz z kopiami; `skill/SKILL.md`; `skill/scripts/validate_0_3.py`; oba pliki testów 0.3 |
 | B1 | wykonany protokół i rejestry w `kalibracja/0.3/`; po zakończeniu bezpieczne podsumowanie `kalibracja/0.3/wyniki-B1.md` |
-| B2 | nowy protokół w `kalibracja/0.3/`; bez zmian standardu, kotwic, schematów i skilla przed analizą wyników |
+| B2 | historyczna propozycja; pełny protokół zachowany poza zakresem wydania 0.3 jako materiał prac nad 0.4 |
 
 „Oba pliki testów 0.3” oznacza `tests/test_validate_0_3.py` i `tests/test_0_3_package.py`. „Wszystkie trzy schematy” oznacza wynik, wyciąg i porównanie pary. „Wszystkie trzy szablony” oznacza kartę oceny, wzór raportu i wzór porównania.

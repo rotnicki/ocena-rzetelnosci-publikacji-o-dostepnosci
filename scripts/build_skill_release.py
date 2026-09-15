@@ -31,6 +31,14 @@ RELEASES = {
             "This version-specific package is fixed to methodology 0.2. Treat the included 0.1 materials only as the retained base required by 0.2; do not select 0.1 as the active version.",
         ),
     },
+    "0.3.0": {
+        "source_commit": "714a5979e52f889671ba52f376824990549da013",
+        "methodology": "0.3",
+        "replacement": (
+            "Select and record the methodology version before reading the publication critically. Use version 0.3 unless the user or a frozen calibration prompt explicitly selects another version.",
+            "This version-specific package is fixed to methodology 0.3. Do not select or combine rules from another version.",
+        ),
+    },
 }
 
 PACKAGE_NAME = "assess-accessibility-articles"

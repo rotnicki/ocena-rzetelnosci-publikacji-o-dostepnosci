@@ -16,7 +16,7 @@ Wszystkie wersje `0.x.y` są rozwojowe. Opublikowane wersje `0.x.y` są jednak z
 
 - **W przygotowaniu** — zmiany powstają na osobnej gałęzi i mogą się jeszcze zmieniać. Nie jest to wydanie.
 - **Kandydat do wydania** — wersja jest kompletna i podlega końcowej kontroli. W razie potrzeby może otrzymać oznaczenie, np. `v0.3.0-rc.1`.
-- **Zamrożona wersja eksperymentalna** — opublikowane wydanie `v0.x.y`, którego można używać w ocenach i testach. Na GitHubie jest oznaczone jako wersja przedpremierowa.
+- **Zamrożona wersja eksperymentalna** — opublikowane wydanie `v0.x.y`, którego można używać w ocenach i testach. Status eksperymentalny wynika z opisu wersji; wydanie może być oznaczone w interfejsie GitHuba jako przedpremierowe albo zwykłe, zależnie od jawnej decyzji wydawniczej.
 - **Wersja stabilna** — wydanie od `v1.0.0`, przeznaczone do zwykłego stosowania po zakończeniu wymaganej walidacji.
 
 Słowo `draft` nie jest dodawane do numeru zamrożonego wydania. Może występować w historycznych dokumentach opisujących etap przygotowywania danej wersji, ale strona wydania zawsze podaje jej aktualny status prostym językiem.
@@ -35,11 +35,13 @@ Każde wydanie musi zawierać:
 
 Opisy opublikowanych wydań są przechowywane także w katalogu `wydania/`, aby historia nie zależała wyłącznie od interfejsu GitHuba.
 
-Historyczne paczki 0.1.0 i 0.2.0 buduje skrypt `scripts/build_skill_release.py`. Pobiera on zawartość skilla z przypisanego źródłowego commita, jednoznacznie ustawia aktywną wersję metodologii, usuwa odsyłacze do nieobecnych historycznie ikon oraz dodaje manifest i licencje. Nie zmienia treści metodologii ani kotwic ocen.
+Paczki 0.1.0, 0.2.0 i 0.3.0 buduje skrypt `scripts/build_skill_release.py`. Pobiera on zawartość skilla z przypisanego źródłowego commita, jednoznacznie ustawia aktywną wersję metodologii, usuwa odsyłacze do nieobecnych historycznie ikon oraz dodaje manifest i licencje. Nie zmienia treści metodologii ani kotwic ocen.
 
-Paczki do przeglądu projektu 0.3 buduje skrypt `scripts/build_skill_draft.py`. Taka paczka ma w nazwie i manifeście oznaczenie `draft`, nie otrzymuje znacznika Git ani strony wydania i nie może być przedstawiana jako zamrożona wersja `v0.3.0`.
+Historyczne paczki do przeglądu projektu 0.3 powstawały przed wydaniem z roboczej gałęzi. Wydanie `v0.3.0` jest budowane wyłącznie z przypisanego, niezmiennego commita przez skrypt wydawniczy.
 
 Publikację historycznych wydań wykonuje kontrolowany proces GitHub Actions zapisany w `.github/workflows/publish-historical-releases.yml`. Proces buduje paczki od początku, tworzy brakujące znaczniki na gałęziach wydawniczych, dołącza ZIP-y i sumy kontrolne oraz oznacza wydania jako przedpremierowe. Jeżeli wydanie już istnieje, pozostawia je bez zmian.
+
+Wydanie `v0.3.0` publikuje osobny, jednorazowy proces `.github/workflows/publish-v0.3.0.yml`. Buduje paczkę dwukrotnie, sprawdza jej powtarzalność i integralność, a następnie tworzy zwykłe wydanie GitHub. Określenie „zwykłe” dotyczy ustawienia interfejsu GitHuba; metodologia nadal jest zamrożoną wersją eksperymentalną przed 1.0.
 
 Paczka instalacyjna musi zawierać obowiązkowy `SKILL.md` oraz wszystkie pliki, do których się odwołuje. Nie może wymagać pobierania metodologii z tego repozytorium podczas działania. Zewnętrzny dostęp może być nadal potrzebny do pobrania ocenianej publikacji i sprawdzenia jej twierdzeń w źródłach.
 
@@ -49,9 +51,10 @@ Paczka instalacyjna musi zawierać obowiązkowy `SKILL.md` oraz wszystkie pliki,
 |---|---|---|---|
 | `v0.1.0` | zamrożona wersja eksperymentalna | `af83066983e832cd7f61b7c2bd99482a07731afc` | pierwszy kompletny stan metodologii i umiejętności 0.1 przed rozpoczęciem prac nad 0.2 |
 | `v0.2.0` | zamrożona wersja eksperymentalna | `c3280da26d2bf0a5a44dfcddc9105180bf3d4267` | dokładna metodologia 0.2 użyta w serii ośmiu publikacji i szesnastu przebiegów |
+| `v0.3.0` | zamrożona wersja eksperymentalna | `714a5979e52f889671ba52f376824990549da013` | samodzielna metodologia po pilotażu, B1 oraz wdrożeniu S1–S15 |
 
 Historyczne sformułowanie `0.2-draft` oznacza, że wersja była projektem podczas przygotowywania kalibracji. Wydanie `v0.2.0` zamraża dokładnie tę eksperymentalną metodologię i nie przedstawia jej jako wersji stabilnej.
 
-## Kolejne wersje
+## Kolejne prace
 
-Prace nad następną metodologią prowadzi się jako projekt 0.3 na osobnej gałęzi. Dopiero po przeglądzie, zatwierdzeniu i zamrożeniu powstaje wydanie `v0.3.0`. Zakończonych wyników 0.1 ani 0.2 nie przelicza się według nowych reguł.
+Przenośność zamrożonej metodologii 0.3 pomiędzy rodzinami AI może zostać zbadana osobno podczas prac nad 0.4. Wyników 0.1, 0.2 ani 0.3 nie przelicza się wstecz według późniejszych reguł.

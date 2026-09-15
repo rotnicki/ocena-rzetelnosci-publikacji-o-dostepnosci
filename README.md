@@ -70,7 +70,7 @@ Projekt pozostaje na wczesnym etapie rozwoju, przed wersją 1.0.
 
 ### Wersja 0.1
 
-To pierwsza zamrożona wersja robocza. Została użyta w początkowej serii ocen i w ich zaślepionym powtórzeniu. Pozostaje domyślną wersją działającej umiejętności.
+To pierwsza zamrożona wersja robocza. Została użyta w początkowej serii ocen i w ich zaślepionym powtórzeniu. Pozostaje dostępna jako historyczny punkt odniesienia; domyślną wersją działającej umiejętności jest obecnie 0.3.
 
 „Zamrożona” oznacza tutaj, że podczas porównywania wyników nie zmieniano jej reguł. Nie oznacza to, że wersja 0.1 jest ostateczna albo w pełni zwalidowana.
 

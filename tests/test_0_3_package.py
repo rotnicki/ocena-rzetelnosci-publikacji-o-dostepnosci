@@ -33,6 +33,28 @@ class PackageTests(unittest.TestCase):
             schema = json.loads((ROOT / "metodologia/0.3" / name).read_text(encoding="utf-8"))
             self.assertIn("/v0.3.0/", schema["$id"])
 
+    def test_release_builder_pins_the_0_3_source(self) -> None:
+        builder = (ROOT / "scripts/build_skill_release.py").read_text(encoding="utf-8")
+        versioning = (ROOT / "WERSJONOWANIE.md").read_text(encoding="utf-8")
+        workflow = (ROOT / ".github/workflows/publish-v0.3.0.yml").read_text(encoding="utf-8")
+        self.assertIn('"0.3.0"', builder)
+        self.assertIn("714a5979e52f889671ba52f376824990549da013", builder)
+        self.assertIn("714a5979e52f889671ba52f376824990549da013", versioning)
+        self.assertIn("cmp dist-a/assess-accessibility-articles-v0.3.0.zip", workflow)
+        self.assertNotIn("--prerelease", workflow)
+        self.assertIn("gh release download v0.3.0", workflow)
+
+    def test_release_documents_record_scope_and_integrity(self) -> None:
+        notes = (ROOT / "wydania/v0.3.0.md").read_text(encoding="utf-8")
+        control = (ROOT / "kalibracja/0.3/kontrola-techniczna-v0.3.0.md").read_text(encoding="utf-8")
+        digest = "72b2604d3a9e4581241570c4ca89726e5a8dd7a8e3fd6addafb3a4596b9a6979"
+        for text in (notes, control):
+            self.assertIn(digest, text)
+            self.assertIn("32", text)
+            self.assertIn("15/16", text)
+        self.assertIn("nie była objęta zakresem walidacji 0.3", notes)
+        self.assertIn("research/0.4-przenosnosc-ai", control)
+
     def test_skill_copies_match_public_sources(self) -> None:
         pairs = {
             ROOT / "metodologia/0.3/standard.md": ROOT / "skill/references/standard-0.3.md",
