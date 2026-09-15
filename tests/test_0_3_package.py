@@ -13,6 +13,40 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PackageTests(unittest.TestCase):
+    def test_root_readme_is_a_concise_accessible_entry_point(self) -> None:
+        readme_path = ROOT / "README.md"
+        readme = readme_path.read_text(encoding="utf-8")
+        word_count = len(readme.split())
+        self.assertGreaterEqual(word_count, 600)
+        self.assertLessEqual(word_count, 900)
+        self.assertIn("## W skrócie", readme)
+        self.assertIn("## Jak użyć", readme)
+        self.assertIn("## Co sprawdzono", readme)
+        self.assertIn("## Ograniczenia", readme)
+        self.assertIn("## Dokumentacja", readme)
+        self.assertIn("releases/tag/v0.3.0", readme)
+        self.assertIn("32 niezależne oceny", readme)
+        self.assertIn("każdą z 16 publikacji oceniono dwa razy", readme)
+        self.assertIn("15 z 16 porównań", readme)
+        self.assertIn("A–D: poprawność faktów, prawa i norm", readme)
+        self.assertIn("E–H: kompletność i kontekst", readme)
+        self.assertIn("I–L: użyteczność i bezpieczeństwo zaleceń", readme)
+        self.assertNotRegex(readme, r"\bS\d+(?:[–-]S?\d+)?\b")
+
+        headings = [line for line in readme.splitlines() if line.startswith("#")]
+        self.assertTrue(headings[0].startswith("# "))
+        self.assertTrue(all(line.startswith(("# ", "## ")) for line in headings))
+
+    def test_root_readme_relative_links_exist(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        links = re.findall(r"\[[^\]]+\]\(([^)]+)\)", readme)
+        missing = [
+            link
+            for link in links
+            if "://" not in link and not (ROOT / link).is_file()
+        ]
+        self.assertEqual([], missing)
+
     def test_0_3_is_the_frozen_default_release(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         method_readme = (ROOT / "metodologia/0.3/README.md").read_text(encoding="utf-8")
