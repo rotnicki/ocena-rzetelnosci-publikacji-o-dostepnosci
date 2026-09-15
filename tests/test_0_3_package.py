@@ -97,6 +97,14 @@ class PackageTests(unittest.TestCase):
         self.assertIn("R3 nie uruchomiono", summary)
         self.assertIn("B2 nie zostało rozpoczęte", summary)
 
+    def test_portability_is_outside_the_0_3_release_scope(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        method_readme = (ROOT / "metodologia/0.3/README.md").read_text(encoding="utf-8")
+        self.assertIn("nie była objęta zakresem walidacji 0.3", readme)
+        self.assertIn("prac nad przyszłą wersją 0.4", readme)
+        self.assertIn("poza zakresem walidacji 0.3", method_readme)
+        self.assertFalse((ROOT / "kalibracja/0.3/protokol-B2.md").exists())
+
     def test_s11_through_s15_are_implemented(self) -> None:
         standard = (ROOT / "metodologia/0.3/standard.md").read_text(encoding="utf-8")
         result_schema = json.loads((ROOT / "metodologia/0.3/wynik.schema.json").read_text(encoding="utf-8"))

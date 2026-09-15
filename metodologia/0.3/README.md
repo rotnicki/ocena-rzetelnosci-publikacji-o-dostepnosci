@@ -29,6 +29,6 @@ Pliki:
 
 Historyczne wersje 0.1 i 0.2 pozostają niezmienione. Zmiany w tym katalogu obowiązują wyłącznie wtedy, gdy oceniający świadomie wybierze projekt 0.3.
 
-Projekt obejmuje zatwierdzone doprecyzowania S1–S15. Badanie B1 zostało zakończone proceduralnie, lecz metodologia nadal jest robocza i niezamrożona. B2 nie zostało rozpoczęte.
+Projekt obejmuje zatwierdzone doprecyzowania S1–S15. Badanie B1 zostało zakończone proceduralnie, lecz metodologia nadal jest robocza i niezamrożona. Przenośność pomiędzy rodzinami AI pozostaje poza zakresem walidacji 0.3 i może zostać zbadana osobno podczas prac nad 0.4.
 
 Historycznych metryk YAML ani wyników zakończonych serii nie migruje się do nowego kontraktu. `metryka.yaml` może być w przyszłych seriach jedynie automatycznie wygenerowaną kopią dla człowieka; źródłem kanonicznym pozostaje JSON.

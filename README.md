@@ -122,8 +122,7 @@ Ocena powinna:
 - `kalibracja/0.3/propozycje-zmian-po-polskim-pilocie.md` — historyczne decyzje S1–S10 oraz decyzje S11–S15 po B1;
 - `kalibracja/0.3/wyniki-B1.md` — bezpieczne, zagregowane wyniki zakończonego B1, bez powiązania nazwanych publikacji z negatywnymi wynikami;
 - `kalibracja/0.3/kontrola-techniczna-S1-S10.md` — historyczna kontrola techniczna stanu sprzed wykonania B1.
-- `kalibracja/0.3/kontrola-techniczna-S1-S15.md` — aktualna kontrola techniczna projektu po wdrożeniu T1–T2 i S11–S15.
-- `kalibracja/0.3/protokol-B2.md` — przygotowany protokół badania przenośności między ChatGPT, Gemini i Grokiem; oceny B2 nie zostały rozpoczęte.
+- `kalibracja/0.3/kontrola-techniczna-S1-S15.md` — kontrola techniczna projektu po wdrożeniu T1–T2 i S11–S15.
 
 ### Metodologia
 
@@ -181,7 +180,7 @@ Wynik pokazuje powtarzalność w badanym środowisku. Nie jest jeszcze dowodem p
 
 ## Następny etap
 
-Badanie B1 zakończono proceduralnie. Wynikające z niego techniczne poprawki T1–T2 oraz doprecyzowania S11–S15 zostały wdrożone i obowiązują wyłącznie w przyszłych ocenach. Protokół B2 i odizolowane pakiety wejściowe zostały przygotowane do zatwierdzenia; żadna ocena B2 nie została jeszcze rozpoczęta.
+Walidacja wersji 0.3 obejmowała wcześniejszy pilotaż oraz zakończone badanie B1. Przenośność metodologii pomiędzy różnymi rodzinami AI nie była objęta zakresem walidacji 0.3. Może zostać zbadana osobno na podstawie zamrożonej wersji 0.3, a wyniki takiego badania mogą posłużyć do prac nad przyszłą wersją 0.4.
 
 Publiczny projekt 0.3 nadal podlega przeglądowi spójności. Dopiero po dalszych testach, zatwierdzeniu, zamrożeniu i końcowej kontroli może powstać wydanie `v0.3.0`.
 
